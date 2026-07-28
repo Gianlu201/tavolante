@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="it" class="min-h-full scheme-dark">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#092820" />
+    <!-- iOS ignora il manifest: senza questi meta l'icona in home aprirebbe Safari
+    con la barra degli indirizzi invece dell'app a schermo intero. -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Tavolante" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <!-- SEO. Il titolo apre con il nome del sito perché è quello che si cerca
+         ("tavolante"), seguito da cosa fa per chi cerca il problema. -->
+    <title>Tavolante — Distributore di carte per il Murlan</title>
+    <meta
+      name="description"
+      content="Tavolante calcola da quale giocatore iniziare a distribuire perché l'ultima carta arrivi al vincitore della mano precedente. Gratis e installabile."
+    />
+    <link rel="canonical" href="https://tavolante.it/" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="application-name" content="Tavolante" />
+    <meta name="color-scheme" content="dark" />
+
+    <!-- Anteprima nelle condivisioni: WhatsApp, Telegram, Facebook e iMessage
+         non eseguono JavaScript, quindi tutto deve stare qui, statico, con URL
+         assoluti — i path relativi vengono ignorati. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Tavolante" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:url" content="https://tavolante.it/" />
+    <meta
+      property="og:title"
+      content="Tavolante — Distributore di carte per il Murlan"
+    />
+    <meta
+      property="og:description"
+      content="Da chi iniziare a distribuire perché l'ultima carta arrivi al vincitore della mano precedente. Scegli giocatori, mazzo e senso: ci pensa Tavolante."
+    />
+    <meta property="og:image" content="https://tavolante.it/og-cover.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Tavolante: un tavolo da gioco con sei posti e due carte al centro."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Tavolante — Distributore di carte per il Murlan"
+    />
+    <meta
+      name="twitter:description"
+      content="Da chi iniziare a distribuire perché l'ultima carta arrivi al vincitore della mano precedente. Scegli giocatori, mazzo e senso: ci pensa Tavolante."
+    />
+    <meta name="twitter:image" content="https://tavolante.it/og-cover.png" />
+    <meta
+      name="twitter:image:alt"
+      content="Tavolante: un tavolo da gioco con sei posti e due carte al centro."
+    />
+
+    <!-- Dati strutturati: dice a Google che "Tavolante" è un'app gratuita, non
+         una pagina qualsiasi, e le dà il nome con cui mostrarla nei risultati. -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Tavolante",
+        "alternateName": "Tavolante — Distributore di carte",
+        "url": "https://tavolante.it/",
+        "description": "Tavolante calcola da quale giocatore iniziare a distribuire le carte nel Murlan perché l'ultima carta del mazzo arrivi al vincitore della mano precedente.",
+        "applicationCategory": "GameApplication",
+        "applicationSubCategory": "Utilità per giochi di carte",
+        "operatingSystem": "Android, iOS, Windows, macOS — qualsiasi browser",
+        "browserRequirements": "Richiede JavaScript",
+        "inLanguage": "it-IT",
+        "isAccessibleForFree": true,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "EUR"
+        },
+        "featureList": [
+          "Calcolo del giocatore da cui iniziare a distribuire",
+          "Da 2 a 12 giocatori",
+          "Mazzo da 54, 106 o personalizzato",
+          "Senso orario e antiorario",
+          "Nomi e personaggi per ogni giocatore",
+          "Funziona offline una volta installata"
+        ],
+        "screenshot": "https://tavolante.it/og-cover.png"
+      }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="min-h-full touch-manipulation overscroll-none bg-felt-3 bg-fixed font-sans text-cream [-webkit-tap-highlight-color:transparent] bg-[radial-gradient(120%_90%_at_50%_-10%,rgba(201,161,90,0.1),transparent_60%),radial-gradient(90%_70%_at_50%_110%,rgba(0,0,0,0.35),transparent_60%)]"
+  >
+    <div id="root"></div>
+    <!-- L'interfaccia la monta React: questo è l'unico testo che vede chi
+         (o cosa) non esegue JavaScript. -->
+    <noscript>
+      <div class="mx-auto max-w-130 px-4 py-10 text-center">
+        <h1 class="font-display text-2xl font-semibold text-cream">
+          Tavolante — distributore di carte per il Murlan
+        </h1>
+        <p class="mt-3 text-[14px] leading-normal text-cream/70">
+          Tavolante calcola da quale giocatore iniziare a distribuire le carte
+          perché l'ultima carta del mazzo arrivi al vincitore della mano
+          precedente. Si scelgono giocatori (da 2 a 12), dimensione del mazzo
+          (54, 106 o personalizzato) e senso di distribuzione.
+          <b class="text-gold-light"
+            >Attiva JavaScript per usare l'applicazione.</b
+          >
+        </p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

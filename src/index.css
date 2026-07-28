@@ -1,0 +1,64 @@
+@import 'tailwindcss';
+
+/* Il tema è l'unica sede dei token: colori, font e animazioni diventano classi
+   Tailwind (bg-felt-3, font-display, animate-drawer-in, …) usate nei componenti. */
+@theme {
+  --color-felt-1: #134a37;
+  --color-felt-2: #0c3226;
+  --color-felt-3: #092820;
+  --color-rim: #8a6a34;
+  --color-gold: #c9a15a;
+  --color-gold-light: #ecd8a3;
+  --color-gold-bright: #d6ae66;
+  --color-cream: #f4ecdd;
+  --color-cream-deep: #e6dcc6;
+  --color-ink: #20160f;
+  --color-ember: #b5482f;
+  --color-ember-dark: #8f3623;
+  --color-ember-soft: #e08363;
+  --color-drawer: #0f3a2c;
+
+  --font-sans: 'Manrope', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --animate-scrim-in: scrim-in 0.2s ease;
+  --animate-drawer-in: drawer-in 0.26s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-seat-lift: seat-lift 0.18s ease-out;
+  --animate-drop-slot-pulse: drop-slot-pulse 1.1s ease-in-out infinite;
+
+  @keyframes scrim-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes drawer-in {
+    from {
+      translate: 0 100%;
+    }
+  }
+
+  @keyframes seat-lift {
+    from {
+      scale: 1;
+    }
+  }
+
+  @keyframes drop-slot-pulse {
+    50% {
+      scale: 1.12;
+      background-color: rgba(201, 161, 90, 0.2);
+    }
+  }
+}
+
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
