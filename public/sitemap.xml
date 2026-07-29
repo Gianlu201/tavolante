@@ -2,7 +2,7 @@
 <!-- L'app è una pagina sola: la sitemap serve solo a dichiararla a Google. -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://tavolante.it/</loc>
+    <loc>https://tavolante.vercel.app/</loc>
     <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>

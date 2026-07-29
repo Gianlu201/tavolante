@@ -1,4 +1,3 @@
-import { easterEggAvatar, isEasterEggAvatar } from './avatars'
 import {
   clamp,
   MAX_CARDS,
@@ -39,23 +38,6 @@ export const DEFAULT_SETTINGS: Settings = {
 
 /** Initials shown on the seat when the player has a name but no avatar. */
 export const profileInitials = (name: string) => name.trim().slice(0, 3).toUpperCase()
-
-/**
- * Naming a player after one of the easter egg characters hands them that portrait;
- * renaming them away from it takes it back. Picking an avatar from the grid afterwards
- * overrides it, since that patch carries an explicit avatarId.
- */
-export const applyEasterEgg = (
-  current: PlayerProfile,
-  patch: Partial<PlayerProfile>,
-): Partial<PlayerProfile> => {
-  if (patch.name === undefined || patch.avatarId !== undefined) return patch
-
-  const egg = easterEggAvatar(patch.name)
-  if (egg) return { ...patch, avatarId: egg }
-  if (isEasterEggAvatar(current.avatarId)) return { ...patch, avatarId: null }
-  return patch
-}
 
 const STORAGE_KEY = 'tavolante:settings:v1'
 

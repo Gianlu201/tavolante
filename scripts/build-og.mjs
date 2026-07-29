@@ -72,10 +72,10 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
         fill="${CREAM}" fill-opacity="0.7">Da chi iniziare a distribuire perché</text>
   <text x="86" y="474" font-family="Verdana, DejaVu Sans, sans-serif" font-size="23"
         fill="${CREAM}" fill-opacity="0.7">l’ultima carta vada al vincitore.</text>
-  <rect x="86" y="516" width="250" height="52" rx="26"
+  <rect x="86" y="516" width="330" height="52" rx="26"
         fill="${GOLD}" fill-opacity="0.14" stroke="${GOLD}" stroke-opacity="0.55"/>
-  <text x="211" y="549" text-anchor="middle" font-family="Verdana, DejaVu Sans, sans-serif"
-        font-size="21" fill="${GOLD_LIGHT}">tavolante.it</text>
+  <text x="251" y="549" text-anchor="middle" font-family="Verdana, DejaVu Sans, sans-serif"
+        font-size="21" fill="${GOLD_LIGHT}">tavolante.vercel.app</text>
 
   <!-- Colonna destra: il tavolo con il posto di partenza acceso. -->
   <circle cx="895" cy="315" r="196" fill="#0c3226" stroke="${GOLD}" stroke-opacity="0.45" stroke-width="3"/>

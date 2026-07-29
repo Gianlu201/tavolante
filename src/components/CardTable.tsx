@@ -60,11 +60,9 @@ const seatSkin = ({ hasAvatar, isWinner, isStart, editing }: SeatState) => {
       ? 'shadow-[0_0_0_3px_rgba(201,161,90,0.18)]'
       : '';
 
-  // L'avatar viene ritagliato dal contenitore solo quando non serve far uscire la matita.
-  const clipping =
-    !editing && hasAvatar ? 'overflow-hidden' : 'overflow-visible';
-
-  return `${surface} ${ink} ${glow} ${clipping}`;
+  /* Il posto non ritaglia mai: la stellina del vincitore e la matita sporgono
+     dal cerchio. È l'avatar a ritagliarsi da solo (clip-path). */
+  return `${surface} ${ink} ${glow} overflow-visible`;
 };
 
 type CardTableProps = {
@@ -187,7 +185,6 @@ export default function CardTable({
               profile={profile}
               index={index}
               isWinner={isWinner}
-              editing={editing}
             />
             <span
               className={`pointer-events-none absolute -right-0.5 -bottom-0.5 flex aspect-square w-[42%] items-center justify-center rounded-full bg-gold text-[clamp(8px,2.2vw,11px)] text-ink transition-[opacity,scale] duration-180 ease-out ${
@@ -236,7 +233,6 @@ export default function CardTable({
             profile={profiles[ghostIndex] ?? EMPTY_PROFILE}
             index={ghostIndex}
             isWinner={ghostIndex === winnerIndex}
-            editing
           />
         </div>
       )}
@@ -248,10 +244,9 @@ type SeatContentProps = {
   profile: PlayerProfile;
   index: number;
   isWinner: boolean;
-  editing: boolean;
 };
 
-function SeatContent({ profile, index, isWinner, editing }: SeatContentProps) {
+function SeatContent({ profile, index, isWinner }: SeatContentProps) {
   const src = avatarSrc(profile.avatarId);
   const initials = profileInitials(profile.name);
 
@@ -267,9 +262,7 @@ function SeatContent({ profile, index, isWinner, editing }: SeatContentProps) {
       </span>
       {src ? (
         <img
-          className={`pointer-events-none absolute inset-0 size-full rounded-full object-cover [-webkit-user-drag:none] ${
-            editing ? '[clip-path:circle(50%)]' : ''
-          }`}
+          className='pointer-events-none absolute inset-0 size-full rounded-full object-cover [-webkit-user-drag:none] [clip-path:circle(50%)]'
           src={src}
           alt=''
           draggable={false}

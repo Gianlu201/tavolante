@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AVATARS, avatarSrc } from '../lib/avatars'
+import { avatarChoices, avatarSrc } from '../lib/avatars'
 import { MIN_PLAYERS } from '../lib/dealing'
 import {
   MAX_NAME_LENGTH,
@@ -42,6 +42,7 @@ export default function PlayerDrawer({
 
   const initials = profileInitials(profile.name)
   const preview = avatarSrc(profile.avatarId)
+  const avatars = avatarChoices(profile.name, profile.avatarId)
   const isCustomised = profile.name !== '' || profile.avatarId !== null
 
   const avatarOptionClass = (active: boolean) =>
@@ -113,7 +114,7 @@ export default function PlayerDrawer({
 
         <div className={FIELD_CLASS}>
           <span className={LABEL_CLASS}>Personaggio</span>
-          {AVATARS.length === 0 ? (
+          {avatars.length === 0 ? (
             <p className="m-0 rounded-xl border border-dashed border-cream/22 p-3 text-[12.5px] leading-normal text-cream/60">
               Nessun personaggio disponibile: aggiungi le immagini in{' '}
               <code className="font-mono text-[11.5px] text-gold-light">
@@ -135,7 +136,7 @@ export default function PlayerDrawer({
               >
                 {initials || index + 1}
               </button>
-              {AVATARS.map((avatar) => (
+              {avatars.map((avatar) => (
                 <button
                   key={avatar.id}
                   type="button"

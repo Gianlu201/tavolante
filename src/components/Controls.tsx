@@ -53,6 +53,26 @@ export default function Controls({
 
   return (
     <section className="flex shrink-0 flex-col gap-2.5 rounded-[20px] border border-gold/18 bg-felt-3/55 p-3.5 backdrop-blur-[6px]">
+      <div className="flex gap-2">
+        <button
+          type="button"
+          className="flex-1 cursor-pointer rounded-[14px] bg-[linear-gradient(180deg,var(--color-gold-bright),var(--color-gold))] p-3.5 font-display text-[16px] font-bold text-ink shadow-[0_6px_14px_rgba(201,161,90,0.25)] transition-[scale,translate,box-shadow,opacity] duration-120 ease-out not-disabled:active:translate-y-px not-disabled:active:scale-99 not-disabled:active:shadow-[0_3px_8px_rgba(201,161,90,0.2)] disabled:cursor-default disabled:opacity-55"
+          disabled={disabled}
+          onClick={onDeal}
+        >
+          Distribuisci le carte
+        </button>
+        <button
+          type="button"
+          className="cursor-pointer rounded-[14px] border border-cream/20 bg-cream/6 px-4 py-3.5 text-[13px] font-semibold text-cream/85 not-disabled:active:bg-cream/16 disabled:cursor-default disabled:opacity-55"
+          disabled={disabled}
+          onClick={onReset}
+          aria-label="Ripristina i valori predefiniti"
+        >
+          Reset
+        </button>
+      </div>
+
       <div className={FIELD_CLASS}>
         <span className={FIELD_LABEL_CLASS}>Giocatori</span>
         <div className="flex items-center justify-between">
@@ -145,26 +165,6 @@ export default function Controls({
             Antiorario
           </button>
         </div>
-      </div>
-
-      <div className="flex gap-2">
-        <button
-          type="button"
-          className="flex-1 cursor-pointer rounded-[14px] bg-[linear-gradient(180deg,var(--color-gold-bright),var(--color-gold))] p-3.5 font-display text-[16px] font-bold text-ink shadow-[0_6px_14px_rgba(201,161,90,0.25)] transition-[scale,translate,box-shadow,opacity] duration-120 ease-out not-disabled:active:translate-y-px not-disabled:active:scale-99 not-disabled:active:shadow-[0_3px_8px_rgba(201,161,90,0.2)] disabled:cursor-default disabled:opacity-55"
-          disabled={disabled}
-          onClick={onDeal}
-        >
-          Distribuisci le carte
-        </button>
-        <button
-          type="button"
-          className="cursor-pointer rounded-[14px] border border-cream/20 bg-cream/6 px-4 py-3.5 text-[13px] font-semibold text-cream/85 not-disabled:active:bg-cream/16 disabled:cursor-default disabled:opacity-55"
-          disabled={disabled}
-          onClick={onReset}
-          aria-label="Ripristina i valori predefiniti"
-        >
-          Reset
-        </button>
       </div>
     </section>
   )

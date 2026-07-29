@@ -58,9 +58,10 @@ cambia il favicon.
 
 ## SEO e anteprima nelle condivisioni
 
-Il sito vive su **https://tavolante.it/**: l'indirizzo è scritto in `index.html`
-(canonical, `og:url`, JSON-LD), in `public/robots.txt` e in `public/sitemap.xml`.
-Se cambia il dominio vanno aggiornati tutti e tre.
+Il sito vive su **https://tavolante.vercel.app/**: l'indirizzo è scritto in
+`index.html` (canonical, `og:url`, JSON-LD), in `public/robots.txt`, in
+`public/sitemap.xml` e nel badge disegnato da `scripts/build-og.mjs`. Se cambia
+il dominio vanno aggiornati tutti e quattro (e va rilanciato `npm run og`).
 
 `index.html` contiene, statici nell'`<head>`:
 

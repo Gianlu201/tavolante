@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://tavolante.it/sitemap.xml
+Sitemap: https://tavolante.vercel.app/sitemap.xml

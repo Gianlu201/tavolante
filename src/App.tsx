@@ -12,12 +12,7 @@ import {
   resolveDeckSize,
   type Direction,
 } from './lib/dealing';
-import {
-  applyEasterEgg,
-  EMPTY_PROFILE,
-  type PlayerProfile,
-  type Settings,
-} from './lib/settings';
+import { EMPTY_PROFILE, type Settings } from './lib/settings';
 
 const EDIT_TOGGLE_BASE =
   'inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-4 py-2 text-[12.5px] font-semibold transition-[background-color,border-color,color] duration-180 ease-out disabled:cursor-default disabled:opacity-45';
@@ -65,14 +60,6 @@ export default function App() {
     setEditing(false);
     setEditIndex(null);
     reset();
-  };
-
-  const handleProfileChange = (
-    index: number,
-    patch: Partial<PlayerProfile>,
-  ) => {
-    const current = settings.profiles[index] ?? EMPTY_PROFILE;
-    updateProfile(index, applyEasterEgg(current, patch));
   };
 
   const handleReorder = (from: number, to: number) => {
@@ -202,7 +189,7 @@ export default function App() {
           index={editIndex}
           profile={settings.profiles[editIndex] ?? EMPTY_PROFILE}
           canRemove={settings.players > MIN_PLAYERS}
-          onChange={(patch) => handleProfileChange(editIndex, patch)}
+          onChange={(patch) => updateProfile(editIndex, patch)}
           onRemove={() => handleRemovePlayer(editIndex)}
           onClose={() => setEditIndex(null)}
         />
