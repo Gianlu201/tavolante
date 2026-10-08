@@ -17,6 +17,8 @@
   --color-ember-dark: #8f3623;
   --color-ember-soft: #e08363;
   --color-drawer: #0f3a2c;
+  --color-silver: #c9ced6;
+  --color-bronze: #cf8a57;
 
   --font-sans: 'Manrope', system-ui, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
@@ -26,6 +28,14 @@
   --animate-drawer-in: drawer-in 0.26s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-seat-lift: seat-lift 0.18s ease-out;
   --animate-drop-slot-pulse: drop-slot-pulse 1.1s ease-in-out infinite;
+  --animate-seat-invite: seat-invite 1.4s ease-in-out infinite;
+  --animate-place-pop: place-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-notice-in: notice-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-podium-rise: podium-rise 0.55s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+  --animate-podium-drop: podium-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-fade-up: fade-up 0.5s ease-out both;
+  --animate-confetti-fall: confetti-fall 3s cubic-bezier(0.25, 0.4, 0.55, 1) 2 both;
+  --animate-horn-blow: horn-blow 1.5s ease-in-out 2 both;
 
   @keyframes scrim-in {
     from {
@@ -49,6 +59,75 @@
     50% {
       scale: 1.12;
       background-color: rgba(201, 161, 90, 0.2);
+    }
+  }
+
+  @keyframes seat-invite {
+    50% {
+      box-shadow: 0 0 0 5px rgba(244, 236, 221, 0.14);
+    }
+  }
+
+  @keyframes place-pop {
+    from {
+      scale: 0.2;
+      opacity: 0;
+    }
+  }
+
+  @keyframes notice-in {
+    from {
+      translate: 0 -12px;
+      opacity: 0;
+    }
+  }
+
+  @keyframes podium-rise {
+    from {
+      scale: 1 0;
+    }
+  }
+
+  @keyframes podium-drop {
+    from {
+      translate: 0 -70px;
+      scale: 0.6;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      translate: 0 10px;
+      opacity: 0;
+    }
+  }
+
+  /* --drift e --spin arrivano da ogni coriandolo: ognuno cade a modo suo. */
+  @keyframes confetti-fall {
+    from {
+      translate: 0 -8vh;
+      rotate: 0deg;
+    }
+    to {
+      translate: var(--drift) 108vh;
+      rotate: var(--spin);
+    }
+  }
+
+  /* La lingua di carta si srotola, sobbalza e si riavvolge. */
+  @keyframes horn-blow {
+    0%,
+    100% {
+      scale: 0.08 1;
+    }
+    18%,
+    44%,
+    70% {
+      scale: 1 1;
+    }
+    31% {
+      scale: 0.84 1;
     }
   }
 }

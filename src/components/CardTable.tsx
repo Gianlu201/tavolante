@@ -3,6 +3,7 @@ import { arrayMove, useSeatDrag } from '../hooks/useSeatDrag';
 import { avatarSrc } from '../lib/avatars';
 import { profileInitials, type PlayerProfile } from '../lib/settings';
 import { seatPosition } from '../lib/table';
+import { PLACE_BADGE_CLASS } from './placeStyles';
 
 const TABLE_CLASS =
   "relative aspect-square w-[min(86vw,46dvh,360px)] rounded-full bg-[radial-gradient(circle_at_50%_40%,var(--color-felt-1),var(--color-felt-2)_70%,var(--color-felt-3)_100%)] shadow-[0_0_0_2px_var(--color-rim),0_0_0_8px_rgba(0,0,0,0.25),inset_0_0_40px_rgba(0,0,0,0.55),0_24px_50px_-12px_rgba(0,0,0,0.6)] before:absolute before:inset-[9%] before:rounded-full before:border before:border-dashed before:border-cream/16 before:content-['']";
@@ -30,13 +31,27 @@ type SeatState = {
   isWinner: boolean;
   isStart: boolean;
   editing: boolean;
+  /** A tournament hand is being recorded, and whether this seat already has its place. */
+  recording?: boolean;
+  placed?: boolean;
 };
 
-/** Precedenza ereditata dal foglio di stile originale: modifica > partenza > vincitore. */
-const seatSkin = ({ hasAvatar, isWinner, isStart, editing }: SeatState) => {
+/** Precedenza: modifica > registrazione della mano > partenza > vincitore. */
+const seatSkin = ({
+  hasAvatar,
+  isWinner,
+  isStart,
+  editing,
+  recording = false,
+  placed = false,
+}: SeatState) => {
   const surface = editing
     ? 'border-dashed border-gold bg-gold/14'
-    : isStart
+    : recording
+      ? placed
+        ? 'border-gold-light bg-gold/22'
+        : 'border-cream/55 bg-cream/12 animate-seat-invite motion-reduce:animate-none'
+      : isStart
       ? 'border-gold-light bg-gold'
       : isWinner
         ? 'border-gold bg-gold/22'
@@ -67,9 +82,12 @@ type CardTableProps = {
   winnerIndex: number;
   startIndex: number | null;
   editing: boolean;
+  /** Seat indexes in finishing order while a tournament hand is recorded, else null. */
+  finishOrder: number[] | null;
   disabled: boolean;
   onSelectWinner: (index: number) => void;
   onEditPlayer: (index: number) => void;
+  onMarkFinish: (index: number) => void;
   onReorder: (from: number, to: number) => void;
   cardRef: React.RefObject<HTMLDivElement | null>;
 };
@@ -80,12 +98,15 @@ export default function CardTable({
   winnerIndex,
   startIndex,
   editing,
+  finishOrder,
   disabled,
   onSelectWinner,
   onEditPlayer,
+  onMarkFinish,
   onReorder,
   cardRef,
 }: CardTableProps) {
+  const recording = finishOrder !== null;
   const tableRef = useRef<HTMLDivElement>(null);
   const { drag, consumeClickSuppression, seatHandlers } = useSeatDrag({
     tableRef,
@@ -138,7 +159,9 @@ export default function CardTable({
         const profile = profiles[index];
         const isWinner = index === winnerIndex;
         const hasAvatar = Boolean(profile.avatarId);
+        const place = finishOrder ? finishOrder.indexOf(index) : -1;
         const { x, y } = seatPosition(slotOf(index), players);
+        const label = profile.name || `Giocatore ${index + 1}`;
 
         return (
           <button
@@ -154,6 +177,8 @@ export default function CardTable({
                 isWinner,
                 isStart: index === startIndex,
                 editing,
+                recording,
+                placed: place >= 0,
               }),
               index === ghostIndex ? 'opacity-0' : '',
             ]
@@ -161,11 +186,15 @@ export default function CardTable({
               .join(' ')}
             style={{ left: `${x}%`, top: `${y}%` }}
             disabled={disabled}
-            aria-pressed={editing ? undefined : isWinner}
+            aria-pressed={editing || recording ? undefined : isWinner}
             aria-label={
               editing
-                ? `Personalizza o trascina ${profile.name || `giocatore ${index + 1}`}`
-                : `${profile.name || `Giocatore ${index + 1}`}${isWinner ? ', vincitore della mano precedente' : ''}`
+                ? `Personalizza o trascina ${label}`
+                : recording
+                  ? place >= 0
+                    ? `${label}, ${place + 1}° posto: tocca per correggere`
+                    : `Segna ${label} come ${(finishOrder?.length ?? 0) + 1}°`
+                  : `${label}${isWinner ? ', vincitore della mano precedente' : ''}`
             }
             onPointerDown={seatHandlers.onPointerDown(index)}
             onPointerMove={seatHandlers.onPointerMove}
@@ -174,6 +203,7 @@ export default function CardTable({
             onClick={() => {
               if (consumeClickSuppression()) return;
               if (editing) onEditPlayer(index);
+              else if (recording) onMarkFinish(index);
               else onSelectWinner(index);
             }}
           >
@@ -190,6 +220,14 @@ export default function CardTable({
             >
               ✎
             </span>
+            {place >= 0 && (
+              <span
+                className={`pointer-events-none absolute -top-1 -left-1 z-1 flex aspect-square w-[46%] animate-place-pop items-center justify-center rounded-full font-mono text-[clamp(9px,2.4vw,12px)] font-bold shadow-[0_2px_6px_rgba(0,0,0,0.4)] motion-reduce:animate-none ${PLACE_BADGE_CLASS[place]}`}
+                aria-hidden='true'
+              >
+                {place + 1}
+              </span>
+            )}
           </button>
         );
       })}

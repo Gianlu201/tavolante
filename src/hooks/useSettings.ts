@@ -75,10 +75,28 @@ export function useSettings() {
     })
   }, [])
 
+  /** Points the winner at a person, wherever they sit now. */
+  const selectWinnerById = useCallback((id: string) => {
+    setSettings((current) => {
+      const index = current.profiles.findIndex((profile) => profile.id === id)
+      return index < 0 || index === current.winnerIndex
+        ? current
+        : { ...current, winnerIndex: index }
+    })
+  }, [])
+
   const reset = useCallback(() => {
     clearSettings()
     setSettings(createDefaultSettings())
   }, [])
 
-  return { settings, update, updateProfile, reorderPlayers, removePlayer, reset }
+  return {
+    settings,
+    update,
+    updateProfile,
+    reorderPlayers,
+    removePlayer,
+    selectWinnerById,
+    reset,
+  }
 }

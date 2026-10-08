@@ -54,9 +54,17 @@ export const createDefaultSettings = (): Settings => ({
   profiles: fitProfiles([], DEFAULT_PLAYERS),
 })
 
+const SEAT_LABEL_PREFIX = 'Giocatore '
+
 /** Display name: the typed name, or the seat number when the seat has none. */
 export const seatLabel = (profile: PlayerProfile | undefined, index: number) =>
-  profile?.name.trim() || `Giocatore ${index + 1}`
+  profile?.name.trim() || `${SEAT_LABEL_PREFIX}${index + 1}`
+
+/** What a round badge shows for a label: initials, or the bare number of an unnamed seat. */
+export const labelInitials = (label: string) => {
+  const seat = label.startsWith(SEAT_LABEL_PREFIX) && /^\d+$/.test(label.slice(SEAT_LABEL_PREFIX.length))
+  return seat ? label.slice(SEAT_LABEL_PREFIX.length) : profileInitials(label)
+}
 
 /** Initials shown on the seat when the player has a name but no avatar. */
 export const profileInitials = (name: string) => name.trim().slice(0, 3).toUpperCase()
