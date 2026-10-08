@@ -7,13 +7,22 @@ type ConfettiProps = {
   /** Seconds before the first pieces start falling. */
   delay: number
   count?: number
+  /** Keep raining forever, already mid-fall on the first frame. */
+  loop?: boolean
+  /** Stacking and placement; by default a layer over the whole screen. */
+  className?: string
 }
 
 /** Pioggia di coriandoli in CSS puro: con «riduci animazioni» non compare affatto. */
-export default function Confetti({ delay, count = 46 }: ConfettiProps) {
+export default function Confetti({
+  delay,
+  count = 46,
+  loop = false,
+  className = 'fixed inset-0 z-50',
+}: ConfettiProps) {
   return (
     <div
-      className="pointer-events-none fixed inset-0 z-50 overflow-hidden motion-reduce:hidden"
+      className={`pointer-events-none overflow-hidden motion-reduce:hidden ${className}`}
       aria-hidden="true"
     >
       {Array.from({ length: count }, (_, i) => {
@@ -24,8 +33,11 @@ export default function Confetti({ delay, count = 46 }: ConfettiProps) {
           width: `${size}px`,
           height: `${round ? size : size * 1.7}px`,
           backgroundColor: COLORS[i % COLORS.length],
-          animationDuration: `${2.6 + scatter(i, 3) * 2}s`,
-          animationDelay: `${delay + scatter(i, 4) * 0.9}s`,
+          animationDuration: `${(loop ? 6 : 2.6) + scatter(i, 3) * (loop ? 5 : 2)}s`,
+          animationDelay: loop
+            ? `${-scatter(i, 4) * 11}s`
+            : `${delay + scatter(i, 4) * 0.9}s`,
+          animationIterationCount: loop ? 'infinite' : undefined,
           '--drift': `${(scatter(i, 5) - 0.5) * 160}px`,
           '--spin': `${(scatter(i, 6) > 0.5 ? 1 : -1) * (360 + scatter(i, 7) * 540)}deg`,
         } as CSSProperties

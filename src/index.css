@@ -70,6 +70,13 @@
   --animate-butterfly-a: butterfly-a 19s ease-in-out infinite;
   --animate-butterfly-b: butterfly-b 24s ease-in-out infinite;
   --animate-butterfly-flap: butterfly-flap 0.22s ease-in-out infinite alternate;
+  --animate-wave: wave 0.55s ease-in-out infinite alternate;
+  --animate-burlamacco-peek: burlamacco-peek 16s ease-in-out infinite both;
+  --animate-searchlight: searchlight 7s ease-in-out infinite alternate;
+  --animate-streamer-throw: streamer-throw 9s ease-out infinite both;
+  --animate-cannon-flash: cannon-flash 0.5s ease-out both;
+  --animate-bum: bum 1.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-carnival-caption: carnival-caption 4.8s ease-out both;
   --animate-bat-fly: bat-fly 24s linear infinite both;
   --animate-bat-flap: bat-flap 0.26s ease-in-out infinite;
   --animate-spider-bob: spider-bob 7s ease-in-out infinite;
@@ -647,6 +654,113 @@
     }
   }
 
+  /* Carnevale di Viareggio. */
+  @keyframes wave {
+    from {
+      rotate: -16deg;
+    }
+    to {
+      rotate: 14deg;
+    }
+  }
+
+  @keyframes burlamacco-peek {
+    0%,
+    8%,
+    64%,
+    100% {
+      translate: 105% 0;
+      rotate: 0deg;
+    }
+    14% {
+      translate: 8% 0;
+      rotate: -8deg;
+    }
+    18%,
+    56% {
+      translate: 14% 0;
+      rotate: -4deg;
+    }
+  }
+
+  @keyframes searchlight {
+    from {
+      rotate: -22deg;
+    }
+    to {
+      rotate: 22deg;
+    }
+  }
+
+  /* La stella filante si srotola, resta un po' sospesa e svanisce. */
+  @keyframes streamer-throw {
+    0% {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      opacity: 1;
+    }
+    14% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    40% {
+      stroke-dashoffset: 0;
+      opacity: 0.9;
+    }
+    52%,
+    100% {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes cannon-flash {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bum {
+    0% {
+      scale: 0.2;
+      opacity: 0;
+    }
+    18% {
+      scale: 1.3;
+      opacity: 1;
+    }
+    30%,
+    70% {
+      scale: 1;
+      opacity: 1;
+    }
+    100% {
+      scale: 1.1;
+      opacity: 0;
+    }
+  }
+
+  @keyframes carnival-caption {
+    0%,
+    40% {
+      opacity: 0;
+      scale: 0.8;
+    }
+    50%,
+    86% {
+      opacity: 1;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
   /* La lingua di carta si srotola, sobbalza e si riavvolge. */
   @keyframes horn-blow {
     0%,
@@ -683,6 +797,8 @@
   --deck-emblem: '';
   --deck-emblem-image: none;
   /* La croce pisana, bianca: la usano Luminara e Palio. */
+  /* Rombo a scacchi bianchi e rossi, come la tuta di Burlamacco: lo usa il Carnevale. */
+  --burlamacco-checks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3E%3Cg transform='rotate%2845%29'%3E%3Crect x='-8' y='-8' width='16' height='16' fill='white'/%3E%3Cpath d='M-8-8h4v4h-4zM0-8h4v4H0zM-4-4h4v4h-4zM4-4h4v4H4zM-8 0h4v4h-4zM0 0h4v4H0zM-4 4h4v4h-4zM4 4h4v4H4z' fill='%23d22a35'/%3E%3Crect x='-8' y='-8' width='16' height='16' fill='none' stroke='white' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E");
   --pisan-cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -20 40 40' fill='white'%3E%3Cdefs%3E%3Cg id='t'%3E%3Ccircle cy='-16.2' r='2.9'/%3E%3Ccircle cx='-3.4' cy='-13.6' r='2.9'/%3E%3Ccircle cx='3.4' cy='-13.6' r='2.9'/%3E%3C/g%3E%3C/defs%3E%3Cpath d='M-2.6-13h5.2v26h-5.2zM-13-2.6h26v5.2h-26z'/%3E%3Cuse href='%23t'/%3E%3Cuse href='%23t' transform='rotate%2890%29'/%3E%3Cuse href='%23t' transform='rotate%28180%29'/%3E%3Cuse href='%23t' transform='rotate%28270%29'/%3E%3C/svg%3E");
 }
 
@@ -743,6 +859,17 @@
   --color-deck-2: #6a4fa6;
   --color-page: #2a1a4f;
   --deck-emblem: '✿';
+}
+
+:root[data-season='carnevale'] {
+  --color-felt-1: #a3213a;
+  --color-felt-2: #6e1228;
+  --color-felt-3: #2a0a24;
+  --color-drawer: #2c0d2a;
+  --color-deck-1: #d22a35;
+  --color-deck-2: #9c1622;
+  --color-page: #160a36;
+  --deck-emblem-image: var(--burlamacco-checks);
 }
 
 @layer base {
