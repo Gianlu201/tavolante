@@ -2,6 +2,7 @@ import { Fragment, useRef, useState, type ReactNode } from 'react';
 import { arrayMove, useSeatDrag } from '../hooks/useSeatDrag';
 import { avatarSrc } from '../lib/avatars';
 import { profileInitials, type PlayerProfile } from '../lib/settings';
+import type { SeatInfo } from '../themes/types';
 import { seatPosition } from '../lib/table';
 import { PLACE_BADGE_CLASS } from './placeStyles';
 
@@ -92,8 +93,8 @@ type CardTableProps = {
   cardRef: React.RefObject<HTMLDivElement | null>;
   /** Seasonal dressing around the felt, painted under the seats. */
   decoration?: ReactNode;
-  /** Seasonal touch worn by every seat, the dragged one included. */
-  seatAccessory?: ReactNode;
+  /** Seasonal touch worn by the seats, the dragged one included. */
+  seatAccessory?: (seat: SeatInfo) => ReactNode;
 };
 
 export default function CardTable({
@@ -241,7 +242,7 @@ export default function CardTable({
               profile={profile}
               index={index}
               isWinner={isWinner}
-              accessory={seatAccessory}
+              accessory={seatAccessory?.({ index, profile, profiles })}
             />
             <span
               className={`pointer-events-none absolute -right-0.5 -bottom-0.5 flex aspect-square w-[42%] items-center justify-center rounded-full bg-gold text-[clamp(8px,2.2vw,11px)] text-ink transition-[opacity,scale] duration-180 ease-out ${
@@ -298,7 +299,11 @@ export default function CardTable({
             profile={profiles[ghostIndex]}
             index={ghostIndex}
             isWinner={ghostIndex === winnerIndex}
-            accessory={seatAccessory}
+            accessory={seatAccessory?.({
+              index: ghostIndex,
+              profile: profiles[ghostIndex],
+              profiles,
+            })}
           />
         </div>
       )}

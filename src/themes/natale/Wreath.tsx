@@ -1,4 +1,4 @@
-import { scatter } from '../lib/scatter'
+import { scatter } from '../../lib/scatter'
 
 /**
  * Ghirlanda di Natale attorno al tavolo. Il viewBox è centrato sul tavolo e ne misura
@@ -45,7 +45,7 @@ const BAUBLES = [0, 33, 62, 95, 180, 215, 252, 285, 318].map((angle, i) => ({
 
 const LIGHTS = Array.from({ length: 22 }, (_, i) => polar((360 / 22) * i + 8, 101))
 
-export default function ChristmasWreath() {
+export default function Wreath() {
   const bow = polar(BOW_ANGLE, 114)
 
   return (

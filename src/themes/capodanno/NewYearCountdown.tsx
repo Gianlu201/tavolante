@@ -1,7 +1,7 @@
-import { useNow } from '../hooks/useSeason'
-import { msSinceMidnight, msToMidnight } from '../lib/seasons'
-import Confetti from './Confetti'
-import Fireworks, { type Burst } from './Fireworks'
+import { useNow } from '../../hooks/useSeason'
+import { msSinceMidnight, msToMidnight } from '../../lib/seasons'
+import Confetti from '../../components/Confetti'
+import Fireworks, { type Burst } from '../../components/Fireworks'
 
 const COUNTDOWN_FROM_MS = 10_000
 const CELEBRATION_MS = 25_000
