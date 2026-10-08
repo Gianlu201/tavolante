@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { avatarChoices, avatarSrc } from '../lib/avatars'
 import { MIN_PLAYERS } from '../lib/dealing'
 import {
+  createPlayerId,
   MAX_NAME_LENGTH,
   profileInitials,
   type PlayerProfile,
@@ -165,7 +166,9 @@ export default function PlayerDrawer({
             type="button"
             className="cursor-pointer rounded-[13px] border border-cream/20 bg-cream/6 px-4.5 py-3.25 text-[13.5px] font-semibold text-cream/85 disabled:cursor-default disabled:opacity-40"
             disabled={!isCustomised}
-            onClick={() => onChange({ name: '', avatarId: null })}
+            // Azzerare il posto è far sedere qualcun altro: nuova identità, i punti
+            // del torneo restano a chi c'era prima.
+            onClick={() => onChange({ id: createPlayerId(), name: '', avatarId: null })}
           >
             Azzera
           </button>

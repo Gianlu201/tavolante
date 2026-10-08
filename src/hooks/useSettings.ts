@@ -2,8 +2,8 @@ import { useCallback, useEffect, useState } from 'react'
 import { MIN_PLAYERS } from '../lib/dealing'
 import {
   clearSettings,
-  DEFAULT_SETTINGS,
-  EMPTY_PROFILE,
+  createDefaultSettings,
+  fitProfiles,
   loadSettings,
   saveSettings,
   type PlayerProfile,
@@ -22,8 +22,8 @@ export function useSettings() {
       const next = { ...current, ...patch }
       // Dropping a player clears their slot, so bringing the seat back gives a
       // blank placeholder instead of resurrecting the previous name or avatar.
-      if (next.players < current.players) {
-        next.profiles = next.profiles.slice(0, next.players)
+      if (next.players !== current.players) {
+        next.profiles = fitProfiles(next.profiles.slice(0, next.players), next.players)
       }
       if (next.winnerIndex > next.players - 1) next.winnerIndex = 0
       return next
@@ -32,8 +32,7 @@ export function useSettings() {
 
   const updateProfile = useCallback((index: number, patch: Partial<PlayerProfile>) => {
     setSettings((current) => {
-      const profiles = [...current.profiles]
-      while (profiles.length <= index) profiles.push(EMPTY_PROFILE)
+      const profiles = fitProfiles(current.profiles, current.players)
       profiles[index] = { ...profiles[index], ...patch }
       return { ...current, profiles }
     })
@@ -44,10 +43,7 @@ export function useSettings() {
     setSettings((current) => {
       if (from === to) return current
 
-      const profiles = Array.from(
-        { length: current.players },
-        (_, index) => current.profiles[index] ?? EMPTY_PROFILE,
-      )
+      const profiles = fitProfiles(current.profiles, current.players)
       const [moved] = profiles.splice(from, 1)
       profiles.splice(to, 0, moved)
 
@@ -68,8 +64,8 @@ export function useSettings() {
     setSettings((current) => {
       if (current.players <= MIN_PLAYERS) return current
 
-      const profiles = [...current.profiles]
-      if (index < profiles.length) profiles.splice(index, 1)
+      const profiles = fitProfiles(current.profiles, current.players)
+      profiles.splice(index, 1)
 
       let winnerIndex = current.winnerIndex
       if (winnerIndex === index) winnerIndex = 0
@@ -81,7 +77,7 @@ export function useSettings() {
 
   const reset = useCallback(() => {
     clearSettings()
-    setSettings(DEFAULT_SETTINGS)
+    setSettings(createDefaultSettings())
   }, [])
 
   return { settings, update, updateProfile, reorderPlayers, removePlayer, reset }

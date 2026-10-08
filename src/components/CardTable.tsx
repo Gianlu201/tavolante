@@ -1,11 +1,7 @@
 import { useRef } from 'react';
 import { arrayMove, useSeatDrag } from '../hooks/useSeatDrag';
 import { avatarSrc } from '../lib/avatars';
-import {
-  EMPTY_PROFILE,
-  profileInitials,
-  type PlayerProfile,
-} from '../lib/settings';
+import { profileInitials, type PlayerProfile } from '../lib/settings';
 import { seatPosition } from '../lib/table';
 
 const TABLE_CLASS =
@@ -139,7 +135,7 @@ export default function CardTable({
       <div className={FLYING_CARD_CLASS} ref={cardRef} />
 
       {Array.from({ length: players }, (_, index) => {
-        const profile = profiles[index] ?? EMPTY_PROFILE;
+        const profile = profiles[index];
         const isWinner = index === winnerIndex;
         const hasAvatar = Boolean(profile.avatarId);
         const { x, y } = seatPosition(slotOf(index), players);
@@ -230,7 +226,7 @@ export default function CardTable({
           aria-hidden='true'
         >
           <SeatContent
-            profile={profiles[ghostIndex] ?? EMPTY_PROFILE}
+            profile={profiles[ghostIndex]}
             index={ghostIndex}
             isWinner={ghostIndex === winnerIndex}
           />

@@ -9,6 +9,8 @@ import {
 } from './dealing'
 
 export type PlayerProfile = {
+  /** Identità stabile: segue la persona quando i posti si spostano (serve ai punti del torneo). */
+  id: string
   name: string
   avatarId: string | null
 }
@@ -19,22 +21,42 @@ export type Settings = {
   customCards: number
   direction: Direction
   winnerIndex: number
-  /** Indexed by seat position; missing entries fall back to the seat number. */
+  /** Indexed by seat position, always exactly `players` long. */
   profiles: PlayerProfile[]
 }
 
 export const MAX_NAME_LENGTH = 14
 
-export const EMPTY_PROFILE: PlayerProfile = { name: '', avatarId: null }
+/** randomUUID esiste solo in contesto sicuro: da un IP in HTTP serve il ripiego. */
+export const createPlayerId = () =>
+  typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : `p-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`
 
-export const DEFAULT_SETTINGS: Settings = {
-  players: 4,
+export const emptyProfile = (): PlayerProfile => ({
+  id: createPlayerId(),
+  name: '',
+  avatarId: null,
+})
+
+/** Trims or pads the profiles to one per seat; a returning seat comes back blank. */
+export const fitProfiles = (profiles: PlayerProfile[], players: number) =>
+  Array.from({ length: players }, (_, index) => profiles[index] ?? emptyProfile())
+
+const DEFAULT_PLAYERS = 4
+
+export const createDefaultSettings = (): Settings => ({
+  players: DEFAULT_PLAYERS,
   deckPreset: 54,
   customCards: 54,
   direction: 'ccw',
   winnerIndex: 0,
-  profiles: [],
-}
+  profiles: fitProfiles([], DEFAULT_PLAYERS),
+})
+
+/** Display name: the typed name, or the seat number when the seat has none. */
+export const seatLabel = (profile: PlayerProfile | undefined, index: number) =>
+  profile?.name.trim() || `Giocatore ${index + 1}`
 
 /** Initials shown on the seat when the player has a name but no avatar. */
 export const profileInitials = (name: string) => name.trim().slice(0, 3).toUpperCase()
@@ -44,12 +66,20 @@ const STORAGE_KEY = 'tavolante:settings:v1'
 const isDeckPreset = (value: unknown): value is DeckPreset =>
   value === 54 || value === 106 || value === 'custom'
 
+/** Profiles saved before ids existed (or with duplicated ids) get a fresh one. */
 const parseProfiles = (value: unknown): PlayerProfile[] => {
   if (!Array.isArray(value)) return []
+  const seen = new Set<string>()
   return value.map((entry): PlayerProfile => {
-    if (typeof entry !== 'object' || entry === null) return EMPTY_PROFILE
+    if (typeof entry !== 'object' || entry === null) return emptyProfile()
     const profile = entry as Partial<Record<keyof PlayerProfile, unknown>>
+    const id =
+      typeof profile.id === 'string' && profile.id !== '' && !seen.has(profile.id)
+        ? profile.id
+        : createPlayerId()
+    seen.add(id)
     return {
+      id,
       name:
         typeof profile.name === 'string' ? profile.name.slice(0, MAX_NAME_LENGTH) : '',
       avatarId: typeof profile.avatarId === 'string' ? profile.avatarId : null,
@@ -59,38 +89,39 @@ const parseProfiles = (value: unknown): PlayerProfile[] => {
 
 const parseSettings = (raw: string): Settings => {
   const data: unknown = JSON.parse(raw)
-  if (typeof data !== 'object' || data === null) return DEFAULT_SETTINGS
+  const defaults = createDefaultSettings()
+  if (typeof data !== 'object' || data === null) return defaults
 
   const stored = data as Partial<Record<keyof Settings, unknown>>
   const players =
     typeof stored.players === 'number'
       ? clamp(Math.round(stored.players), MIN_PLAYERS, MAX_PLAYERS)
-      : DEFAULT_SETTINGS.players
+      : defaults.players
 
   return {
     players,
     deckPreset: isDeckPreset(stored.deckPreset)
       ? stored.deckPreset
-      : DEFAULT_SETTINGS.deckPreset,
+      : defaults.deckPreset,
     customCards:
       typeof stored.customCards === 'number'
         ? clamp(Math.round(stored.customCards), MIN_CARDS, MAX_CARDS)
-        : DEFAULT_SETTINGS.customCards,
+        : defaults.customCards,
     direction: stored.direction === 'cw' ? 'cw' : 'ccw',
     winnerIndex:
       typeof stored.winnerIndex === 'number'
         ? clamp(Math.round(stored.winnerIndex), 0, players - 1)
-        : DEFAULT_SETTINGS.winnerIndex,
-    profiles: parseProfiles(stored.profiles),
+        : defaults.winnerIndex,
+    profiles: fitProfiles(parseProfiles(stored.profiles), players),
   }
 }
 
 export const loadSettings = (): Settings => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
-    return raw ? parseSettings(raw) : DEFAULT_SETTINGS
+    return raw ? parseSettings(raw) : createDefaultSettings()
   } catch {
-    return DEFAULT_SETTINGS
+    return createDefaultSettings()
   }
 }
 
