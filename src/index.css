@@ -77,6 +77,19 @@
   --animate-cannon-flash: cannon-flash 0.5s ease-out both;
   --animate-bum: bum 1.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   --animate-carnival-caption: carnival-caption 4.8s ease-out both;
+  --animate-table-flip: table-flip 2.6s ease-in-out 0.6s both;
+  --animate-briscola-out: briscola-out 3.2s ease-out 0.8s both;
+  --animate-murlan-in: murlan-in 3.2s ease-out 0.8s both;
+  --animate-fish-dangle: fish-dangle 2.4s ease-in-out infinite alternate;
+  --animate-fish-fall: fish-fall 1.4s ease-in forwards;
+  --animate-fish-joke: fish-joke 2.4s ease-out both;
+  --animate-swim-right: swim-right 28s linear infinite;
+  --animate-swim-left: swim-left 28s linear infinite;
+  --animate-fish-bob: fish-bob 1.8s ease-in-out infinite alternate;
+  --animate-bubble-rise: bubble-rise 10s linear infinite;
+  --animate-shooting-star: shooting-star 8s ease-out infinite both;
+  --animate-firefly: firefly 4s ease-in-out infinite;
+  --animate-sea-drift: sea-drift 20s linear infinite;
   --animate-bat-fly: bat-fly 24s linear infinite both;
   --animate-bat-flap: bat-flap 0.26s ease-in-out infinite;
   --animate-spider-bob: spider-bob 7s ease-in-out infinite;
@@ -761,6 +774,201 @@
     }
   }
 
+  /* Pesce d'aprile: il tavolo fa una capriola e si ferma a testa in giù, poi si raddrizza. */
+  @keyframes table-flip {
+    0% {
+      rotate: 0deg;
+    }
+    30%,
+    55% {
+      rotate: 180deg;
+    }
+    82% {
+      rotate: 372deg;
+    }
+    92% {
+      rotate: 356deg;
+    }
+    100% {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes briscola-out {
+    0%,
+    35% {
+      opacity: 1;
+      text-decoration-color: transparent;
+    }
+    45%,
+    68% {
+      opacity: 1;
+      text-decoration-color: #e08363;
+    }
+    82%,
+    100% {
+      opacity: 0;
+      text-decoration-color: #e08363;
+    }
+  }
+
+  @keyframes murlan-in {
+    0%,
+    74% {
+      opacity: 0;
+      translate: 0 4px;
+    }
+    90%,
+    100% {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @keyframes fish-dangle {
+    from {
+      rotate: -24deg;
+    }
+    to {
+      rotate: -12deg;
+    }
+  }
+
+  @keyframes fish-fall {
+    from {
+      translate: 0 0;
+      rotate: -18deg;
+      opacity: 1;
+    }
+    to {
+      translate: 14px 170px;
+      rotate: 170deg;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fish-joke {
+    0% {
+      opacity: 0;
+      translate: -50% 6px;
+      scale: 0.6;
+    }
+    15% {
+      opacity: 1;
+      translate: -50% -4px;
+      scale: 1.06;
+    }
+    25%,
+    78% {
+      opacity: 1;
+      translate: -50% -6px;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+      translate: -50% -20px;
+      scale: 1;
+    }
+  }
+
+  @keyframes swim-right {
+    from {
+      translate: -20vw 0;
+    }
+    to {
+      translate: 120vw 0;
+    }
+  }
+
+  @keyframes swim-left {
+    from {
+      translate: 120vw 0;
+    }
+    to {
+      translate: -20vw 0;
+    }
+  }
+
+  @keyframes fish-bob {
+    from {
+      translate: 0 -4px;
+    }
+    to {
+      translate: 0 4px;
+    }
+  }
+
+  @keyframes bubble-rise {
+    0% {
+      translate: 0 0;
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    100% {
+      translate: 8px -105vh;
+      opacity: 0;
+    }
+  }
+
+  /* Notti d'agosto: la stella cadente attraversa il cielo in un attimo, poi aspetta. */
+  @keyframes shooting-star {
+    0% {
+      opacity: 0;
+      translate: 0 0;
+      rotate: -32deg;
+      scale: 0.4 1;
+    }
+    2% {
+      opacity: 1;
+      scale: 1 1;
+    }
+    9% {
+      opacity: 0.9;
+    }
+    12% {
+      opacity: 0;
+      translate: -40vw 25vh;
+      rotate: -32deg;
+      scale: 0.7 1;
+    }
+    100% {
+      opacity: 0;
+      translate: -40vw 25vh;
+      rotate: -32deg;
+    }
+  }
+
+  @keyframes firefly {
+    0%,
+    100% {
+      opacity: 0.1;
+      translate: 0 0;
+    }
+    30% {
+      opacity: 1;
+      translate: 6px -8px;
+    }
+    55% {
+      opacity: 0.2;
+      translate: -4px -14px;
+    }
+    75% {
+      opacity: 0.9;
+      translate: 3px -6px;
+    }
+  }
+
+  @keyframes sea-drift {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: -50% 0;
+    }
+  }
+
   /* La lingua di carta si srotola, sobbalza e si riavvolge. */
   @keyframes horn-blow {
     0%,
@@ -870,6 +1078,17 @@
   --color-deck-2: #9c1622;
   --color-page: #160a36;
   --deck-emblem-image: var(--burlamacco-checks);
+}
+
+:root[data-season='agosto'] {
+  --color-felt-1: #157a8c;
+  --color-felt-2: #0d5566;
+  --color-felt-3: #062a38;
+  --color-drawer: #0a3442;
+  --color-deck-1: #e3473f;
+  --color-deck-2: #b8302a;
+  --color-page: #030820;
+  --deck-emblem: '☀';
 }
 
 @layer base {
