@@ -36,6 +36,9 @@
   --animate-fade-up: fade-up 0.5s ease-out both;
   --animate-confetti-fall: confetti-fall 3s cubic-bezier(0.25, 0.4, 0.55, 1) 2 both;
   --animate-horn-blow: horn-blow 1.5s ease-in-out 2 both;
+  --animate-riffle-left: riffle-left 0.95s ease-in-out;
+  --animate-riffle-right: riffle-right 0.95s ease-in-out;
+  --animate-deck-square: deck-square 0.95s ease-in-out;
 
   @keyframes scrim-in {
     from {
@@ -112,6 +115,52 @@
     to {
       translate: var(--drift) 108vh;
       rotate: var(--spin);
+    }
+  }
+
+  /* Mescolata: il mazzo si apre in due metà e si richiude due volte, poi si
+     pareggia battendolo sul tavolo. Si anima transform, che si somma a
+     translate/rotate delle classi. */
+  @keyframes riffle-left {
+    0%,
+    34%,
+    74%,
+    100% {
+      transform: none;
+    }
+    17%,
+    52% {
+      transform: translate(-70%, -5%) rotate(-10deg);
+    }
+    86% {
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes riffle-right {
+    0%,
+    34%,
+    74%,
+    100% {
+      transform: none;
+    }
+    17%,
+    52% {
+      transform: translate(70%, -5%) rotate(10deg);
+    }
+    86% {
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes deck-square {
+    0%,
+    74%,
+    100% {
+      transform: none;
+    }
+    86% {
+      transform: scale(0.9);
     }
   }
 

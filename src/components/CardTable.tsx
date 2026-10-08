@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import { arrayMove, useSeatDrag } from '../hooks/useSeatDrag';
 import { avatarSrc } from '../lib/avatars';
 import { profileInitials, type PlayerProfile } from '../lib/settings';
@@ -108,6 +108,9 @@ export default function CardTable({
 }: CardTableProps) {
   const recording = finishOrder !== null;
   const tableRef = useRef<HTMLDivElement>(null);
+  /** Bumped on every tap of the deck: remounting the cards replays the riffle. */
+  const [shuffles, setShuffles] = useState(0);
+  const shuffled = shuffles > 0;
   const { drag, consumeClickSuppression, seatHandlers } = useSeatDrag({
     tableRef,
     players,
@@ -143,15 +146,34 @@ export default function CardTable({
 
   return (
     <div className={TABLE_CLASS} ref={tableRef}>
-      <div className='absolute top-1/2 left-1/2 z-3 aspect-[0.7/1] w-[15%] -translate-x-1/2 -translate-y-1/2'>
-        <div
-          className={`${CARD_BACK_CLASS} translate-x-[1.5px] translate-y-[1.5px] -rotate-3`}
-        />
-        <div
-          className={`${CARD_BACK_CLASS} -translate-x-px -translate-y-px rotate-2`}
-        />
-        <div className={CARD_BACK_CLASS} />
-      </div>
+      <button
+        type='button'
+        className='absolute top-1/2 left-1/2 z-3 aspect-[0.7/1] w-[15%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-[14%] border-none bg-transparent p-0 disabled:cursor-default'
+        disabled={disabled || editing || recording}
+        aria-label='Mescola il mazzo'
+        onClick={() => {
+          setShuffles((count) => count + 1);
+          navigator.vibrate?.([8, 140, 8, 140, 14]);
+        }}
+      >
+        <Fragment key={shuffles}>
+          <span
+            className={`${CARD_BACK_CLASS} translate-x-[1.5px] translate-y-[1.5px] -rotate-3 ${
+              shuffled ? 'animate-deck-square motion-reduce:animate-none' : ''
+            }`}
+          />
+          <span
+            className={`${CARD_BACK_CLASS} -translate-x-px -translate-y-px rotate-2 ${
+              shuffled ? 'animate-riffle-left motion-reduce:animate-none' : ''
+            }`}
+          />
+          <span
+            className={`${CARD_BACK_CLASS} ${
+              shuffled ? 'animate-riffle-right motion-reduce:animate-none' : ''
+            }`}
+          />
+        </Fragment>
+      </button>
 
       <div className={FLYING_CARD_CLASS} ref={cardRef} />
 
