@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useInstallPrompt } from '../hooks/useInstallPrompt'
 
 const SITE_URL = 'https://www.gianlucadidiego.it'
@@ -8,19 +8,41 @@ const LINK_CLASS =
 
 const SEPARATOR_CLASS = 'text-gold/30'
 
+/** Five taps on the name, each soon after the last, open the secret theme panel. */
+const SECRET_TAPS = 5
+const SECRET_TAP_GAP_MS = 700
+
 /**
  * Ultima riga della pagina: copyright, rimando al sito personale e — solo dove
  * l'app non è già installata — l'invito a installarla. L'invito sparisce da
  * solo quando la finestra è in standalone o quando Chromium non ha alcun
  * evento da rilanciare, cioè quando l'app risulta già sul dispositivo.
  */
-export default function Footer() {
+export default function Footer({ onSecret }: { onSecret: () => void }) {
   const { state, install } = useInstallPrompt()
   const [hint, setHint] = useState(false)
+  const tapsRef = useRef({ count: 0, last: -Infinity })
+
+  const countSecretTap = (time: number) => {
+    const taps = tapsRef.current
+    taps.count = time - taps.last <= SECRET_TAP_GAP_MS ? taps.count + 1 : 1
+    taps.last = time
+    if (taps.count < SECRET_TAPS) return
+    taps.count = 0
+    navigator.vibrate?.([12, 40, 12])
+    onSecret()
+  }
 
   return (
     <footer className="relative flex shrink-0 flex-wrap items-center justify-center gap-x-2 gap-y-1 pt-0.5 font-mono text-[10.5px] tracking-[0.04em] text-cream/40">
-      <span>© {new Date().getFullYear()} Gianluca Di Diego</span>
+      {/* Looks like plain text on purpose: nothing hints that it can be tapped. */}
+      <button
+        type="button"
+        className="cursor-default border-none bg-transparent p-0 [font:inherit] [letter-spacing:inherit] text-inherit select-none"
+        onClick={(event) => countSecretTap(event.timeStamp)}
+      >
+        © {new Date().getFullYear()} Gianluca Di Diego
+      </button>
 
       <span aria-hidden="true" className={SEPARATOR_CLASS}>
         ·

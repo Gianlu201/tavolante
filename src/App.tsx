@@ -6,6 +6,7 @@ import Notice, { type NoticeData } from './components/Notice';
 import PlayerDrawer from './components/PlayerDrawer';
 import Podium from './components/Podium';
 import SeasonLayer from './components/SeasonLayer';
+import ThemeLabDrawer from './components/ThemeLabDrawer';
 import TournamentDrawer from './components/TournamentDrawer';
 import { useDealAnimation } from './hooks/useDealAnimation';
 import { useSeason } from './hooks/useSeason';
@@ -18,8 +19,10 @@ import {
   resolveDeckSize,
   type Direction,
 } from './lib/dealing';
+import { chooseSeason, type SeasonChoice } from './lib/seasons';
 import { seatLabel, type Settings } from './lib/settings';
 import { unlockAudio } from './lib/sound';
+import { themeName } from './lib/themeOptions';
 import { completeOrder, finishersNeeded, standings } from './lib/tournament';
 import { useThemeModule } from './themes';
 
@@ -55,7 +58,7 @@ export default function App() {
     end: endTournament,
     discard: discardTournament,
   } = useTournament();
-  const { season, greeting } = useSeason();
+  const { season, greeting, choice, version } = useSeason();
   const theme = useThemeModule(season);
   const cardRef = useRef<HTMLDivElement>(null);
   const noticeKeyRef = useRef(0);
@@ -67,6 +70,7 @@ export default function App() {
   const [recording, setRecording] = useState<string[] | null>(null);
   const [tournamentOpen, setTournamentOpen] = useState(false);
   const [podiumOpen, setPodiumOpen] = useState(false);
+  const [themeLabOpen, setThemeLabOpen] = useState(false);
   const [notice, setNotice] = useState<(NoticeData & { key: number }) | null>(
     null,
   );
@@ -207,6 +211,12 @@ export default function App() {
     discardTournament();
     setTournamentOpen(false);
     showNotice({ text: 'Torneo annullato.' });
+  };
+
+  const handleChooseTheme = (next: SeasonChoice) => {
+    chooseSeason(next);
+    setThemeLabOpen(false);
+    showNotice({ text: `Tema: ${themeName(next)}` });
   };
 
   const hands = tournament?.hands.length ?? 0;
@@ -350,7 +360,7 @@ export default function App() {
           onCancelRecording={() => setRecording(null)}
         />
 
-        <Footer />
+        <Footer onSecret={() => setThemeLabOpen(true)} />
 
         {editIndex !== null && (
           <PlayerDrawer
@@ -380,6 +390,15 @@ export default function App() {
           />
         )}
 
+        {themeLabOpen && (
+          <ThemeLabDrawer
+            choice={choice}
+            season={season}
+            onChoose={handleChooseTheme}
+            onClose={() => setThemeLabOpen(false)}
+          />
+        )}
+
         {podiumOpen && tournament?.endedAt != null && (
           <Podium tournament={tournament} onClose={() => setPodiumOpen(false)} />
         )}
@@ -393,7 +412,8 @@ export default function App() {
           />
         )}
       </main>
-      {theme?.Overlay && <theme.Overlay />}
+      {/* Keyed on the choice count: picking the same theme again replays its intro. */}
+      {theme?.Overlay && <theme.Overlay key={version} />}
     </>
   );
 }

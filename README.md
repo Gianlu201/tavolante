@@ -252,7 +252,7 @@ Per provarli fuori stagione si aggiunge un parametro all'indirizzo:
 
 | URL | Effetto |
 | --- | --- |
-| `?tema=carnevale` · `pasqua` · `pesce` · `luminara` · `palio` · `agosto` · `halloween` · `natale` · `capodanno` | forza quel tema |
+| `?tema=carnevale` · `pasqua` · `pesce` · `luminara` · `palio` · `agosto` · `halloween` · `natale` · `capodanno` | forza quel tema e sposta l'orologio dell'app sul suo giorno clou (auguri compresi), solo per quella visita |
 | `?tema=mezzanotte` | Capodanno con l'orologio a pochi secondi dalla mezzanotte, per vedere il conto alla rovescia |
 | `?tema=off` | nessun tema, anche se il periodo è attivo |
 
@@ -467,7 +467,7 @@ e controllati**, ricevono dati e callback e non conoscono `localStorage`.
 | [`hooks/useSettings.ts`](src/hooks/useSettings.ts) | le mutazioni non banali: rimuovere un posto, riordinarli, e in entrambi i casi far seguire al `winnerIndex` la **persona**, non l'indice |
 | [`lib/tournament.ts`](src/lib/tournament.ts) | mani registrate per **id** di giocatore, classifica con spareggi ed ex aequo, gradini del podio. **Puro**, più il parsing difensivo della chiave `tavolante:tournament:v1` |
 | [`lib/podiumImage.ts`](src/lib/podiumImage.ts) | disegna il podio su un canvas 1080 px con avatar e font già in cache, lo condivide con la Web Share API o lo scarica |
-| [`lib/seasons.ts`](src/lib/seasons.ts) | calendario dei temi: ognuno è una funzione anno → giorni coperti (fissi, a cavallo dell'anno o legati alla Pasqua), in ordine di priorità, con gli auguri; override `?tema=` e orologio spostabile per provare la mezzanotte |
+| [`lib/seasons.ts`](src/lib/seasons.ts) | calendario dei temi: ognuno è una funzione anno → giorni coperti (fissi, a cavallo dell'anno o legati alla Pasqua), in ordine di priorità, con gli auguri; scelta del tema forzata (`?tema=` o salvata sul dispositivo) che sposta l'orologio dell'app sul giorno clou del tema |
 | [`themes/`](src/themes) | un modulo per tema (`index.tsx` più i suoi componenti): fondale, introduzione, decorazione del tavolo, accessorio dei posti, scritta in alto. [`themes/index.ts`](src/themes/index.ts) li carica con `import()` solo nel loro periodo |
 | [`hooks/useDealAnimation.ts`](src/hooks/useDealAnimation.ts) | l'animazione, in coordinate polari, cancellabile e `async` |
 | [`hooks/useSeatDrag.ts`](src/hooks/useSeatDrag.ts) | drag & drop circolare: soglia tap/drag, slot dall'angolo del puntatore, zona morta centrale, soppressione del click post-drag |

@@ -144,33 +144,123 @@ const isSeason = (value: string | null): value is Season =>
   (SEASONS as readonly string[]).includes(value ?? '')
 
 /**
- * `?tema=<nome>` forces a theme, to try one out or show it off out of season, and
- * `?tema=off` turns them off. `?tema=mezzanotte` is New Year's Eve with the clock set
- * a few seconds before midnight, to watch the countdown.
+ * What the app shows: the calendar (`auto`), never a theme (`off`), one theme forced
+ * whatever the date, or New Year's Eve a few seconds before midnight (`mezzanotte`).
  */
-const readOverride = (): { season: Season | null | undefined; offset: number } => {
-  try {
-    const value = new URLSearchParams(window.location.search).get('tema')
-    if (value === 'off') return { season: null, offset: 0 }
-    if (isSeason(value)) return { season: value, offset: 0 }
-    if (value === 'mezzanotte') {
-      const now = new Date()
-      const eve = new Date(now.getFullYear(), 11, 31, 23, 59, 48)
-      return { season: 'capodanno', offset: eve.getTime() - now.getTime() }
-    }
-  } catch {
-    // no URL to read: no override
+export type SeasonChoice = 'auto' | 'off' | 'mezzanotte' | Season
+
+const isChoice = (value: string | null): value is SeasonChoice =>
+  value === 'auto' || value === 'off' || value === 'mezzanotte' || isSeason(value)
+
+/** The day each theme shows off best, greetings included, in the given year. */
+const showcaseDay = (season: Season, year: number): Date => {
+  const easter = easterSunday(year)
+  const at = (date: Date, hour: number) =>
+    new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour)
+  switch (season) {
+    case 'capodanno':
+      return new Date(year, 11, 31, 22)
+    case 'pasqua':
+      return at(easter, 18)
+    case 'pesce':
+      return new Date(year, 3, 1, 12)
+    case 'carnevale':
+      return at(addDays(easter, -47), 21)
+    case 'luminara':
+      return new Date(year, 5, 16, 21, 30)
+    case 'palio':
+      return new Date(year, 5, 17, 19)
+    case 'agosto':
+      return new Date(year, 7, 10, 22)
+    case 'halloween':
+      return new Date(year, 9, 31, 21)
+    case 'natale':
+      return new Date(year, 11, 25, 21)
   }
-  return { season: undefined, offset: 0 }
 }
 
-const override = readOverride()
+type Override = { season: Season | null; offset: number }
 
-/** The app's clock: the real one, unless `?tema=mezzanotte` moved it. */
-export const clockNow = () => new Date(Date.now() + override.offset)
+/**
+ * A forced theme moves the app clock to its showcase day, so it looks exactly as it
+ * will on the day. Only themes, greetings and the April fish read this clock: the
+ * tournament keeps the real time.
+ */
+const overrideFor = (choice: SeasonChoice): Override | null => {
+  if (choice === 'auto') return null
+  if (choice === 'off') return { season: null, offset: 0 }
+  const now = new Date()
+  const target =
+    choice === 'mezzanotte'
+      ? new Date(now.getFullYear(), 11, 31, 23, 59, 48)
+      : showcaseDay(choice, now.getFullYear())
+  return { season: choice === 'mezzanotte' ? 'capodanno' : choice, offset: target.getTime() - now.getTime() }
+}
 
-export const seasonAt = (date: Date) =>
-  override.season === undefined ? seasonOn(date) : override.season
+const CHOICE_KEY = 'tavolante:tema:v1'
+
+/**
+ * `?tema=<scelta>` in the address wins for that visit only. Otherwise the choice made in
+ * the secret theme panel, saved on this device until «Automatico» is chosen again.
+ */
+const readChoice = (): SeasonChoice => {
+  try {
+    const fromUrl = new URLSearchParams(window.location.search).get('tema')
+    if (isChoice(fromUrl)) return fromUrl
+    const saved = localStorage.getItem(CHOICE_KEY)
+    if (isChoice(saved)) return saved
+  } catch {
+    // no URL or storage to read: follow the calendar
+  }
+  return 'auto'
+}
+
+let choice = readChoice()
+let override = overrideFor(choice)
+let version = 0
+const listeners = new Set<() => void>()
+
+/** For `useSyncExternalStore`: the theme choice can change while the app runs. */
+export const subscribeSeason = (listener: () => void) => {
+  listeners.add(listener)
+  return () => {
+    listeners.delete(listener)
+  }
+}
+
+/** Bumped on every choice, even the same one again, so intros can replay. */
+export const seasonVersion = () => version
+
+export const currentChoice = () => choice
+
+export const chooseSeason = (next: SeasonChoice) => {
+  choice = next
+  override = overrideFor(next)
+  version += 1
+  try {
+    if (next === 'auto') localStorage.removeItem(CHOICE_KEY)
+    else localStorage.setItem(CHOICE_KEY, next)
+  } catch {
+    // storage unavailable: the choice lasts until the app is closed
+  }
+  listeners.forEach((listener) => listener())
+}
+
+/** The app's clock: the real one, unless a forced theme moved it. */
+export const clockNow = () => new Date(Date.now() + (override?.offset ?? 0))
+
+export const seasonAt = (date: Date) => (override ? override.season : seasonOn(date))
+
+/** The current or next occurrence of a theme's period, as seen from `date`. */
+export const upcomingRange = (season: Season, date: Date): DayRange => {
+  const entry = CALENDAR.find((item) => item.season === season)
+  if (!entry) throw new Error(`Unknown season ${season}`)
+  const year = date.getFullYear()
+  const next = [year - 1, year, year + 1]
+    .map((y) => entry.range(y))
+    .find(([, last]) => addDays(last, 1) > date)
+  return next ?? entry.range(year + 1)
+}
 
 /** Wishes shown in the header on the days of the feast itself. */
 export const holidayGreeting = (date: Date, season: Season | null) =>
