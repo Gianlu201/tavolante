@@ -12,7 +12,7 @@ vincitore della mano precedente** — la regola con cui si distribuisce nel Murl
 
 | | |
 | --- | --- |
-| **Versione** | 1.1.0 |
+| **Versione** | 1.2.0 |
 | **Stack** | React 19 · TypeScript 6 · Vite 8 · Tailwind CSS v4 · PWA |
 | **Lingua UI** | Italiano |
 | **Offline** | Sì, una volta installata |
@@ -227,24 +227,37 @@ telefono:
 
 | Tema | Periodo | Cosa cambia |
 | --- | --- | --- |
+| 🎭 **Carnevale di Viareggio** | dal sabato di 17 giorni prima del Martedì grasso al Martedì grasso | si apre con i tre colpi di cannone dei corsi mascherati; Burlamacco si affaccia e saluta, coriandoli che cadono sempre, stelle filanti lanciate dagli angoli, fari nel cielo; tavolo a rombi con un bordo di stelle filanti, mascherina su ogni giocatore, carte a scacchi bianchi e rossi. Giovedì e Martedì grasso: «A Carnevale ogni scherzo vale» |
+| 🐣 **Pasqua** | Domenica delle Palme → Pasquetta | il tavolo è un uovo di cioccolato aperto nella sua stagnola cangiante, con la coccarda; orecchie da coniglio su ogni giocatore; il coniglio che sbuca accanto al titolo, l'uovo che si schiude con il pulcino, farfalle e prato fiorito. «Buona Pasqua» a Pasqua e Pasquetta |
+| 🐟 **Pesce d'aprile** | 1° aprile | il tavolo fa una capriola, la scritta in alto dice «Briscola» e si corregge, pesci di carta nuotano sullo sfondo e uno è attaccato al posto di un giocatore (lo stesso per tutto il giorno): toccandolo si stacca, senza cambiare il vincitore |
+| ✨ **Luminara di San Ranieri** | 16 giugno | all'apertura i Lungarni si spengono e i lampanini si accendono da sinistra a destra su palazzi, Ponte di Mezzo, Spina e spalletta, con la Torre dietro e i riflessi nell'Arno; tavolo blu notte dentro un anello di lumini, un lampanino su ogni posto, carte con la croce pisana, fuochi d'artificio |
+| 🚣 **Palio di San Ranieri** | 17 giugno | tramonto sull'Arno, Lungarni in controluce e bandierine dei quartieri; le galee di San Francesco, San Martino, Santa Maria e Sant'Antonio vogano attorno al tavolo superandosi, ogni giocatore porta la bandierina di un quartiere |
+| 🌠 **Notti d'agosto** | 9 → 16 agosto | cielo d'estate con la Via Lattea e le stelle cadenti di San Lorenzo, lucciole e mare; tavolo dentro un salvagente, occhiali da sole su ogni giocatore. «Notte di San Lorenzo» il 10, «Buon Ferragosto» il 15 |
 | 🎃 **Halloween** | 24 ottobre → 2 novembre | feltro viola, bordo e dorso delle carte arancio, ragnatela, un ragno che penzola e pipistrelli che attraversano lo schermo |
 | 🎄 **Natale** | 8 dicembre → 6 gennaio | notte di Natale: tavolo di velluto rosso incorniciato da una ghirlanda innevata con bacche, palline, lucine e fiocco; cappellino di Babbo Natale su ogni giocatore; carte verdi con il fiocco di neve; cielo stellato con la luna e la slitta di Babbo Natale che la attraversa; palline appese che dondolano, lucine colorate e neve. Dal 24 al 26 dicembre in alto compare «Buon Natale» |
 | 🎆 **Capodanno** | 31 dicembre → 1 gennaio | feltro blu notte e oro, stelline e fuochi d'artificio; a mezzanotte conto alla rovescia a tutto schermo e auguri con fuochi e coriandoli |
 
-Le decorazioni stanno ai bordi e dietro ai contenuti: sui posti arriva al massimo il
-cappellino di Natale, che lascia libere stellina, matita e badge del torneo, e il
-giocatore di partenza in oro resta la cosa più leggibile. Con «riduci animazioni» restano solo
-i colori e le decorazioni ferme.
+La data della Pasqua (e quindi del Carnevale) si calcola dall'anno con l'algoritmo di
+Meeus/Jones/Butcher: niente tabelle da aggiornare e niente rete. Quando due periodi si
+sovrappongono vince quello che viene prima nell'elenco del calendario: Capodanno dentro
+Natale, Pasqua sul pesce d'aprile (succede nel 2029).
+
+Le decorazioni stanno ai bordi e dietro ai contenuti: sui posti arriva al massimo un
+accessorio (cappellino, orecchie, mascherina, lampanino…), che lascia libere stellina,
+matita e badge del torneo, e il giocatore di partenza in oro resta la cosa più
+leggibile. Con «riduci animazioni» le introduzioni non partono e restano solo i colori
+e le decorazioni ferme.
 
 Per provarli fuori stagione si aggiunge un parametro all'indirizzo:
 
 | URL | Effetto |
 | --- | --- |
-| `?tema=halloween` · `?tema=natale` · `?tema=capodanno` | forza quel tema |
+| `?tema=carnevale` · `pasqua` · `pesce` · `luminara` · `palio` · `agosto` · `halloween` · `natale` · `capodanno` | forza quel tema |
 | `?tema=mezzanotte` | Capodanno con l'orologio a pochi secondi dalla mezzanotte, per vedere il conto alla rovescia |
 | `?tema=off` | nessun tema, anche se il periodo è attivo |
 
-I periodi sono costanti in [`src/lib/seasons.ts`](src/lib/seasons.ts).
+Il calendario sta in [`src/lib/seasons.ts`](src/lib/seasons.ts), i temi in
+[`src/themes/`](src/themes): uno per cartella, caricato solo nel suo periodo.
 
 ---
 
@@ -355,10 +368,11 @@ niente libreria di drag & drop (Pointer Events nativi).
 
 | Asset | Dimensione | Gzip |
 | --- | --- | --- |
-| JS | 292,4 kB | **95,1 kB** |
-| CSS | 91,2 kB | **16,5 kB** |
+| JS (senza i temi stagionali) | 277,9 kB | **90,4 kB** |
+| Ogni tema stagionale, caricato solo nel suo periodo | 2,6–13,3 kB | 1,2–4,1 kB |
+| CSS | 112,3 kB | **21,2 kB** |
 | Workbox runtime | 5,7 kB | 2,2 kB |
-| Precache totale (bundle + icone + avatar WebP) | 708 KiB | — |
+| Precache totale (bundle, temi, icone, avatar WebP) | 781 KiB | — |
 
 ---
 
@@ -390,10 +404,7 @@ tavolante/
     │   ├── Confetti.tsx        # coriandoli in CSS
     │   ├── PartyHorn.tsx       # trombetta SVG che si srotola
     │   ├── Fireworks.tsx       # fuochi d'artificio in CSS
-    │   ├── SeasonLayer.tsx     # decorazioni dei temi stagionali
-    │   ├── ChristmasWreath.tsx # ghirlanda di Natale attorno al tavolo
-    │   ├── SantaHat.tsx        # cappellino di Natale sui posti
-    │   ├── NewYearCountdown.tsx# conto alla rovescia e auguri di mezzanotte
+    │   ├── SeasonLayer.tsx     # contenitore del fondale del tema stagionale
     │   ├── Notice.tsx          # avviso breve in alto, con «Annulla»
     │   ├── PlayerAvatar.tsx    # ritratto rotondo fuori dal tavolo
     │   └── Footer.tsx          # copyright, link al sito, invito all'installazione
@@ -410,10 +421,15 @@ tavolante/
     │   ├── settings.ts         # schema, id dei giocatori, parsing difensivo, persistenza
     │   ├── tournament.ts       # punti, classifica, podio, persistenza del torneo
     │   ├── podiumImage.ts      # podio disegnato su canvas, testo per WhatsApp, condivisione
-    │   ├── seasons.ts          # periodi dei temi e parametro ?tema=
+    │   ├── seasons.ts          # calendario dei temi, data della Pasqua, ?tema=
     │   ├── sound.ts            # fanfara sintetizzata con Web Audio
     │   ├── scatter.ts          # pseudo-casuale deterministico per decorazioni e coriandoli
     │   └── avatars.ts          # raccolta degli avatar e composizione della griglia
+    ├── themes/                 # 🎨 temi stagionali, uno per cartella, caricati solo nel periodo
+    │   ├── index.ts            #    mappa tema → import() e hook useThemeModule
+    │   ├── types.ts            #    cosa può aggiungere un tema (fondale, intro, tavolo, posti…)
+    │   ├── pisa/               #    Lungarni, lampanini e quartieri: condivisi da Luminara e Palio
+    │   └── carnevale/ pasqua/ pesce/ luminara/ palio/ agosto/ halloween/ natale/ capodanno/
     └── assets/avatars/         # 🖼️ WebP generati — cartella di output, non toccare a mano
 ```
 
@@ -451,7 +467,8 @@ e controllati**, ricevono dati e callback e non conoscono `localStorage`.
 | [`hooks/useSettings.ts`](src/hooks/useSettings.ts) | le mutazioni non banali: rimuovere un posto, riordinarli, e in entrambi i casi far seguire al `winnerIndex` la **persona**, non l'indice |
 | [`lib/tournament.ts`](src/lib/tournament.ts) | mani registrate per **id** di giocatore, classifica con spareggi ed ex aequo, gradini del podio. **Puro**, più il parsing difensivo della chiave `tavolante:tournament:v1` |
 | [`lib/podiumImage.ts`](src/lib/podiumImage.ts) | disegna il podio su un canvas 1080 px con avatar e font già in cache, lo condivide con la Web Share API o lo scarica |
-| [`lib/seasons.ts`](src/lib/seasons.ts) | periodi dei temi (anche a cavallo dell'anno), override `?tema=` e orologio spostabile per provare la mezzanotte |
+| [`lib/seasons.ts`](src/lib/seasons.ts) | calendario dei temi: ognuno è una funzione anno → giorni coperti (fissi, a cavallo dell'anno o legati alla Pasqua), in ordine di priorità, con gli auguri; override `?tema=` e orologio spostabile per provare la mezzanotte |
+| [`themes/`](src/themes) | un modulo per tema (`index.tsx` più i suoi componenti): fondale, introduzione, decorazione del tavolo, accessorio dei posti, scritta in alto. [`themes/index.ts`](src/themes/index.ts) li carica con `import()` solo nel loro periodo |
 | [`hooks/useDealAnimation.ts`](src/hooks/useDealAnimation.ts) | l'animazione, in coordinate polari, cancellabile e `async` |
 | [`hooks/useSeatDrag.ts`](src/hooks/useSeatDrag.ts) | drag & drop circolare: soglia tap/drag, slot dall'angolo del puntatore, zona morta centrale, soppressione del click post-drag |
 
@@ -734,7 +751,7 @@ va rilanciato `npm run og`.
 
 | Cosa | Strategia |
 | --- | --- |
-| Bundle, CSS, icone, avatar WebP | **precache** (50 voci, 708 KiB) |
+| Bundle, CSS, icone, avatar WebP | **precache** (61 voci, 781 KiB) |
 | `og-cover.png` | **escluso** dal precache (`globIgnores`): serve ai crawler, non all'app installata |
 | CSS di Google Fonts | `StaleWhileRevalidate` |
 | File dei font (`fonts.gstatic.com`) | `CacheFirst`, 30 voci, 1 anno |
