@@ -9,7 +9,7 @@ const TABLE_CLASS =
   "relative aspect-square w-[min(86vw,46dvh,360px)] rounded-full bg-[radial-gradient(circle_at_50%_40%,var(--color-felt-1),var(--color-felt-2)_70%,var(--color-felt-3)_100%)] shadow-[0_0_0_2px_var(--color-rim),0_0_0_8px_rgba(0,0,0,0.25),inset_0_0_40px_rgba(0,0,0,0.55),0_24px_50px_-12px_rgba(0,0,0,0.6)] before:absolute before:inset-[9%] before:rounded-full before:border before:border-dashed before:border-cream/16 before:content-['']";
 
 const CARD_BACK_CLASS =
-  "absolute inset-0 rounded-[14%] border-2 border-gold-light bg-[linear-gradient(135deg,var(--color-ember)_0%,var(--color-ember-dark)_100%)] shadow-[0_2px_0_rgba(0,0,0,0.3)] after:absolute after:inset-[14%] after:rounded-[10%] after:border after:border-cream/55 after:content-['']";
+  "absolute inset-0 rounded-[14%] border-2 border-gold-light bg-[linear-gradient(135deg,var(--color-deck-1)_0%,var(--color-deck-2)_100%)] shadow-[0_2px_0_rgba(0,0,0,0.3)] after:absolute after:inset-[14%] after:rounded-[10%] after:border after:border-cream/55 after:content-['']";
 
 const FLYING_CARD_CLASS =
   "pointer-events-none absolute top-1/2 left-1/2 z-4 flex aspect-[0.7/1] w-[9.5%] items-center justify-center rounded-[16%] border-2 border-gold bg-[linear-gradient(135deg,var(--color-cream),var(--color-cream-deep))] opacity-0 shadow-[0_4px_10px_rgba(0,0,0,0.45)] transition-opacity duration-250 [transform:translate(-50%,-50%)] after:text-[60%] after:text-ink after:opacity-75 after:content-['♠']";

@@ -17,6 +17,10 @@
   --color-ember-dark: #8f3623;
   --color-ember-soft: #e08363;
   --color-drawer: #0f3a2c;
+  /* Dorso delle carte: separato da ember, che resta il colore delle azioni
+     distruttive, così i temi stagionali possono cambiarlo da solo. */
+  --color-deck-1: #b5482f;
+  --color-deck-2: #8f3623;
   --color-silver: #c9ced6;
   --color-bronze: #cf8a57;
 
@@ -39,6 +43,13 @@
   --animate-riffle-left: riffle-left 0.95s ease-in-out;
   --animate-riffle-right: riffle-right 0.95s ease-in-out;
   --animate-deck-square: deck-square 0.95s ease-in-out;
+  --animate-twinkle: twinkle 2s ease-in-out infinite;
+  --animate-snow-fall: snow-fall 12s linear infinite;
+  --animate-bat-fly: bat-fly 24s linear infinite both;
+  --animate-bat-flap: bat-flap 0.26s ease-in-out infinite;
+  --animate-spider-bob: spider-bob 7s ease-in-out infinite;
+  --animate-firework: firework 6s ease-out infinite both;
+  --animate-countdown-pop: countdown-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
   @keyframes scrim-in {
     from {
@@ -164,6 +175,80 @@
     }
   }
 
+  @keyframes twinkle {
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes snow-fall {
+    from {
+      translate: 0 -10vh;
+    }
+    to {
+      translate: var(--drift) 110vh;
+    }
+  }
+
+  /* Il pipistrello attraversa lo schermo nel primo terzo del ciclo, poi aspetta fuori. */
+  @keyframes bat-fly {
+    0% {
+      translate: -15vw 0;
+    }
+    9% {
+      translate: 20vw -16px;
+    }
+    18% {
+      translate: 55vw 10px;
+    }
+    27% {
+      translate: 90vw -12px;
+    }
+    35%,
+    100% {
+      translate: 120vw 0;
+    }
+  }
+
+  @keyframes bat-flap {
+    50% {
+      scale: 1 0.55;
+    }
+  }
+
+  @keyframes spider-bob {
+    50% {
+      translate: 0 26px;
+    }
+  }
+
+  /* Ogni scintilla vola lungo il proprio angolo (--a) fino a --r, poi si spegne. */
+  @keyframes firework {
+    0% {
+      transform: rotate(var(--a)) translateX(0) scale(1);
+      opacity: 0;
+    }
+    3% {
+      opacity: 1;
+    }
+    30% {
+      transform: rotate(var(--a)) translateX(var(--r)) scale(0.55);
+      opacity: 0.9;
+    }
+    40%,
+    100% {
+      transform: rotate(var(--a)) translateX(calc(var(--r) * 1.12)) scale(0.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes countdown-pop {
+    from {
+      scale: 1.7;
+      opacity: 0;
+    }
+  }
+
   /* La lingua di carta si srotola, sobbalza e si riavvolge. */
   @keyframes horn-blow {
     0%,
@@ -179,6 +264,38 @@
       scale: 0.84 1;
     }
   }
+}
+
+/* Temi stagionali: sovrascrivono i token, quindi tavolo, pannelli, sfondo e dorso
+   delle carte cambiano colore senza toccare i componenti. Oro e panna restano: il
+   posto di partenza deve essere sempre la cosa più leggibile. */
+:root[data-season='halloween'] {
+  --color-felt-1: #3b2149;
+  --color-felt-2: #251430;
+  --color-felt-3: #170c1e;
+  --color-rim: #d0702c;
+  --color-drawer: #271636;
+  --color-deck-1: #e2742a;
+  --color-deck-2: #a3461a;
+}
+
+:root[data-season='natale'] {
+  --color-felt-1: #18593d;
+  --color-felt-2: #0e3b2a;
+  --color-felt-3: #0a2b1f;
+  --color-rim: #b3262f;
+  --color-deck-1: #c8262e;
+  --color-deck-2: #7f1218;
+}
+
+:root[data-season='capodanno'] {
+  --color-felt-1: #23335f;
+  --color-felt-2: #152042;
+  --color-felt-3: #0b1229;
+  --color-rim: #d6ae66;
+  --color-drawer: #17234a;
+  --color-deck-1: #2f4789;
+  --color-deck-2: #18264f;
 }
 
 @layer base {

@@ -2,11 +2,14 @@ import { useRef, useState } from 'react';
 import CardTable from './components/CardTable';
 import Controls from './components/Controls';
 import Footer from './components/Footer';
+import NewYearCountdown from './components/NewYearCountdown';
 import Notice, { type NoticeData } from './components/Notice';
 import PlayerDrawer from './components/PlayerDrawer';
 import Podium from './components/Podium';
+import SeasonLayer from './components/SeasonLayer';
 import TournamentDrawer from './components/TournamentDrawer';
 import { useDealAnimation } from './hooks/useDealAnimation';
+import { useSeason } from './hooks/useSeason';
 import { useSettings } from './hooks/useSettings';
 import { useTournament } from './hooks/useTournament';
 import {
@@ -52,6 +55,7 @@ export default function App() {
     end: endTournament,
     discard: discardTournament,
   } = useTournament();
+  const season = useSeason();
   const cardRef = useRef<HTMLDivElement>(null);
   const noticeKeyRef = useRef(0);
   const { spinning, deal, hideCard } = useDealAnimation(cardRef);
@@ -208,172 +212,176 @@ export default function App() {
   const leaders = rows.filter((row) => row.rank === 1 && row.points > 0);
 
   return (
-    <main className='mx-auto flex min-h-dvh w-full max-w-130 flex-col gap-2.5 px-4 pt-[calc(14px+env(safe-area-inset-top,0px))] pb-[calc(14px+env(safe-area-inset-bottom,0px))]'>
-      <header className='shrink-0 text-center'>
-        <p className='mb-1 font-mono text-[11px] tracking-[0.16em] text-gold/85 uppercase'>
-          Tavolante · Murlan
+    <>
+      {season && <SeasonLayer season={season} />}
+      <main className='relative z-1 mx-auto flex min-h-dvh w-full max-w-130 flex-col gap-2.5 px-4 pt-[calc(14px+env(safe-area-inset-top,0px))] pb-[calc(14px+env(safe-area-inset-bottom,0px))]'>
+        <header className='shrink-0 text-center'>
+          <p className='mb-1 font-mono text-[11px] tracking-[0.16em] text-gold/85 uppercase'>
+            Tavolante · Murlan
+          </p>
+          <h1 className='font-display text-2xl font-semibold text-cream'>
+            Distributore di{' '}
+            <em className='font-medium text-gold-light italic'>carte</em>
+          </h1>
+        </header>
+
+        <div className='flex shrink-0 flex-wrap justify-center gap-2'>
+          <button
+            type='button'
+            className={`${PILL_BASE} ${editing ? PILL_ACTIVE : PILL_IDLE}`}
+            disabled={busy}
+            aria-pressed={editing}
+            onClick={toggleEditing}
+          >
+            {editing ? '✓ Fatto' : '✎ Personalizza'}
+          </button>
+          <button
+            type='button'
+            className={`${PILL_BASE} ${
+              tournamentActive
+                ? 'border-gold/60 bg-gold/14 text-gold-light'
+                : PILL_IDLE
+            }`}
+            disabled={busy || editing}
+            onClick={() => setTournamentOpen(true)}
+          >
+            {tournamentActive ? '🏆 Classifica' : '🏆 Torneo'}
+          </button>
+        </div>
+
+        <div className='flex min-h-0 flex-1 items-center justify-center py-1'>
+          <CardTable
+            players={settings.players}
+            profiles={settings.profiles}
+            winnerIndex={settings.winnerIndex}
+            startIndex={result?.startIndex ?? null}
+            editing={editing}
+            finishOrder={
+              recording
+                ? recording.map((id) =>
+                    settings.profiles.findIndex((profile) => profile.id === id),
+                  )
+                : null
+            }
+            disabled={spinning}
+            onSelectWinner={(winnerIndex) => handleChange({ winnerIndex })}
+            onEditPlayer={setEditIndex}
+            onMarkFinish={handleMarkFinish}
+            onReorder={handleReorder}
+            cardRef={cardRef}
+          />
+        </div>
+
+        <p
+          className='m-0 min-h-8.5 shrink-0 text-center text-[13px] leading-[1.4] text-balance text-cream/60'
+          aria-live='polite'
+        >
+          {spinning ? (
+            'La carta gira e rallenta fino al giocatore di partenza…'
+          ) : editing ? (
+            'Tocca un giocatore per assegnargli un nome o un personaggio.'
+          ) : recording ? (
+            <>
+              Tocca chi ha chiuso{' '}
+              <b className='text-[15px] font-bold text-gold-light'>
+                {recording.length + 1}°
+              </b>
+              {recording.length > 0 &&
+                ' · tocca di nuovo un giocatore segnato per correggere'}
+            </>
+          ) : result ? (
+            <>
+              Con <b className='font-bold text-gold-light'>{result.players}</b>{' '}
+              giocatori e{' '}
+              <b className='font-bold text-gold-light'>{result.cards}</b> carte in
+              senso {directionLabel(result.direction)}, per far arrivare l'ultima
+              carta a{' '}
+              <b className='font-bold text-gold-light'>
+                {playerName(result.winnerIndex)}
+              </b>{' '}
+              inizia a distribuire da{' '}
+              <b className='text-[15px] font-bold text-cream'>
+                {playerName(result.startIndex)}
+              </b>
+            </>
+          ) : tournamentActive && leaders.length > 0 ? (
+            <>
+              Torneo · {hands === 1 ? '1 mano' : `${hands} mani`} · in testa{' '}
+              <b className='font-bold text-gold-light'>
+                {leaders.map((row) => row.name).join(' e ')}
+              </b>{' '}
+              con {leaders[0].points} pt. A fine mano premi «Fine mano».
+            </>
+          ) : tournamentActive ? (
+            <>
+              Torneo in corso: a fine mano premi{' '}
+              <b className='font-bold text-gold-light'>Fine mano</b> e tocca chi
+              ha chiuso 1°, 2° e 3°.
+            </>
+          ) : (
+            <>
+              Tocca il giocatore che ha vinto la mano precedente: riceverà
+              l'ultima carta del mazzo.
+            </>
+          )}
         </p>
-        <h1 className='font-display text-2xl font-semibold text-cream'>
-          Distributore di{' '}
-          <em className='font-medium text-gold-light italic'>carte</em>
-        </h1>
-      </header>
 
-      <div className='flex shrink-0 flex-wrap justify-center gap-2'>
-        <button
-          type='button'
-          className={`${PILL_BASE} ${editing ? PILL_ACTIVE : PILL_IDLE}`}
+        <Controls
+          settings={settings}
           disabled={busy}
-          aria-pressed={editing}
-          onClick={toggleEditing}
-        >
-          {editing ? '✓ Fatto' : '✎ Personalizza'}
-        </button>
-        <button
-          type='button'
-          className={`${PILL_BASE} ${
-            tournamentActive
-              ? 'border-gold/60 bg-gold/14 text-gold-light'
-              : PILL_IDLE
-          }`}
-          disabled={busy || editing}
-          onClick={() => setTournamentOpen(true)}
-        >
-          {tournamentActive ? '🏆 Classifica' : '🏆 Torneo'}
-        </button>
-      </div>
-
-      <div className='flex min-h-0 flex-1 items-center justify-center py-1'>
-        <CardTable
-          players={settings.players}
-          profiles={settings.profiles}
-          winnerIndex={settings.winnerIndex}
-          startIndex={result?.startIndex ?? null}
-          editing={editing}
-          finishOrder={
-            recording
-              ? recording.map((id) =>
-                  settings.profiles.findIndex((profile) => profile.id === id),
-                )
-              : null
-          }
-          disabled={spinning}
-          onSelectWinner={(winnerIndex) => handleChange({ winnerIndex })}
-          onEditPlayer={setEditIndex}
-          onMarkFinish={handleMarkFinish}
-          onReorder={handleReorder}
-          cardRef={cardRef}
+          tournamentActive={tournamentActive}
+          recording={recording !== null}
+          onChange={handleChange}
+          onDeal={handleDeal}
+          onReset={handleReset}
+          onFinishHand={handleFinishHand}
+          onCancelRecording={() => setRecording(null)}
         />
-      </div>
 
-      <p
-        className='m-0 min-h-8.5 shrink-0 text-center text-[13px] leading-[1.4] text-balance text-cream/60'
-        aria-live='polite'
-      >
-        {spinning ? (
-          'La carta gira e rallenta fino al giocatore di partenza…'
-        ) : editing ? (
-          'Tocca un giocatore per assegnargli un nome o un personaggio.'
-        ) : recording ? (
-          <>
-            Tocca chi ha chiuso{' '}
-            <b className='text-[15px] font-bold text-gold-light'>
-              {recording.length + 1}°
-            </b>
-            {recording.length > 0 &&
-              ' · tocca di nuovo un giocatore segnato per correggere'}
-          </>
-        ) : result ? (
-          <>
-            Con <b className='font-bold text-gold-light'>{result.players}</b>{' '}
-            giocatori e{' '}
-            <b className='font-bold text-gold-light'>{result.cards}</b> carte in
-            senso {directionLabel(result.direction)}, per far arrivare l'ultima
-            carta a{' '}
-            <b className='font-bold text-gold-light'>
-              {playerName(result.winnerIndex)}
-            </b>{' '}
-            inizia a distribuire da{' '}
-            <b className='text-[15px] font-bold text-cream'>
-              {playerName(result.startIndex)}
-            </b>
-          </>
-        ) : tournamentActive && leaders.length > 0 ? (
-          <>
-            Torneo · {hands === 1 ? '1 mano' : `${hands} mani`} · in testa{' '}
-            <b className='font-bold text-gold-light'>
-              {leaders.map((row) => row.name).join(' e ')}
-            </b>{' '}
-            con {leaders[0].points} pt. A fine mano premi «Fine mano».
-          </>
-        ) : tournamentActive ? (
-          <>
-            Torneo in corso: a fine mano premi{' '}
-            <b className='font-bold text-gold-light'>Fine mano</b> e tocca chi
-            ha chiuso 1°, 2° e 3°.
-          </>
-        ) : (
-          <>
-            Tocca il giocatore che ha vinto la mano precedente: riceverà
-            l'ultima carta del mazzo.
-          </>
+        <Footer />
+
+        {editIndex !== null && (
+          <PlayerDrawer
+            key={editIndex}
+            index={editIndex}
+            profile={settings.profiles[editIndex]}
+            canRemove={settings.players > MIN_PLAYERS}
+            onChange={(patch) => updateProfile(editIndex, patch)}
+            onRemove={() => handleRemovePlayer(editIndex)}
+            onClose={() => setEditIndex(null)}
+          />
         )}
-      </p>
 
-      <Controls
-        settings={settings}
-        disabled={busy}
-        tournamentActive={tournamentActive}
-        recording={recording !== null}
-        onChange={handleChange}
-        onDeal={handleDeal}
-        onReset={handleReset}
-        onFinishHand={handleFinishHand}
-        onCancelRecording={() => setRecording(null)}
-      />
+        {tournamentOpen && (
+          <TournamentDrawer
+            tournament={tournament}
+            rows={rows}
+            onStart={handleStartTournament}
+            onUndoLastHand={() => {
+              undoLastHand();
+              showNotice({ text: 'Ultima mano annullata.' });
+            }}
+            onEnd={handleEndTournament}
+            onDiscard={handleDiscardTournament}
+            onShowPodium={handleShowPodium}
+            onClose={() => setTournamentOpen(false)}
+          />
+        )}
 
-      <Footer />
+        {podiumOpen && tournament?.endedAt != null && (
+          <Podium tournament={tournament} onClose={() => setPodiumOpen(false)} />
+        )}
 
-      {editIndex !== null && (
-        <PlayerDrawer
-          key={editIndex}
-          index={editIndex}
-          profile={settings.profiles[editIndex]}
-          canRemove={settings.players > MIN_PLAYERS}
-          onChange={(patch) => updateProfile(editIndex, patch)}
-          onRemove={() => handleRemovePlayer(editIndex)}
-          onClose={() => setEditIndex(null)}
-        />
-      )}
-
-      {tournamentOpen && (
-        <TournamentDrawer
-          tournament={tournament}
-          rows={rows}
-          onStart={handleStartTournament}
-          onUndoLastHand={() => {
-            undoLastHand();
-            showNotice({ text: 'Ultima mano annullata.' });
-          }}
-          onEnd={handleEndTournament}
-          onDiscard={handleDiscardTournament}
-          onShowPodium={handleShowPodium}
-          onClose={() => setTournamentOpen(false)}
-        />
-      )}
-
-      {podiumOpen && tournament?.endedAt != null && (
-        <Podium tournament={tournament} onClose={() => setPodiumOpen(false)} />
-      )}
-
-      {notice && (
-        <Notice
-          key={notice.key}
-          text={notice.text}
-          onUndo={notice.onUndo}
-          onDismiss={() => setNotice(null)}
-        />
-      )}
-    </main>
+        {notice && (
+          <Notice
+            key={notice.key}
+            text={notice.text}
+            onUndo={notice.onUndo}
+            onDismiss={() => setNotice(null)}
+          />
+        )}
+      </main>
+      {season === 'capodanno' && <NewYearCountdown />}
+    </>
   );
 }
