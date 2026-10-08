@@ -228,11 +228,12 @@ telefono:
 | Tema | Periodo | Cosa cambia |
 | --- | --- | --- |
 | 🎃 **Halloween** | 24 ottobre → 2 novembre | feltro viola, bordo e dorso delle carte arancio, ragnatela, un ragno che penzola e pipistrelli che attraversano lo schermo |
-| 🎄 **Natale** | 8 dicembre → 6 gennaio | lucine colorate in alto, neve che cade, bordo e dorso delle carte rossi |
+| 🎄 **Natale** | 8 dicembre → 6 gennaio | notte di Natale: tavolo di velluto rosso incorniciato da una ghirlanda innevata con bacche, palline, lucine e fiocco; cappellino di Babbo Natale su ogni giocatore; carte verdi con il fiocco di neve; cielo stellato con la luna e la slitta di Babbo Natale che la attraversa; palline appese che dondolano, lucine colorate e neve. Dal 24 al 26 dicembre in alto compare «Buon Natale» |
 | 🎆 **Capodanno** | 31 dicembre → 1 gennaio | feltro blu notte e oro, stelline e fuochi d'artificio; a mezzanotte conto alla rovescia a tutto schermo e auguri con fuochi e coriandoli |
 
-Le decorazioni stanno ai bordi e dietro ai contenuti, mai sopra i posti: il giocatore
-di partenza in oro resta la cosa più leggibile. Con «riduci animazioni» restano solo
+Le decorazioni stanno ai bordi e dietro ai contenuti: sui posti arriva al massimo il
+cappellino di Natale, che lascia libere stellina, matita e badge del torneo, e il
+giocatore di partenza in oro resta la cosa più leggibile. Con «riduci animazioni» restano solo
 i colori e le decorazioni ferme.
 
 Per provarli fuori stagione si aggiunge un parametro all'indirizzo:
@@ -354,10 +355,10 @@ niente libreria di drag & drop (Pointer Events nativi).
 
 | Asset | Dimensione | Gzip |
 | --- | --- | --- |
-| JS | 281,9 kB | **91,3 kB** |
-| CSS | 86,3 kB | **15,5 kB** |
+| JS | 292,4 kB | **95,1 kB** |
+| CSS | 91,2 kB | **16,5 kB** |
 | Workbox runtime | 5,7 kB | 2,2 kB |
-| Precache totale (bundle + icone + avatar WebP) | 692 KiB | — |
+| Precache totale (bundle + icone + avatar WebP) | 708 KiB | — |
 
 ---
 
@@ -390,6 +391,8 @@ tavolante/
     │   ├── PartyHorn.tsx       # trombetta SVG che si srotola
     │   ├── Fireworks.tsx       # fuochi d'artificio in CSS
     │   ├── SeasonLayer.tsx     # decorazioni dei temi stagionali
+    │   ├── ChristmasWreath.tsx # ghirlanda di Natale attorno al tavolo
+    │   ├── SantaHat.tsx        # cappellino di Natale sui posti
     │   ├── NewYearCountdown.tsx# conto alla rovescia e auguri di mezzanotte
     │   ├── Notice.tsx          # avviso breve in alto, con «Annulla»
     │   ├── PlayerAvatar.tsx    # ritratto rotondo fuori dal tavolo
@@ -409,6 +412,7 @@ tavolante/
     │   ├── podiumImage.ts      # podio disegnato su canvas, testo per WhatsApp, condivisione
     │   ├── seasons.ts          # periodi dei temi e parametro ?tema=
     │   ├── sound.ts            # fanfara sintetizzata con Web Audio
+    │   ├── scatter.ts          # pseudo-casuale deterministico per decorazioni e coriandoli
     │   └── avatars.ts          # raccolta degli avatar e composizione della griglia
     └── assets/avatars/         # 🖼️ WebP generati — cartella di output, non toccare a mano
 ```
@@ -730,7 +734,7 @@ va rilanciato `npm run og`.
 
 | Cosa | Strategia |
 | --- | --- |
-| Bundle, CSS, icone, avatar WebP | **precache** (50 voci, 692 KiB) |
+| Bundle, CSS, icone, avatar WebP | **precache** (50 voci, 708 KiB) |
 | `og-cover.png` | **escluso** dal precache (`globIgnores`): serve ai crawler, non all'app installata |
 | CSS di Google Fonts | `StaleWhileRevalidate` |
 | File dei font (`fonts.gstatic.com`) | `CacheFirst`, 30 voci, 1 anno |

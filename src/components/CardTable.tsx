@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react';
+import { Fragment, useRef, useState, type ReactNode } from 'react';
 import { arrayMove, useSeatDrag } from '../hooks/useSeatDrag';
 import { avatarSrc } from '../lib/avatars';
 import { profileInitials, type PlayerProfile } from '../lib/settings';
@@ -9,7 +9,7 @@ const TABLE_CLASS =
   "relative aspect-square w-[min(86vw,46dvh,360px)] rounded-full bg-[radial-gradient(circle_at_50%_40%,var(--color-felt-1),var(--color-felt-2)_70%,var(--color-felt-3)_100%)] shadow-[0_0_0_2px_var(--color-rim),0_0_0_8px_rgba(0,0,0,0.25),inset_0_0_40px_rgba(0,0,0,0.55),0_24px_50px_-12px_rgba(0,0,0,0.6)] before:absolute before:inset-[9%] before:rounded-full before:border before:border-dashed before:border-cream/16 before:content-['']";
 
 const CARD_BACK_CLASS =
-  "absolute inset-0 rounded-[14%] border-2 border-gold-light bg-[linear-gradient(135deg,var(--color-deck-1)_0%,var(--color-deck-2)_100%)] shadow-[0_2px_0_rgba(0,0,0,0.3)] after:absolute after:inset-[14%] after:rounded-[10%] after:border after:border-cream/55 after:content-['']";
+  "absolute inset-0 rounded-[14%] border-2 border-gold-light bg-[linear-gradient(135deg,var(--color-deck-1)_0%,var(--color-deck-2)_100%)] shadow-[0_2px_0_rgba(0,0,0,0.3)] after:absolute after:inset-[14%] after:flex after:items-center after:justify-center after:rounded-[10%] after:border after:border-cream/55 after:text-[clamp(10px,3.4vw,16px)] after:leading-none after:text-gold-light after:content-(--deck-emblem)";
 
 const FLYING_CARD_CLASS =
   "pointer-events-none absolute top-1/2 left-1/2 z-4 flex aspect-[0.7/1] w-[9.5%] items-center justify-center rounded-[16%] border-2 border-gold bg-[linear-gradient(135deg,var(--color-cream),var(--color-cream-deep))] opacity-0 shadow-[0_4px_10px_rgba(0,0,0,0.45)] transition-opacity duration-250 [transform:translate(-50%,-50%)] after:text-[60%] after:text-ink after:opacity-75 after:content-['♠']";
@@ -90,6 +90,10 @@ type CardTableProps = {
   onMarkFinish: (index: number) => void;
   onReorder: (from: number, to: number) => void;
   cardRef: React.RefObject<HTMLDivElement | null>;
+  /** Seasonal dressing around the felt, painted under the seats. */
+  decoration?: ReactNode;
+  /** Seasonal touch worn by every seat, the dragged one included. */
+  seatAccessory?: ReactNode;
 };
 
 export default function CardTable({
@@ -105,6 +109,8 @@ export default function CardTable({
   onMarkFinish,
   onReorder,
   cardRef,
+  decoration,
+  seatAccessory,
 }: CardTableProps) {
   const recording = finishOrder !== null;
   const tableRef = useRef<HTMLDivElement>(null);
@@ -146,6 +152,8 @@ export default function CardTable({
 
   return (
     <div className={TABLE_CLASS} ref={tableRef}>
+      {decoration}
+
       <button
         type='button'
         className='absolute top-1/2 left-1/2 z-3 aspect-[0.7/1] w-[15%] -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-[14%] border-none bg-transparent p-0 disabled:cursor-default'
@@ -233,6 +241,7 @@ export default function CardTable({
               profile={profile}
               index={index}
               isWinner={isWinner}
+              accessory={seatAccessory}
             />
             <span
               className={`pointer-events-none absolute -right-0.5 -bottom-0.5 flex aspect-square w-[42%] items-center justify-center rounded-full bg-gold text-[clamp(8px,2.2vw,11px)] text-ink transition-[opacity,scale] duration-180 ease-out ${
@@ -289,6 +298,7 @@ export default function CardTable({
             profile={profiles[ghostIndex]}
             index={ghostIndex}
             isWinner={ghostIndex === winnerIndex}
+            accessory={seatAccessory}
           />
         </div>
       )}
@@ -300,9 +310,10 @@ type SeatContentProps = {
   profile: PlayerProfile;
   index: number;
   isWinner: boolean;
+  accessory?: ReactNode;
 };
 
-function SeatContent({ profile, index, isWinner }: SeatContentProps) {
+function SeatContent({ profile, index, isWinner, accessory }: SeatContentProps) {
   const src = avatarSrc(profile.avatarId);
   const initials = profileInitials(profile.name);
 
@@ -334,6 +345,7 @@ function SeatContent({ profile, index, isWinner }: SeatContentProps) {
           {initials || index + 1}
         </span>
       )}
+      {accessory}
     </>
   );
 }

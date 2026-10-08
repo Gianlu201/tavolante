@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { clockNow, seasonAt } from '../lib/seasons'
+import { clockNow, holidayGreeting, seasonAt } from '../lib/seasons'
 
 const DEFAULT_THEME_COLOR = '#092820'
 
@@ -20,18 +20,23 @@ export function useNow(intervalMs: number) {
  * the colour tokens, and in the browser bar colour so the whole screen matches.
  */
 export function useSeason() {
-  const season = seasonAt(useNow(60_000))
+  const now = useNow(60_000)
+  const season = seasonAt(now)
 
   useEffect(() => {
     const root = document.documentElement
     if (season) root.dataset.season = season
     else delete root.dataset.season
 
-    const felt = getComputedStyle(root).getPropertyValue('--color-felt-3').trim()
+    // A theme that paints its own sky names it in --color-page; else the felt does.
+    const style = getComputedStyle(root)
+    const color =
+      style.getPropertyValue('--color-page').trim() ||
+      style.getPropertyValue('--color-felt-3').trim()
     document
       .querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', felt || DEFAULT_THEME_COLOR)
+      ?.setAttribute('content', color || DEFAULT_THEME_COLOR)
   }, [season])
 
-  return season
+  return { season, greeting: holidayGreeting(now, season) }
 }

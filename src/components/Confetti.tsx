@@ -1,12 +1,7 @@
 import type { CSSProperties } from 'react'
+import { scatter } from '../lib/scatter'
 
 const COLORS = ['#c9a15a', '#ecd8a3', '#f4ecdd', '#e08363', '#c9ced6', '#d6ae66']
-
-/** Deterministic scatter: no Math.random during render, the same rain every time. */
-const scatter = (i: number, salt: number) => {
-  const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453
-  return x - Math.floor(x)
-}
 
 type ConfettiProps = {
   /** Seconds before the first pieces start falling. */

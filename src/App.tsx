@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 import CardTable from './components/CardTable';
+import ChristmasWreath from './components/ChristmasWreath';
 import Controls from './components/Controls';
 import Footer from './components/Footer';
 import NewYearCountdown from './components/NewYearCountdown';
 import Notice, { type NoticeData } from './components/Notice';
 import PlayerDrawer from './components/PlayerDrawer';
 import Podium from './components/Podium';
+import SantaHat from './components/SantaHat';
 import SeasonLayer from './components/SeasonLayer';
 import TournamentDrawer from './components/TournamentDrawer';
 import { useDealAnimation } from './hooks/useDealAnimation';
@@ -55,7 +57,7 @@ export default function App() {
     end: endTournament,
     discard: discardTournament,
   } = useTournament();
-  const season = useSeason();
+  const { season, greeting } = useSeason();
   const cardRef = useRef<HTMLDivElement>(null);
   const noticeKeyRef = useRef(0);
   const { spinning, deal, hideCard } = useDealAnimation(cardRef);
@@ -214,10 +216,17 @@ export default function App() {
   return (
     <>
       {season && <SeasonLayer season={season} />}
-      <main className='relative z-1 mx-auto flex min-h-dvh w-full max-w-130 flex-col gap-2.5 px-4 pt-[calc(14px+env(safe-area-inset-top,0px))] pb-[calc(14px+env(safe-area-inset-bottom,0px))]'>
+      <main
+        // The Christmas string of lights hangs across the top: leave it some room.
+        className={`relative z-1 mx-auto flex min-h-dvh w-full max-w-130 flex-col gap-2.5 px-4 pb-[calc(14px+env(safe-area-inset-bottom,0px))] ${
+          season === 'natale'
+            ? 'pt-[calc(28px+env(safe-area-inset-top,0px))]'
+            : 'pt-[calc(14px+env(safe-area-inset-top,0px))]'
+        }`}
+      >
         <header className='shrink-0 text-center'>
           <p className='mb-1 font-mono text-[11px] tracking-[0.16em] text-gold/85 uppercase'>
-            Tavolante · Murlan
+            {greeting ? `${greeting} · Murlan 🎄` : 'Tavolante · Murlan'}
           </p>
           <h1 className='font-display text-2xl font-semibold text-cream'>
             Distributore di{' '}
@@ -269,6 +278,8 @@ export default function App() {
             onMarkFinish={handleMarkFinish}
             onReorder={handleReorder}
             cardRef={cardRef}
+            decoration={season === 'natale' ? <ChristmasWreath /> : undefined}
+            seatAccessory={season === 'natale' ? <SantaHat /> : undefined}
           />
         </div>
 

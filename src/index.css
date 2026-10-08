@@ -45,6 +45,9 @@
   --animate-deck-square: deck-square 0.95s ease-in-out;
   --animate-twinkle: twinkle 2s ease-in-out infinite;
   --animate-snow-fall: snow-fall 12s linear infinite;
+  --animate-snow-sway: snow-sway 4s ease-in-out infinite alternate;
+  --animate-sleigh-fly: sleigh-fly 28s linear infinite both;
+  --animate-bauble-swing: bauble-swing 4.5s ease-in-out infinite alternate;
   --animate-bat-fly: bat-fly 24s linear infinite both;
   --animate-bat-flap: bat-flap 0.26s ease-in-out infinite;
   --animate-spider-bob: spider-bob 7s ease-in-out infinite;
@@ -190,6 +193,49 @@
     }
   }
 
+  /* Il fiocco ondeggia e ruota mentre cade: la caduta sta sull'elemento esterno. */
+  @keyframes snow-sway {
+    from {
+      translate: calc(var(--sway) * -1) 0;
+      rotate: -30deg;
+    }
+    to {
+      translate: var(--sway) 0;
+      rotate: 30deg;
+    }
+  }
+
+  /* La slitta entra dal bordo destro, decolla passando davanti alla luna ed esce in
+     alto, a destra del titolo; per il resto del ciclo aspetta fuori dallo schermo. */
+  @keyframes sleigh-fly {
+    0% {
+      translate: 102vw 126px;
+      rotate: 20deg;
+    }
+    14% {
+      translate: 64vw 48px;
+      rotate: 25deg;
+    }
+    26% {
+      translate: 46vw -34px;
+      rotate: 29deg;
+    }
+    34%,
+    100% {
+      translate: 36vw -130px;
+      rotate: 32deg;
+    }
+  }
+
+  @keyframes bauble-swing {
+    from {
+      rotate: -7deg;
+    }
+    to {
+      rotate: 7deg;
+    }
+  }
+
   /* Il pipistrello attraversa lo schermo nel primo terzo del ciclo, poi aspetta fuori. */
   @keyframes bat-fly {
     0% {
@@ -279,13 +325,23 @@
   --color-deck-2: #a3461a;
 }
 
+:root {
+  /* Simbolo al centro del dorso delle carte: vuoto, tranne a Natale. */
+  --deck-emblem: '';
+}
+
+/* Natale: tavolo di velluto rosso, carte verdi con il fiocco di neve, cielo notturno
+   (disegnato da SeasonLayer, --color-page colora la barra del browser). */
 :root[data-season='natale'] {
-  --color-felt-1: #18593d;
-  --color-felt-2: #0e3b2a;
-  --color-felt-3: #0a2b1f;
-  --color-rim: #b3262f;
-  --color-deck-1: #c8262e;
-  --color-deck-2: #7f1218;
+  --color-felt-1: #a52531;
+  --color-felt-2: #6e1420;
+  --color-felt-3: #2c0910;
+  --color-rim: #d6ae66;
+  --color-drawer: #3a0f17;
+  --color-deck-1: #1f7a46;
+  --color-deck-2: #0d4527;
+  --color-page: #0b1430;
+  --deck-emblem: '❄';
 }
 
 :root[data-season='capodanno'] {

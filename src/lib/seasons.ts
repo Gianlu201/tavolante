@@ -56,6 +56,12 @@ export const clockNow = () => new Date(Date.now() + override.offset)
 export const seasonAt = (date: Date) =>
   override.season === undefined ? seasonOn(date) : override.season
 
+/** Wishes shown in the header on the days of the feast itself. */
+export const holidayGreeting = (date: Date, season: Season | null) =>
+  season === 'natale' && date.getMonth() === 11 && date.getDate() >= 24 && date.getDate() <= 26
+    ? 'Buon Natale'
+    : null
+
 /** Milliseconds until the next local midnight. */
 export const msToMidnight = (date: Date) => {
   const midnight = new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)

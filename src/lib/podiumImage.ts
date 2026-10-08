@@ -1,4 +1,5 @@
 import { avatarSrc } from './avatars'
+import { scatter } from './scatter'
 import { labelInitials } from './settings'
 import { offPodium, podiumSteps, type Standing, type Tournament } from './tournament'
 
@@ -84,12 +85,6 @@ const fitText = (ctx: CanvasRenderingContext2D, text: string, maxWidth: number) 
 
 const setSpacing = (ctx: CanvasRenderingContext2D, px: number) => {
   if ('letterSpacing' in ctx) ctx.letterSpacing = `${px}px`
-}
-
-/** Deterministic scatter: the same tournament always gets the same confetti. */
-const scatter = (i: number, salt: number) => {
-  const x = Math.sin(i * 127.1 + salt * 311.7) * 43758.5453
-  return x - Math.floor(x)
 }
 
 const drawConfetti = (ctx: CanvasRenderingContext2D) => {
