@@ -59,6 +59,17 @@
   --animate-regatta: regatta 40s linear infinite;
   --animate-row-stroke: row-stroke 0.85s ease-in-out infinite alternate;
   --animate-pennant-wave: pennant-wave 1.2s ease-in-out infinite alternate;
+  --animate-ear-flop: ear-flop 6s ease-in-out infinite;
+  --animate-blink: blink 4.2s ease-in-out infinite;
+  --animate-nose-twitch: nose-twitch 1.6s ease-in-out infinite;
+  --animate-bunny-peek: bunny-peek 14s ease-in-out infinite both;
+  --animate-egg-wobble: egg-wobble 16s ease-in-out infinite;
+  --animate-egg-crack: egg-crack 16s ease-in-out infinite;
+  --animate-egg-cap: egg-cap 16s cubic-bezier(0.34, 1.4, 0.64, 1) infinite;
+  --animate-chick-rise: chick-rise 16s cubic-bezier(0.34, 1.4, 0.64, 1) infinite;
+  --animate-butterfly-a: butterfly-a 19s ease-in-out infinite;
+  --animate-butterfly-b: butterfly-b 24s ease-in-out infinite;
+  --animate-butterfly-flap: butterfly-flap 0.22s ease-in-out infinite alternate;
   --animate-bat-fly: bat-fly 24s linear infinite both;
   --animate-bat-flap: bat-flap 0.26s ease-in-out infinite;
   --animate-spider-bob: spider-bob 7s ease-in-out infinite;
@@ -440,6 +451,202 @@
     }
   }
 
+  /* Pasqua. */
+  @keyframes ear-flop {
+    0%,
+    68%,
+    100% {
+      rotate: 0deg;
+    }
+    74%,
+    88% {
+      rotate: 38deg;
+    }
+  }
+
+  @keyframes blink {
+    0%,
+    93%,
+    100% {
+      scale: 1 1;
+    }
+    96% {
+      scale: 1 0.1;
+    }
+  }
+
+  @keyframes nose-twitch {
+    0%,
+    60%,
+    100% {
+      scale: 1 1;
+    }
+    70% {
+      scale: 1.2 0.85;
+    }
+    80% {
+      scale: 0.95 1.1;
+    }
+  }
+
+  /* Il coniglio si affaccia dal bordo inclinandosi, resta un po' e torna dietro. */
+  @keyframes bunny-peek {
+    0%,
+    10%,
+    62%,
+    100% {
+      translate: -105% 0;
+      rotate: 0deg;
+    }
+    16% {
+      translate: -6% 0;
+      rotate: 16deg;
+    }
+    20%,
+    52% {
+      translate: -12% 0;
+      rotate: 10deg;
+    }
+    56% {
+      translate: -8% 0;
+      rotate: 16deg;
+    }
+  }
+
+  @keyframes egg-wobble {
+    0%,
+    20%,
+    27%,
+    100% {
+      rotate: 0deg;
+    }
+    21% {
+      rotate: 8deg;
+    }
+    22% {
+      rotate: -8deg;
+    }
+    23% {
+      rotate: 7deg;
+    }
+    24% {
+      rotate: -6deg;
+    }
+    25% {
+      rotate: 4deg;
+    }
+    26% {
+      rotate: -2deg;
+    }
+  }
+
+  @keyframes egg-crack {
+    0%,
+    26%,
+    86%,
+    100% {
+      opacity: 0;
+    }
+    28%,
+    82% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes egg-cap {
+    0%,
+    30%,
+    84%,
+    100% {
+      translate: 0 0;
+      rotate: 0deg;
+    }
+    34% {
+      translate: 6px -16px;
+      rotate: 32deg;
+    }
+    37%,
+    78% {
+      translate: 5px -12px;
+      rotate: 26deg;
+    }
+  }
+
+  @keyframes chick-rise {
+    0%,
+    32%,
+    84%,
+    100% {
+      translate: 0 14px;
+    }
+    38% {
+      translate: 0 -6px;
+    }
+    41%,
+    77% {
+      translate: 0 -3px;
+    }
+  }
+
+  @keyframes butterfly-a {
+    0% {
+      translate: -12vw 22vh;
+      rotate: 10deg;
+    }
+    20% {
+      translate: 16vw 8vh;
+      rotate: -8deg;
+    }
+    40% {
+      translate: 38vw 15vh;
+      rotate: 12deg;
+    }
+    60% {
+      translate: 64vw 4vh;
+      rotate: -10deg;
+    }
+    80% {
+      translate: 88vw 16vh;
+      rotate: 8deg;
+    }
+    100% {
+      translate: 112vw 9vh;
+      rotate: 0deg;
+    }
+  }
+
+  @keyframes butterfly-b {
+    0% {
+      translate: 110vw 12vh;
+      rotate: -10deg;
+    }
+    25% {
+      translate: 82vw 3vh;
+      rotate: 8deg;
+    }
+    50% {
+      translate: 56vw 11vh;
+      rotate: -12deg;
+    }
+    75% {
+      translate: 26vw 4vh;
+      rotate: 10deg;
+    }
+    100% {
+      translate: -12vw 15vh;
+      rotate: 0deg;
+    }
+  }
+
+  @keyframes butterfly-flap {
+    from {
+      scale: 1 1;
+    }
+    to {
+      scale: 0.35 1;
+    }
+  }
+
   /* La lingua di carta si srotola, sobbalza e si riavvolge. */
   @keyframes horn-blow {
     0%,
@@ -524,6 +731,18 @@
   --color-deck-2: #861019;
   --color-page: #1b1d48;
   --deck-emblem-image: var(--pisan-cross);
+}
+
+:root[data-season='pasqua'] {
+  --color-felt-1: #a96f40;
+  --color-felt-2: #74432a;
+  --color-felt-3: #3b2214;
+  --color-rim: #e8c27a;
+  --color-drawer: #3a2318;
+  --color-deck-1: #9c7fd4;
+  --color-deck-2: #6a4fa6;
+  --color-page: #2a1a4f;
+  --deck-emblem: '✿';
 }
 
 @layer base {
