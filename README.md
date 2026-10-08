@@ -12,7 +12,7 @@ vincitore della mano precedente** — la regola con cui si distribuisce nel Murl
 
 | | |
 | --- | --- |
-| **Versione** | 1.0.2 |
+| **Versione** | 1.2.0 |
 | **Stack** | React 19 · TypeScript 6 · Vite 8 · Tailwind CSS v4 · PWA |
 | **Lingua UI** | Italiano |
 | **Offline** | Sì, una volta installata |
@@ -29,6 +29,9 @@ vincitore della mano precedente** — la regola con cui si distribuisce nel Murl
   - [3. Distribuisci](#3-distribuisci)
   - [4. Personalizza i giocatori](#4-personalizza-i-giocatori)
   - [5. Reset](#5-reset)
+  - [6. Modalità torneo](#6-modalità-torneo)
+  - [7. Mescolare il mazzo](#7-mescolare-il-mazzo)
+- [Temi stagionali](#-temi-stagionali)
 - [Installare l'app sul telefono](#installare-lapp-sul-telefono)
 - [Easter egg](#-easter-egg)
 - [La matematica dietro al calcolo](#la-matematica-dietro-al-calcolo)
@@ -72,7 +75,7 @@ stato e il **pannello dei controlli**.
 │      TAVOLANTE · MURLAN       │
 │    Distributore di carte      │
 │                               │
-│   [ ✎ Personalizza giocatori ]│
+│  [✎ Personalizza] [🏆 Torneo] │
 │                               │
 │           ①                   │
 │      ╭─────────╮              │
@@ -135,8 +138,7 @@ un'impostazione mentre la carta sta ancora girando.
 
 Il tap semplice su un posto seleziona il vincitore — è l'azione più frequente e
 deve costare un solo tocco. Per dare a un giocatore un nome o un personaggio si
-entra in **modalità modifica** con il pulsante **«✎ Personalizza giocatori»** in
-alto: i posti diventano tratteggiati, compare una matita su ognuno e cambia cosa
+entra in **modalità modifica** con il pulsante **«✎ Personalizza»** in alto: i posti diventano tratteggiati, compare una matita su ognuno e cambia cosa
 fanno il tap e il trascinamento.
 
 In modalità modifica puoi:
@@ -156,7 +158,8 @@ In modalità modifica puoi:
 - **🗑️ Rimuovere un giocatore** — in fondo al drawer; richiede **doppia conferma**
   (il pulsante prima chiede «Tocca di nuovo per confermare»). Il tavolo scende di
   un posto. Sotto i 2 giocatori non si può scendere.
-- **🧹 Azzerare un giocatore** — cancella nome e personaggio lasciando il posto.
+- **🧹 Azzerare un giocatore** — cancella nome e personaggio lasciando il posto. Per
+  il torneo conta come una persona nuova: i punti già fatti restano a chi sedeva lì.
 
 Si esce dalla modalità modifica con **«✓ Fatto»**.
 
@@ -164,7 +167,97 @@ Si esce dalla modalità modifica con **«✓ Fatto»**.
 
 Il pulsante **Reset** accanto a «Distribuisci» riporta tutto ai valori predefiniti:
 **4 giocatori, 54 carte, senso antiorario, Giocatore 1 vincitore**, nomi e
-personaggi cancellati.
+personaggi cancellati. Durante un torneo è nascosto (al suo posto c'è «Fine mano»):
+cancellerebbe il tavolo a partita in corso.
+
+### 6. Modalità torneo
+
+Per le serate in cui si tengono i punti. Si avvia dal pulsante **«🏆 Torneo»** in
+alto → **«Inizia il torneo»**.
+
+| Posizione | Punti |
+| --- | --- |
+| 1° a chiudere | **3** |
+| 2° | **2** |
+| 3° | **1** |
+| tutti gli altri | 0 |
+
+- **Registrare una mano** — a fine mano premi **«Fine mano»** e tocca in ordine chi
+  ha chiuso 1°, 2° e 3°: sui posti compaiono i badge oro, argento e bronzo. Toccare
+  un posto già segnato lo libera (insieme a quelli dopo). All'ultimo tocco la mano si
+  salva da sola e un avviso in alto permette di **annullarla**. Con 2 o 3 giocatori
+  l'ultimo posto a punti si deduce da solo.
+- **Il primo diventa il vincitore** — chi ha chiuso 1° riceve la stellina ★, quindi
+  «Distribuisci» è già pronto per la mano dopo. Registrare e distribuire restano due
+  azioni separate: se vince sempre lo stesso e sapete già da chi partire, registrate
+  la mano senza far girare la carta.
+- **Classifica** — il pulsante in alto diventa **«🏆 Classifica»**: punti, numero di
+  1°/2°/3° posti e mani giocate di ciascuno. A parità di punti conta chi ha più primi
+  posti, poi più secondi; chi resta pari è **ex aequo**. Da qui si annulla l'ultima
+  mano registrata.
+- **Cambi al tavolo** — i punti seguono la persona, non il posto: si può riordinare,
+  rinominare, aggiungere o togliere giocatori a torneo in corso. Chi se ne va resta in
+  classifica con i punti fatti.
+- **Podio** — **«Termina torneo e mostra il podio»** (doppia conferma) apre il podio:
+  i gradini salgono dal bronzo all'oro, gli avatar ci cadono sopra, partono
+  coriandoli e trombette (con un suono sintetizzato, disattivabile). Gli altri
+  giocatori stanno alla base del podio.
+- **Condividere** — **«Condividi l'immagine del podio»** genera sul telefono un PNG
+  1080 px e apre il menu di condivisione del sistema, dove c'è WhatsApp; dove il
+  browser non sa condividere file, l'immagine si scarica. **«Classifica su
+  WhatsApp»** apre direttamente WhatsApp con la classifica in testo: il link di
+  WhatsApp non può portare immagini.
+
+Il torneo è salvato in `localStorage` e sopravvive a chiusure e aggiornamenti
+dell'app. L'ultimo torneo terminato resta consultabile («Rivedi il podio») finché non
+se ne inizia uno nuovo.
+
+### 7. Mescolare il mazzo
+
+Tocca il mazzo al centro del tavolo: le carte si dividono in due metà, si
+rimescolano due volte e si pareggiano, con una leggera vibrazione dove disponibile.
+È puramente scenico e non cambia nessun calcolo.
+
+---
+
+## 🎄 Temi stagionali
+
+In alcuni periodi dell'anno l'app si veste a tema da sola, in base alla data del
+telefono:
+
+| Tema | Periodo | Cosa cambia |
+| --- | --- | --- |
+| 🎭 **Carnevale di Viareggio** | dal sabato di 17 giorni prima del Martedì grasso al Martedì grasso | si apre con i tre colpi di cannone dei corsi mascherati; Burlamacco si affaccia e saluta, coriandoli che cadono sempre, stelle filanti lanciate dagli angoli, fari nel cielo; tavolo a rombi con un bordo di stelle filanti, mascherina su ogni giocatore, carte a scacchi bianchi e rossi. Giovedì e Martedì grasso: «A Carnevale ogni scherzo vale» |
+| 🐣 **Pasqua** | Domenica delle Palme → Pasquetta | il tavolo è un uovo di cioccolato aperto nella sua stagnola cangiante, con la coccarda; orecchie da coniglio su ogni giocatore; il coniglio che sbuca accanto al titolo, l'uovo che si schiude con il pulcino, farfalle e prato fiorito. «Buona Pasqua» a Pasqua e Pasquetta |
+| 🐟 **Pesce d'aprile** | 1° aprile | il tavolo fa una capriola, la scritta in alto dice «Briscola» e si corregge, pesci di carta nuotano sullo sfondo e uno è attaccato al posto di un giocatore (lo stesso per tutto il giorno): toccandolo si stacca, senza cambiare il vincitore |
+| ✨ **Luminara di San Ranieri** | 16 giugno | all'apertura i Lungarni si spengono e i lampanini si accendono da sinistra a destra su palazzi, Ponte di Mezzo, Spina e spalletta, con la Torre dietro e i riflessi nell'Arno; tavolo blu notte dentro un anello di lumini, un lampanino su ogni posto, carte con la croce pisana, fuochi d'artificio |
+| 🚣 **Palio di San Ranieri** | 17 giugno | tramonto sull'Arno, Lungarni in controluce e bandierine dei quartieri; le galee di San Francesco, San Martino, Santa Maria e Sant'Antonio vogano attorno al tavolo superandosi, ogni giocatore porta la bandierina di un quartiere |
+| 🌠 **Notti d'agosto** | 9 → 16 agosto | cielo d'estate con la Via Lattea e le stelle cadenti di San Lorenzo, lucciole e mare; tavolo dentro un salvagente, occhiali da sole su ogni giocatore. «Notte di San Lorenzo» il 10, «Buon Ferragosto» il 15 |
+| 🎃 **Halloween** | 24 ottobre → 2 novembre | feltro viola, bordo e dorso delle carte arancio, ragnatela, un ragno che penzola e pipistrelli che attraversano lo schermo |
+| 🎄 **Natale** | 8 dicembre → 6 gennaio | notte di Natale: tavolo di velluto rosso incorniciato da una ghirlanda innevata con bacche, palline, lucine e fiocco; cappellino di Babbo Natale su ogni giocatore; carte verdi con il fiocco di neve; cielo stellato con la luna e la slitta di Babbo Natale che la attraversa; palline appese che dondolano, lucine colorate e neve. Dal 24 al 26 dicembre in alto compare «Buon Natale» |
+| 🎆 **Capodanno** | 31 dicembre → 1 gennaio | feltro blu notte e oro, stelline e fuochi d'artificio; a mezzanotte conto alla rovescia a tutto schermo e auguri con fuochi e coriandoli |
+
+La data della Pasqua (e quindi del Carnevale) si calcola dall'anno con l'algoritmo di
+Meeus/Jones/Butcher: niente tabelle da aggiornare e niente rete. Quando due periodi si
+sovrappongono vince quello che viene prima nell'elenco del calendario: Capodanno dentro
+Natale, Pasqua sul pesce d'aprile (succede nel 2029).
+
+Le decorazioni stanno ai bordi e dietro ai contenuti: sui posti arriva al massimo un
+accessorio (cappellino, orecchie, mascherina, lampanino…), che lascia libere stellina,
+matita e badge del torneo, e il giocatore di partenza in oro resta la cosa più
+leggibile. Con «riduci animazioni» le introduzioni non partono e restano solo i colori
+e le decorazioni ferme.
+
+Per provarli fuori stagione si aggiunge un parametro all'indirizzo:
+
+| URL | Effetto |
+| --- | --- |
+| `?tema=carnevale` · `pasqua` · `pesce` · `luminara` · `palio` · `agosto` · `halloween` · `natale` · `capodanno` | forza quel tema e sposta l'orologio dell'app sul suo giorno clou (auguri compresi), solo per quella visita |
+| `?tema=mezzanotte` | Capodanno con l'orologio a pochi secondi dalla mezzanotte, per vedere il conto alla rovescia |
+| `?tema=off` | nessun tema, anche se il periodo è attivo |
+
+Il calendario sta in [`src/lib/seasons.ts`](src/lib/seasons.ts), i temi in
+[`src/themes/`](src/themes): uno per cartella, caricato solo nel suo periodo.
 
 ---
 
@@ -275,10 +368,11 @@ niente libreria di drag & drop (Pointer Events nativi).
 
 | Asset | Dimensione | Gzip |
 | --- | --- | --- |
-| JS | 238,7 kB | **79,5 kB** |
-| CSS | 71,3 kB | **12,7 kB** |
+| JS (senza i temi stagionali) | 277,9 kB | **90,4 kB** |
+| Ogni tema stagionale, caricato solo nel suo periodo | 2,6–13,3 kB | 1,2–4,1 kB |
+| CSS | 112,3 kB | **21,2 kB** |
 | Workbox runtime | 5,7 kB | 2,2 kB |
-| Precache totale (bundle + icone + avatar WebP) | 628 KiB | — |
+| Precache totale (bundle, temi, icone, avatar WebP) | 781 KiB | — |
 
 ---
 
@@ -301,20 +395,41 @@ tavolante/
     ├── index.css               # import di Tailwind + @theme (unica sede dei token)
     ├── App.tsx                 # stato di pagina, orchestrazione, frase di stato
     ├── components/
-    │   ├── CardTable.tsx       # tavolo, posti, mazzo, carta volante, fantasma del drag
-    │   ├── Controls.tsx        # pannello: giocatori, mazzo, senso, distribuisci, reset
-    │   ├── PlayerDrawer.tsx    # pannello dal basso: nome, personaggio, azzera, rimuovi
+    │   ├── CardTable.tsx       # tavolo, posti, mazzo da mescolare, carta volante, badge 1°/2°/3°
+    │   ├── Controls.tsx        # pannello: giocatori, mazzo, senso, distribuisci, reset / fine mano
+    │   ├── BottomSheet.tsx     # guscio dei pannelli dal basso (scrim, maniglia, Esc)
+    │   ├── PlayerDrawer.tsx    # pannello: nome, personaggio, azzera, rimuovi
+    │   ├── TournamentDrawer.tsx# pannello del torneo: avvio, classifica, annulla, termina
+    │   ├── Podium.tsx          # podio finale animato, condivisione, suono
+    │   ├── Confetti.tsx        # coriandoli in CSS
+    │   ├── PartyHorn.tsx       # trombetta SVG che si srotola
+    │   ├── Fireworks.tsx       # fuochi d'artificio in CSS
+    │   ├── SeasonLayer.tsx     # contenitore del fondale del tema stagionale
+    │   ├── Notice.tsx          # avviso breve in alto, con «Annulla»
+    │   ├── PlayerAvatar.tsx    # ritratto rotondo fuori dal tavolo
     │   └── Footer.tsx          # copyright, link al sito, invito all'installazione
     ├── hooks/
     │   ├── useSettings.ts      # stato impostazioni + persistenza + riordino/rimozione
+    │   ├── useTournament.ts    # stato del torneo + persistenza
+    │   ├── useSeason.ts        # orologio dell'app e tema stagionale attivo
     │   ├── useDealAnimation.ts # animazione della carta lungo l'arco del tavolo
     │   ├── useSeatDrag.ts      # drag & drop dei posti con Pointer Events
     │   └── useInstallPrompt.ts # stato del pulsante "Installa app"
     ├── lib/
     │   ├── dealing.ts          # 🧠 regole, limiti e calcolo del posto di partenza
     │   ├── table.ts            # geometria polare dei posti attorno al tavolo
-    │   ├── settings.ts         # schema, parsing difensivo e persistenza localStorage
+    │   ├── settings.ts         # schema, id dei giocatori, parsing difensivo, persistenza
+    │   ├── tournament.ts       # punti, classifica, podio, persistenza del torneo
+    │   ├── podiumImage.ts      # podio disegnato su canvas, testo per WhatsApp, condivisione
+    │   ├── seasons.ts          # calendario dei temi, data della Pasqua, ?tema=
+    │   ├── sound.ts            # fanfara sintetizzata con Web Audio
+    │   ├── scatter.ts          # pseudo-casuale deterministico per decorazioni e coriandoli
     │   └── avatars.ts          # raccolta degli avatar e composizione della griglia
+    ├── themes/                 # 🎨 temi stagionali, uno per cartella, caricati solo nel periodo
+    │   ├── index.ts            #    mappa tema → import() e hook useThemeModule
+    │   ├── types.ts            #    cosa può aggiungere un tema (fondale, intro, tavolo, posti…)
+    │   ├── pisa/               #    Lungarni, lampanini e quartieri: condivisi da Luminara e Palio
+    │   └── carnevale/ pasqua/ pesce/ luminara/ palio/ agosto/ halloween/ natale/ capodanno/
     └── assets/avatars/         # 🖼️ WebP generati — cartella di output, non toccare a mano
 ```
 
@@ -350,6 +465,10 @@ e controllati**, ricevono dati e callback e non conoscono `localStorage`.
 | [`lib/table.ts`](src/lib/table.ts) | converte l'indice di un posto in coordinate percentuali: `seatAngleDeg` parte da `−90°` (posto 0 in alto) e `polarToPercent` proietta angolo + raggio su `left`/`top` in `%`. Percentuali, non pixel: il tavolo resta responsive senza ricalcoli |
 | [`lib/settings.ts`](src/lib/settings.ts) | schema `Settings`, valori di default, e **parsing difensivo** di quanto letto da `localStorage` |
 | [`hooks/useSettings.ts`](src/hooks/useSettings.ts) | le mutazioni non banali: rimuovere un posto, riordinarli, e in entrambi i casi far seguire al `winnerIndex` la **persona**, non l'indice |
+| [`lib/tournament.ts`](src/lib/tournament.ts) | mani registrate per **id** di giocatore, classifica con spareggi ed ex aequo, gradini del podio. **Puro**, più il parsing difensivo della chiave `tavolante:tournament:v1` |
+| [`lib/podiumImage.ts`](src/lib/podiumImage.ts) | disegna il podio su un canvas 1080 px con avatar e font già in cache, lo condivide con la Web Share API o lo scarica |
+| [`lib/seasons.ts`](src/lib/seasons.ts) | calendario dei temi: ognuno è una funzione anno → giorni coperti (fissi, a cavallo dell'anno o legati alla Pasqua), in ordine di priorità, con gli auguri; scelta del tema forzata (`?tema=` o salvata sul dispositivo) che sposta l'orologio dell'app sul giorno clou del tema |
+| [`themes/`](src/themes) | un modulo per tema (`index.tsx` più i suoi componenti): fondale, introduzione, decorazione del tavolo, accessorio dei posti, scritta in alto. [`themes/index.ts`](src/themes/index.ts) li carica con `import()` solo nel loro periodo |
 | [`hooks/useDealAnimation.ts`](src/hooks/useDealAnimation.ts) | l'animazione, in coordinate polari, cancellabile e `async` |
 | [`hooks/useSeatDrag.ts`](src/hooks/useSeatDrag.ts) | drag & drop circolare: soglia tap/drag, slot dall'angolo del puntatore, zona morta centrale, soppressione del click post-drag |
 
@@ -426,7 +545,10 @@ privata o a quota esaurita `localStorage` **lancia**, e l'app deve continuare a
 funzionare tenendo le impostazioni solo in memoria.
 
 La chiave è versionata — `tavolante:settings:v1` — così un futuro cambio di schema
-incompatibile può convivere con i dati vecchi invece di corromperli.
+incompatibile può convivere con i dati vecchi invece di corromperli. Lo stesso vale
+per il torneo (`tavolante:tournament:v1`) e per la preferenza del suono
+(`tavolante:sound:v1`). Le impostazioni salvate prima che i giocatori avessero un
+`id` lo ricevono al primo caricamento, senza perdere nomi e personaggi.
 
 ### 👥 Indici che seguono le persone
 
@@ -445,6 +567,23 @@ Simmetricamente, ridurre il numero di giocatori **tronca** l'array dei profili: 
 poi si rialza il contatore, il posto che ritorna è vuoto e non resuscita il nome di
 chi se n'era andato.
 
+### 🏆 Il podio diventa un'immagine
+
+Il PNG del podio non è uno screenshot: [`renderPodiumImage`](src/lib/podiumImage.ts)
+lo **disegna** su un canvas con gli stessi colori del tema, gli avatar WebP (stessa
+origine, quindi il canvas resta esportabile) e i font già nella cache del service
+worker. Funziona offline.
+
+L'immagine viene preparata **appena il podio si apre**, non al tocco su
+«Condividi»: iOS rifiuta `navigator.share()` se il tocco ha dovuto aspettare un
+lavoro lento. Alla condivisione si passa solo il file, senza titolo né testo, perché
+su iOS WhatsApp scarta l'immagine quando arriva insieme a del testo.
+
+Il suono di trombette e «pop» è **sintetizzato** con Web Audio (oscillatori, filtri,
+rumore): nessun file audio da scaricare. L'`AudioContext` viene sbloccato dentro il
+tocco su «Termina torneo», come richiede iOS, e la fanfara è programmata sul suo
+orologio per arrivare insieme al gradino d'oro.
+
 ### 🎨 Tailwind v4 e i token nel `@theme`
 
 Non esistono fogli di stile per componente: ogni elemento è stilizzato dalle classi
@@ -453,6 +592,11 @@ di Tailwind e il blocco `@theme` con i token del progetto — colori del feltro,
 panna, brace; famiglie `sans` / `display` / `mono`; keyframe delle animazioni — che
 Tailwind trasforma in classi come `bg-felt-3`, `text-gold-light`, `font-display` o
 `animate-drawer-in`.
+
+I **temi stagionali** sfruttano il fatto che le utility di Tailwind v4 leggono le
+variabili CSS: `:root[data-season='natale']` ridefinisce `--color-felt-*`,
+`--color-rim` e `--color-deck-*` e tavolo, pannelli e carte cambiano colore senza
+toccare i componenti.
 
 Gli stati che in CSS avrebbero richiesto selettori discendenti
 (`.table.is-editing .seat`) sono calcolati in TypeScript e restituiti come stringhe
@@ -475,6 +619,8 @@ sia il posto reale sia il fantasma trascinato, e non possono divergere.
 - `prefers-reduced-motion: reduce` è rispettato su tre livelli: le transizioni CSS
   sono ridotte a `0.01ms` in `@layer base`, le animazioni decorative sono spente con
   `motion-reduce:animate-none`, e l'animazione della carta viene proprio saltata.
+  Coriandoli, fuochi d'artificio, neve e pipistrelli non compaiono affatto; il podio
+  si mostra già completo.
 - Il campo nome usa `font-size: 16px`, la soglia sotto cui iOS fa zoom automatico
   al focus.
 
@@ -605,7 +751,7 @@ va rilanciato `npm run og`.
 
 | Cosa | Strategia |
 | --- | --- |
-| Bundle, CSS, icone, avatar WebP | **precache** (49 voci, 628 KiB) |
+| Bundle, CSS, icone, avatar WebP | **precache** (61 voci, 781 KiB) |
 | `og-cover.png` | **escluso** dal precache (`globIgnores`): serve ai crawler, non all'app installata |
 | CSS di Google Fonts | `StaleWhileRevalidate` |
 | File dei font (`fonts.gstatic.com`) | `CacheFirst`, 30 voci, 1 anno |

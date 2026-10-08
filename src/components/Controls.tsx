@@ -36,17 +36,26 @@ const CHIP_ICON_CLASS =
 type ControlsProps = {
   settings: Settings
   disabled: boolean
+  /** In a tournament «Fine mano» takes the place of Reset, which would wipe the table. */
+  tournamentActive: boolean
+  recording: boolean
   onChange: (patch: Partial<Settings>) => void
   onDeal: () => void
   onReset: () => void
+  onFinishHand: () => void
+  onCancelRecording: () => void
 }
 
 export default function Controls({
   settings,
   disabled,
+  tournamentActive,
+  recording,
   onChange,
   onDeal,
   onReset,
+  onFinishHand,
+  onCancelRecording,
 }: ControlsProps) {
   const chipClass = (active: boolean) =>
     `${CHIP_BASE_CLASS} ${active ? CHIP_ACTIVE_CLASS : CHIP_IDLE_CLASS}`
@@ -54,23 +63,39 @@ export default function Controls({
   return (
     <section className="flex shrink-0 flex-col gap-2.5 rounded-[20px] border border-gold/18 bg-felt-3/55 p-3.5 backdrop-blur-[6px]">
       <div className="flex gap-2">
+        {tournamentActive && (
+          <button
+            type="button"
+            className={`cursor-pointer rounded-[14px] border px-4 py-3.5 font-display text-[15px] font-bold transition-[background-color,border-color,color] duration-160 ease-out disabled:cursor-default disabled:opacity-55 ${
+              recording
+                ? 'border-ember/60 bg-ember/15 text-ember-soft'
+                : 'border-gold/60 bg-gold/12 text-gold-light not-disabled:active:bg-gold/22'
+            }`}
+            disabled={disabled && !recording}
+            onClick={recording ? onCancelRecording : onFinishHand}
+          >
+            {recording ? 'Annulla' : 'Fine mano'}
+          </button>
+        )}
         <button
           type="button"
           className="flex-1 cursor-pointer rounded-[14px] bg-[linear-gradient(180deg,var(--color-gold-bright),var(--color-gold))] p-3.5 font-display text-[16px] font-bold text-ink shadow-[0_6px_14px_rgba(201,161,90,0.25)] transition-[scale,translate,box-shadow,opacity] duration-120 ease-out not-disabled:active:translate-y-px not-disabled:active:scale-99 not-disabled:active:shadow-[0_3px_8px_rgba(201,161,90,0.2)] disabled:cursor-default disabled:opacity-55"
           disabled={disabled}
           onClick={onDeal}
         >
-          Distribuisci le carte
+          {tournamentActive ? 'Distribuisci' : 'Distribuisci le carte'}
         </button>
-        <button
-          type="button"
-          className="cursor-pointer rounded-[14px] border border-cream/20 bg-cream/6 px-4 py-3.5 text-[13px] font-semibold text-cream/85 not-disabled:active:bg-cream/16 disabled:cursor-default disabled:opacity-55"
-          disabled={disabled}
-          onClick={onReset}
-          aria-label="Ripristina i valori predefiniti"
-        >
-          Reset
-        </button>
+        {!tournamentActive && (
+          <button
+            type="button"
+            className="cursor-pointer rounded-[14px] border border-cream/20 bg-cream/6 px-4 py-3.5 text-[13px] font-semibold text-cream/85 not-disabled:active:bg-cream/16 disabled:cursor-default disabled:opacity-55"
+            disabled={disabled}
+            onClick={onReset}
+            aria-label="Ripristina i valori predefiniti"
+          >
+            Reset
+          </button>
+        )}
       </div>
 
       <div className={FIELD_CLASS}>

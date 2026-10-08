@@ -17,6 +17,12 @@
   --color-ember-dark: #8f3623;
   --color-ember-soft: #e08363;
   --color-drawer: #0f3a2c;
+  /* Dorso delle carte: separato da ember, che resta il colore delle azioni
+     distruttive, così i temi stagionali possono cambiarlo da solo. */
+  --color-deck-1: #b5482f;
+  --color-deck-2: #8f3623;
+  --color-silver: #c9ced6;
+  --color-bronze: #cf8a57;
 
   --font-sans: 'Manrope', system-ui, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
@@ -26,6 +32,69 @@
   --animate-drawer-in: drawer-in 0.26s cubic-bezier(0.22, 1, 0.36, 1);
   --animate-seat-lift: seat-lift 0.18s ease-out;
   --animate-drop-slot-pulse: drop-slot-pulse 1.1s ease-in-out infinite;
+  --animate-seat-invite: seat-invite 1.4s ease-in-out infinite;
+  --animate-place-pop: place-pop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+  --animate-notice-in: notice-in 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-podium-rise: podium-rise 0.55s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+  --animate-podium-drop: podium-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-fade-up: fade-up 0.5s ease-out both;
+  --animate-confetti-fall: confetti-fall 3s cubic-bezier(0.25, 0.4, 0.55, 1) 2 both;
+  --animate-horn-blow: horn-blow 1.5s ease-in-out 2 both;
+  --animate-riffle-left: riffle-left 0.95s ease-in-out;
+  --animate-riffle-right: riffle-right 0.95s ease-in-out;
+  --animate-deck-square: deck-square 0.95s ease-in-out;
+  --animate-twinkle: twinkle 2s ease-in-out infinite;
+  --animate-snow-fall: snow-fall 12s linear infinite;
+  --animate-snow-sway: snow-sway 4s ease-in-out infinite alternate;
+  --animate-sleigh-fly: sleigh-fly 28s linear infinite both;
+  --animate-bauble-swing: bauble-swing 4.5s ease-in-out infinite alternate;
+  --animate-lumini-flicker: lumini-flicker 2.4s ease-in-out infinite;
+  --animate-lumini-reveal: lumini-reveal 3.4s ease-in-out 1.6s both;
+  --animate-luminara-veil: luminara-veil 6.8s linear both;
+  --animate-caption-early: caption-early 6.8s ease-out both;
+  --animate-caption-late: caption-late 6.8s ease-out both;
+  --animate-arno-shimmer: arno-shimmer 5s ease-in-out infinite alternate;
+  --animate-water-glint: water-glint 4s ease-in-out infinite;
+  --animate-flame: flame 0.9s ease-in-out infinite;
+  --animate-regatta: regatta 40s linear infinite;
+  --animate-row-stroke: row-stroke 0.85s ease-in-out infinite alternate;
+  --animate-pennant-wave: pennant-wave 1.2s ease-in-out infinite alternate;
+  --animate-ear-flop: ear-flop 6s ease-in-out infinite;
+  --animate-blink: blink 4.2s ease-in-out infinite;
+  --animate-nose-twitch: nose-twitch 1.6s ease-in-out infinite;
+  --animate-bunny-peek: bunny-peek 14s ease-in-out infinite both;
+  --animate-egg-wobble: egg-wobble 16s ease-in-out infinite;
+  --animate-egg-crack: egg-crack 16s ease-in-out infinite;
+  --animate-egg-cap: egg-cap 16s cubic-bezier(0.34, 1.4, 0.64, 1) infinite;
+  --animate-chick-rise: chick-rise 16s cubic-bezier(0.34, 1.4, 0.64, 1) infinite;
+  --animate-butterfly-a: butterfly-a 19s ease-in-out infinite;
+  --animate-butterfly-b: butterfly-b 24s ease-in-out infinite;
+  --animate-butterfly-flap: butterfly-flap 0.22s ease-in-out infinite alternate;
+  --animate-wave: wave 0.55s ease-in-out infinite alternate;
+  --animate-burlamacco-peek: burlamacco-peek 16s ease-in-out infinite both;
+  --animate-searchlight: searchlight 7s ease-in-out infinite alternate;
+  --animate-streamer-throw: streamer-throw 9s ease-out infinite both;
+  --animate-cannon-flash: cannon-flash 0.5s ease-out both;
+  --animate-bum: bum 1.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-carnival-caption: carnival-caption 4.8s ease-out both;
+  --animate-table-flip: table-flip 2.6s ease-in-out 0.6s both;
+  --animate-briscola-out: briscola-out 3.2s ease-out 0.8s both;
+  --animate-murlan-in: murlan-in 3.2s ease-out 0.8s both;
+  --animate-fish-dangle: fish-dangle 2.4s ease-in-out infinite alternate;
+  --animate-fish-fall: fish-fall 1.4s ease-in forwards;
+  --animate-fish-joke: fish-joke 2.4s ease-out both;
+  --animate-swim-right: swim-right 28s linear infinite;
+  --animate-swim-left: swim-left 28s linear infinite;
+  --animate-fish-bob: fish-bob 1.8s ease-in-out infinite alternate;
+  --animate-bubble-rise: bubble-rise 10s linear infinite;
+  --animate-shooting-star: shooting-star 8s ease-out infinite both;
+  --animate-firefly: firefly 4s ease-in-out infinite;
+  --animate-sea-drift: sea-drift 20s linear infinite;
+  --animate-bat-fly: bat-fly 24s linear infinite both;
+  --animate-bat-flap: bat-flap 0.26s ease-in-out infinite;
+  --animate-spider-bob: spider-bob 7s ease-in-out infinite;
+  --animate-firework: firework 6s ease-out infinite both;
+  --animate-countdown-pop: countdown-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
   @keyframes scrim-in {
     from {
@@ -51,6 +120,975 @@
       background-color: rgba(201, 161, 90, 0.2);
     }
   }
+
+  @keyframes seat-invite {
+    50% {
+      box-shadow: 0 0 0 5px rgba(244, 236, 221, 0.14);
+    }
+  }
+
+  @keyframes place-pop {
+    from {
+      scale: 0.2;
+      opacity: 0;
+    }
+  }
+
+  @keyframes notice-in {
+    from {
+      translate: 0 -12px;
+      opacity: 0;
+    }
+  }
+
+  @keyframes podium-rise {
+    from {
+      scale: 1 0;
+    }
+  }
+
+  @keyframes podium-drop {
+    from {
+      translate: 0 -70px;
+      scale: 0.6;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fade-up {
+    from {
+      translate: 0 10px;
+      opacity: 0;
+    }
+  }
+
+  /* --drift e --spin arrivano da ogni coriandolo: ognuno cade a modo suo. */
+  @keyframes confetti-fall {
+    from {
+      translate: 0 -8vh;
+      rotate: 0deg;
+    }
+    to {
+      translate: var(--drift) 108vh;
+      rotate: var(--spin);
+    }
+  }
+
+  /* Mescolata: il mazzo si apre in due metà e si richiude due volte, poi si
+     pareggia battendolo sul tavolo. Si anima transform, che si somma a
+     translate/rotate delle classi. */
+  @keyframes riffle-left {
+    0%,
+    34%,
+    74%,
+    100% {
+      transform: none;
+    }
+    17%,
+    52% {
+      transform: translate(-70%, -5%) rotate(-10deg);
+    }
+    86% {
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes riffle-right {
+    0%,
+    34%,
+    74%,
+    100% {
+      transform: none;
+    }
+    17%,
+    52% {
+      transform: translate(70%, -5%) rotate(10deg);
+    }
+    86% {
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes deck-square {
+    0%,
+    74%,
+    100% {
+      transform: none;
+    }
+    86% {
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes twinkle {
+    50% {
+      opacity: 0.3;
+    }
+  }
+
+  @keyframes snow-fall {
+    from {
+      translate: 0 -10vh;
+    }
+    to {
+      translate: var(--drift) 110vh;
+    }
+  }
+
+  /* Il fiocco ondeggia e ruota mentre cade: la caduta sta sull'elemento esterno. */
+  @keyframes snow-sway {
+    from {
+      translate: calc(var(--sway) * -1) 0;
+      rotate: -30deg;
+    }
+    to {
+      translate: var(--sway) 0;
+      rotate: 30deg;
+    }
+  }
+
+  /* La slitta entra dal bordo destro, decolla passando davanti alla luna ed esce in
+     alto, a destra del titolo; per il resto del ciclo aspetta fuori dallo schermo. */
+  @keyframes sleigh-fly {
+    0% {
+      translate: 102vw 126px;
+      rotate: 20deg;
+    }
+    14% {
+      translate: 64vw 48px;
+      rotate: 25deg;
+    }
+    26% {
+      translate: 46vw -34px;
+      rotate: 29deg;
+    }
+    34%,
+    100% {
+      translate: 36vw -130px;
+      rotate: 32deg;
+    }
+  }
+
+  @keyframes bauble-swing {
+    from {
+      rotate: -7deg;
+    }
+    to {
+      rotate: 7deg;
+    }
+  }
+
+  /* Il pipistrello attraversa lo schermo nel primo terzo del ciclo, poi aspetta fuori. */
+  @keyframes bat-fly {
+    0% {
+      translate: -15vw 0;
+    }
+    9% {
+      translate: 20vw -16px;
+    }
+    18% {
+      translate: 55vw 10px;
+    }
+    27% {
+      translate: 90vw -12px;
+    }
+    35%,
+    100% {
+      translate: 120vw 0;
+    }
+  }
+
+  @keyframes bat-flap {
+    50% {
+      scale: 1 0.55;
+    }
+  }
+
+  @keyframes spider-bob {
+    50% {
+      translate: 0 26px;
+    }
+  }
+
+  /* Ogni scintilla vola lungo il proprio angolo (--a) fino a --r, poi si spegne. */
+  @keyframes firework {
+    0% {
+      transform: rotate(var(--a)) translateX(0) scale(1);
+      opacity: 0;
+    }
+    3% {
+      opacity: 1;
+    }
+    30% {
+      transform: rotate(var(--a)) translateX(var(--r)) scale(0.55);
+      opacity: 0.9;
+    }
+    40%,
+    100% {
+      transform: rotate(var(--a)) translateX(calc(var(--r) * 1.12)) scale(0.2);
+      opacity: 0;
+    }
+  }
+
+  @keyframes countdown-pop {
+    from {
+      scale: 1.7;
+      opacity: 0;
+    }
+  }
+
+  /* Luminara e Palio. */
+  @keyframes lumini-flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    23% {
+      opacity: 0.78;
+    }
+    41% {
+      opacity: 0.95;
+    }
+    67% {
+      opacity: 0.72;
+    }
+    84% {
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes lumini-reveal {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+
+  @keyframes luminara-veil {
+    0% {
+      opacity: 0;
+    }
+    12%,
+    84% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes caption-early {
+    0%,
+    4%,
+    28%,
+    100% {
+      opacity: 0;
+    }
+    9%,
+    22% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes caption-late {
+    0%,
+    50% {
+      opacity: 0;
+      translate: 0 6px;
+    }
+    57%,
+    80% {
+      opacity: 1;
+      translate: 0 0;
+    }
+    86%,
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Il riflesso nell'Arno si increspa: transform si somma allo scale che lo capovolge. */
+  @keyframes arno-shimmer {
+    from {
+      transform: skewX(-0.7deg) translateX(-1px);
+    }
+    to {
+      transform: skewX(0.7deg) translateX(1px) scaleY(1.03);
+    }
+  }
+
+  @keyframes water-glint {
+    0%,
+    100% {
+      opacity: 0.15;
+      translate: 0 0;
+    }
+    50% {
+      opacity: 0.9;
+      translate: 10px 0;
+    }
+  }
+
+  @keyframes flame {
+    0%,
+    100% {
+      scale: 1 1;
+      rotate: 0deg;
+    }
+    33% {
+      scale: 0.9 1.1;
+      rotate: -4deg;
+    }
+    66% {
+      scale: 1.06 0.93;
+      rotate: 3deg;
+    }
+  }
+
+  @keyframes regatta {
+    to {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes row-stroke {
+    from {
+      rotate: -24deg;
+    }
+    to {
+      rotate: 18deg;
+    }
+  }
+
+  @keyframes pennant-wave {
+    from {
+      transform: skewY(-7deg);
+    }
+    to {
+      transform: skewY(5deg) scaleX(0.9);
+    }
+  }
+
+  /* Pasqua. */
+  @keyframes ear-flop {
+    0%,
+    68%,
+    100% {
+      rotate: 0deg;
+    }
+    74%,
+    88% {
+      rotate: 38deg;
+    }
+  }
+
+  @keyframes blink {
+    0%,
+    93%,
+    100% {
+      scale: 1 1;
+    }
+    96% {
+      scale: 1 0.1;
+    }
+  }
+
+  @keyframes nose-twitch {
+    0%,
+    60%,
+    100% {
+      scale: 1 1;
+    }
+    70% {
+      scale: 1.2 0.85;
+    }
+    80% {
+      scale: 0.95 1.1;
+    }
+  }
+
+  /* Il coniglio si affaccia dal bordo inclinandosi, resta un po' e torna dietro. */
+  @keyframes bunny-peek {
+    0%,
+    10%,
+    62%,
+    100% {
+      translate: -105% 0;
+      rotate: 0deg;
+    }
+    16% {
+      translate: -6% 0;
+      rotate: 16deg;
+    }
+    20%,
+    52% {
+      translate: -12% 0;
+      rotate: 10deg;
+    }
+    56% {
+      translate: -8% 0;
+      rotate: 16deg;
+    }
+  }
+
+  @keyframes egg-wobble {
+    0%,
+    20%,
+    27%,
+    100% {
+      rotate: 0deg;
+    }
+    21% {
+      rotate: 8deg;
+    }
+    22% {
+      rotate: -8deg;
+    }
+    23% {
+      rotate: 7deg;
+    }
+    24% {
+      rotate: -6deg;
+    }
+    25% {
+      rotate: 4deg;
+    }
+    26% {
+      rotate: -2deg;
+    }
+  }
+
+  @keyframes egg-crack {
+    0%,
+    26%,
+    86%,
+    100% {
+      opacity: 0;
+    }
+    28%,
+    82% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes egg-cap {
+    0%,
+    30%,
+    84%,
+    100% {
+      translate: 0 0;
+      rotate: 0deg;
+    }
+    34% {
+      translate: 6px -16px;
+      rotate: 32deg;
+    }
+    37%,
+    78% {
+      translate: 5px -12px;
+      rotate: 26deg;
+    }
+  }
+
+  @keyframes chick-rise {
+    0%,
+    32%,
+    84%,
+    100% {
+      translate: 0 14px;
+    }
+    38% {
+      translate: 0 -6px;
+    }
+    41%,
+    77% {
+      translate: 0 -3px;
+    }
+  }
+
+  @keyframes butterfly-a {
+    0% {
+      translate: -12vw 22vh;
+      rotate: 10deg;
+    }
+    20% {
+      translate: 16vw 8vh;
+      rotate: -8deg;
+    }
+    40% {
+      translate: 38vw 15vh;
+      rotate: 12deg;
+    }
+    60% {
+      translate: 64vw 4vh;
+      rotate: -10deg;
+    }
+    80% {
+      translate: 88vw 16vh;
+      rotate: 8deg;
+    }
+    100% {
+      translate: 112vw 9vh;
+      rotate: 0deg;
+    }
+  }
+
+  @keyframes butterfly-b {
+    0% {
+      translate: 110vw 12vh;
+      rotate: -10deg;
+    }
+    25% {
+      translate: 82vw 3vh;
+      rotate: 8deg;
+    }
+    50% {
+      translate: 56vw 11vh;
+      rotate: -12deg;
+    }
+    75% {
+      translate: 26vw 4vh;
+      rotate: 10deg;
+    }
+    100% {
+      translate: -12vw 15vh;
+      rotate: 0deg;
+    }
+  }
+
+  @keyframes butterfly-flap {
+    from {
+      scale: 1 1;
+    }
+    to {
+      scale: 0.35 1;
+    }
+  }
+
+  /* Carnevale di Viareggio. */
+  @keyframes wave {
+    from {
+      rotate: -16deg;
+    }
+    to {
+      rotate: 14deg;
+    }
+  }
+
+  @keyframes burlamacco-peek {
+    0%,
+    8%,
+    64%,
+    100% {
+      translate: 105% 0;
+      rotate: 0deg;
+    }
+    14% {
+      translate: 8% 0;
+      rotate: -8deg;
+    }
+    18%,
+    56% {
+      translate: 14% 0;
+      rotate: -4deg;
+    }
+  }
+
+  @keyframes searchlight {
+    from {
+      rotate: -22deg;
+    }
+    to {
+      rotate: 22deg;
+    }
+  }
+
+  /* La stella filante si srotola, resta un po' sospesa e svanisce. */
+  @keyframes streamer-throw {
+    0% {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      opacity: 1;
+    }
+    14% {
+      stroke-dashoffset: 0;
+      opacity: 1;
+    }
+    40% {
+      stroke-dashoffset: 0;
+      opacity: 0.9;
+    }
+    52%,
+    100% {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 0;
+      opacity: 0;
+    }
+  }
+
+  @keyframes cannon-flash {
+    0%,
+    100% {
+      opacity: 0;
+    }
+    15% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bum {
+    0% {
+      scale: 0.2;
+      opacity: 0;
+    }
+    18% {
+      scale: 1.3;
+      opacity: 1;
+    }
+    30%,
+    70% {
+      scale: 1;
+      opacity: 1;
+    }
+    100% {
+      scale: 1.1;
+      opacity: 0;
+    }
+  }
+
+  @keyframes carnival-caption {
+    0%,
+    40% {
+      opacity: 0;
+      scale: 0.8;
+    }
+    50%,
+    86% {
+      opacity: 1;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Pesce d'aprile: il tavolo fa una capriola e si ferma a testa in giù, poi si raddrizza. */
+  @keyframes table-flip {
+    0% {
+      rotate: 0deg;
+    }
+    30%,
+    55% {
+      rotate: 180deg;
+    }
+    82% {
+      rotate: 372deg;
+    }
+    92% {
+      rotate: 356deg;
+    }
+    100% {
+      rotate: 360deg;
+    }
+  }
+
+  @keyframes briscola-out {
+    0%,
+    35% {
+      opacity: 1;
+      text-decoration-color: transparent;
+    }
+    45%,
+    68% {
+      opacity: 1;
+      text-decoration-color: #e08363;
+    }
+    82%,
+    100% {
+      opacity: 0;
+      text-decoration-color: #e08363;
+    }
+  }
+
+  @keyframes murlan-in {
+    0%,
+    74% {
+      opacity: 0;
+      translate: 0 4px;
+    }
+    90%,
+    100% {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  @keyframes fish-dangle {
+    from {
+      rotate: -24deg;
+    }
+    to {
+      rotate: -12deg;
+    }
+  }
+
+  @keyframes fish-fall {
+    from {
+      translate: 0 0;
+      rotate: -18deg;
+      opacity: 1;
+    }
+    to {
+      translate: 14px 170px;
+      rotate: 170deg;
+      opacity: 0;
+    }
+  }
+
+  @keyframes fish-joke {
+    0% {
+      opacity: 0;
+      translate: -50% 6px;
+      scale: 0.6;
+    }
+    15% {
+      opacity: 1;
+      translate: -50% -4px;
+      scale: 1.06;
+    }
+    25%,
+    78% {
+      opacity: 1;
+      translate: -50% -6px;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+      translate: -50% -20px;
+      scale: 1;
+    }
+  }
+
+  @keyframes swim-right {
+    from {
+      translate: -20vw 0;
+    }
+    to {
+      translate: 120vw 0;
+    }
+  }
+
+  @keyframes swim-left {
+    from {
+      translate: 120vw 0;
+    }
+    to {
+      translate: -20vw 0;
+    }
+  }
+
+  @keyframes fish-bob {
+    from {
+      translate: 0 -4px;
+    }
+    to {
+      translate: 0 4px;
+    }
+  }
+
+  @keyframes bubble-rise {
+    0% {
+      translate: 0 0;
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    100% {
+      translate: 8px -105vh;
+      opacity: 0;
+    }
+  }
+
+  /* Notti d'agosto: la stella cadente attraversa il cielo in un attimo, poi aspetta. */
+  @keyframes shooting-star {
+    0% {
+      opacity: 0;
+      translate: 0 0;
+      rotate: -32deg;
+      scale: 0.4 1;
+    }
+    2% {
+      opacity: 1;
+      scale: 1 1;
+    }
+    9% {
+      opacity: 0.9;
+    }
+    12% {
+      opacity: 0;
+      translate: -40vw 25vh;
+      rotate: -32deg;
+      scale: 0.7 1;
+    }
+    100% {
+      opacity: 0;
+      translate: -40vw 25vh;
+      rotate: -32deg;
+    }
+  }
+
+  @keyframes firefly {
+    0%,
+    100% {
+      opacity: 0.1;
+      translate: 0 0;
+    }
+    30% {
+      opacity: 1;
+      translate: 6px -8px;
+    }
+    55% {
+      opacity: 0.2;
+      translate: -4px -14px;
+    }
+    75% {
+      opacity: 0.9;
+      translate: 3px -6px;
+    }
+  }
+
+  @keyframes sea-drift {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: -50% 0;
+    }
+  }
+
+  /* La lingua di carta si srotola, sobbalza e si riavvolge. */
+  @keyframes horn-blow {
+    0%,
+    100% {
+      scale: 0.08 1;
+    }
+    18%,
+    44%,
+    70% {
+      scale: 1 1;
+    }
+    31% {
+      scale: 0.84 1;
+    }
+  }
+}
+
+/* Temi stagionali: sovrascrivono i token, quindi tavolo, pannelli, sfondo e dorso
+   delle carte cambiano colore senza toccare i componenti. Oro e panna restano: il
+   posto di partenza deve essere sempre la cosa più leggibile. */
+:root[data-season='halloween'] {
+  --color-felt-1: #3b2149;
+  --color-felt-2: #251430;
+  --color-felt-3: #170c1e;
+  --color-rim: #d0702c;
+  --color-drawer: #271636;
+  --color-deck-1: #e2742a;
+  --color-deck-2: #a3461a;
+}
+
+:root {
+  /* Simbolo al centro del dorso delle carte, come testo o come immagine: vuoti, tranne
+     nei temi che li impostano. */
+  --deck-emblem: '';
+  --deck-emblem-image: none;
+  /* La croce pisana, bianca: la usano Luminara e Palio. */
+  /* Rombo a scacchi bianchi e rossi, come la tuta di Burlamacco: lo usa il Carnevale. */
+  --burlamacco-checks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3E%3Cg transform='rotate%2845%29'%3E%3Crect x='-8' y='-8' width='16' height='16' fill='white'/%3E%3Cpath d='M-8-8h4v4h-4zM0-8h4v4H0zM-4-4h4v4h-4zM4-4h4v4H4zM-8 0h4v4h-4zM0 0h4v4H0zM-4 4h4v4h-4zM4 4h4v4H4z' fill='%23d22a35'/%3E%3Crect x='-8' y='-8' width='16' height='16' fill='none' stroke='white' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E");
+  --pisan-cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -20 40 40' fill='white'%3E%3Cdefs%3E%3Cg id='t'%3E%3Ccircle cy='-16.2' r='2.9'/%3E%3Ccircle cx='-3.4' cy='-13.6' r='2.9'/%3E%3Ccircle cx='3.4' cy='-13.6' r='2.9'/%3E%3C/g%3E%3C/defs%3E%3Cpath d='M-2.6-13h5.2v26h-5.2zM-13-2.6h26v5.2h-26z'/%3E%3Cuse href='%23t'/%3E%3Cuse href='%23t' transform='rotate%2890%29'/%3E%3Cuse href='%23t' transform='rotate%28180%29'/%3E%3Cuse href='%23t' transform='rotate%28270%29'/%3E%3C/svg%3E");
+}
+
+/* Natale: tavolo di velluto rosso, carte verdi con il fiocco di neve, cielo notturno
+   (disegnato da SeasonLayer, --color-page colora la barra del browser). */
+:root[data-season='natale'] {
+  --color-felt-1: #a52531;
+  --color-felt-2: #6e1420;
+  --color-felt-3: #2c0910;
+  --color-rim: #d6ae66;
+  --color-drawer: #3a0f17;
+  --color-deck-1: #1f7a46;
+  --color-deck-2: #0d4527;
+  --color-page: #0b1430;
+  --deck-emblem: '❄';
+}
+
+:root[data-season='capodanno'] {
+  --color-felt-1: #23335f;
+  --color-felt-2: #152042;
+  --color-felt-3: #0b1229;
+  --color-rim: #d6ae66;
+  --color-drawer: #17234a;
+  --color-deck-1: #2f4789;
+  --color-deck-2: #18264f;
+}
+
+:root[data-season='luminara'] {
+  --color-felt-1: #14243f;
+  --color-felt-2: #0b1629;
+  --color-felt-3: #060c18;
+  --color-rim: #e8d3a0;
+  --color-drawer: #0e1a2e;
+  --color-deck-1: #c4202b;
+  --color-deck-2: #861019;
+  --color-page: #02030a;
+  --deck-emblem-image: var(--pisan-cross);
+}
+
+:root[data-season='palio'] {
+  --color-felt-1: #2b3f6c;
+  --color-felt-2: #1b2647;
+  --color-felt-3: #11162e;
+  --color-drawer: #1d1838;
+  --color-deck-1: #c4202b;
+  --color-deck-2: #861019;
+  --color-page: #1b1d48;
+  --deck-emblem-image: var(--pisan-cross);
+}
+
+:root[data-season='pasqua'] {
+  --color-felt-1: #a96f40;
+  --color-felt-2: #74432a;
+  --color-felt-3: #3b2214;
+  --color-rim: #e8c27a;
+  --color-drawer: #3a2318;
+  --color-deck-1: #9c7fd4;
+  --color-deck-2: #6a4fa6;
+  --color-page: #2a1a4f;
+  --deck-emblem: '✿';
+}
+
+:root[data-season='carnevale'] {
+  --color-felt-1: #a3213a;
+  --color-felt-2: #6e1228;
+  --color-felt-3: #2a0a24;
+  --color-drawer: #2c0d2a;
+  --color-deck-1: #d22a35;
+  --color-deck-2: #9c1622;
+  --color-page: #160a36;
+  --deck-emblem-image: var(--burlamacco-checks);
+}
+
+:root[data-season='agosto'] {
+  --color-felt-1: #157a8c;
+  --color-felt-2: #0d5566;
+  --color-felt-3: #062a38;
+  --color-drawer: #0a3442;
+  --color-deck-1: #e3473f;
+  --color-deck-2: #b8302a;
+  --color-page: #030820;
+  --deck-emblem: '☀';
 }
 
 @layer base {
