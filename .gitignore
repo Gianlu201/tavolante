@@ -23,3 +23,6 @@ dev-dist
 *.njsproj
 *.sln
 *.sw?
+
+# /brag-slim: recordings, frames and render tools behind brag-output/brag.mp4
+brag-output/work/
