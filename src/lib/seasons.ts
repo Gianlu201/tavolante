@@ -227,42 +227,62 @@ const showcaseDay = (season: Season, now: Date): Date => {
 
 type Override = { season: Season | null; offset: number }
 
+/** A `YYYY-MM-DD` key back to its local date, or null when it is not a real day. */
+export const parseDayKey = (key: string | null) => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(key ?? '')
+  if (!match) return null
+  const [year, month, date] = match.slice(1).map(Number)
+  const parsed = day(year, month, date)
+  return parsed.getMonth() === month - 1 && parsed.getDate() === date ? parsed : null
+}
+
 /**
  * A forced theme moves the app clock to its showcase day, so it looks exactly as it
- * will on the day. Only themes, greetings and the April fish read this clock: the
- * tournament keeps the real time.
+ * will on the day; a forced birthday goes to the evening of `birthdayDay` when one was
+ * picked. Only themes, greetings and the April fish read this clock: the tournament
+ * keeps the real time.
  */
-const overrideFor = (choice: SeasonChoice): Override | null => {
+const overrideFor = (choice: SeasonChoice, birthdayDay: string | null): Override | null => {
   if (choice === 'auto') return null
   if (choice === 'off') return { season: null, offset: 0 }
   const now = new Date()
+  const picked = choice === 'compleanno' ? parseDayKey(birthdayDay) : null
   const target =
     choice === 'mezzanotte'
       ? new Date(now.getFullYear(), 11, 31, 23, 59, 48)
-      : showcaseDay(choice, now)
+      : picked
+        ? new Date(picked.getFullYear(), picked.getMonth(), picked.getDate(), 20)
+        : showcaseDay(choice, now)
   return { season: choice === 'mezzanotte' ? 'capodanno' : choice, offset: target.getTime() - now.getTime() }
 }
 
 const CHOICE_KEY = 'tavolante:tema:v1'
+const BIRTHDAY_DAY_KEY = 'tavolante:tema:giorno:v1'
+
+type StoredChoice = { choice: SeasonChoice; birthdayDay: string | null }
 
 /**
  * `?tema=<scelta>` in the address wins for that visit only. Otherwise the choice made in
- * the secret theme panel, saved on this device until «Automatico» is chosen again.
+ * the secret theme panel, with the day picked for a birthday, saved on this device
+ * until «Automatico» is chosen again.
  */
-const readChoice = (): SeasonChoice => {
+const readChoice = (): StoredChoice => {
   try {
     const fromUrl = new URLSearchParams(window.location.search).get('tema')
-    if (isChoice(fromUrl)) return fromUrl
+    if (isChoice(fromUrl)) return { choice: fromUrl, birthdayDay: null }
     const saved = localStorage.getItem(CHOICE_KEY)
-    if (isChoice(saved)) return saved
+    if (isChoice(saved)) {
+      const birthdayDay = saved === 'compleanno' ? localStorage.getItem(BIRTHDAY_DAY_KEY) : null
+      return { choice: saved, birthdayDay }
+    }
   } catch {
     // no URL or storage to read: follow the calendar
   }
-  return 'auto'
+  return { choice: 'auto', birthdayDay: null }
 }
 
-let choice = readChoice()
-let override = overrideFor(choice)
+let { choice, birthdayDay } = readChoice()
+let override = overrideFor(choice, birthdayDay)
 let version = 0
 const listeners = new Set<() => void>()
 
@@ -279,13 +299,19 @@ export const seasonVersion = () => version
 
 export const currentChoice = () => choice
 
-export const chooseSeason = (next: SeasonChoice) => {
+/** The day picked for a forced birthday (`YYYY-MM-DD`), or null for the next one. */
+export const currentBirthdayDay = () => birthdayDay
+
+export const chooseSeason = (next: SeasonChoice, day: string | null = null) => {
   choice = next
-  override = overrideFor(next)
+  birthdayDay = next === 'compleanno' ? day : null
+  override = overrideFor(next, birthdayDay)
   version += 1
   try {
     if (next === 'auto') localStorage.removeItem(CHOICE_KEY)
     else localStorage.setItem(CHOICE_KEY, next)
+    if (birthdayDay) localStorage.setItem(BIRTHDAY_DAY_KEY, birthdayDay)
+    else localStorage.removeItem(BIRTHDAY_DAY_KEY)
   } catch {
     // storage unavailable: the choice lasts until the app is closed
   }

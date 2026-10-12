@@ -1,4 +1,4 @@
-import type { SeasonChoice } from './seasons'
+import { parseDayKey, type SeasonChoice } from './seasons'
 
 export type ThemeOption = { choice: SeasonChoice; emoji: string; name: string; detail?: string }
 
@@ -24,3 +24,11 @@ export const THEME_OPTIONS: ThemeOption[] = [
 
 export const themeName = (choice: SeasonChoice) =>
   THEME_OPTIONS.find((option) => option.choice === choice)?.name ?? choice
+
+const longDay = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long' })
+
+/** «Compleanno · 6 settembre» for a birthday forced on a day, else the theme name. */
+export const choiceLabel = (choice: SeasonChoice, birthdayDay: string | null) => {
+  const date = choice === 'compleanno' ? parseDayKey(birthdayDay) : null
+  return date ? `${themeName(choice)} · ${longDay.format(date)}` : themeName(choice)
+}

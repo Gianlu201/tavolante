@@ -22,7 +22,7 @@ import {
 import { chooseSeason, type SeasonChoice } from './lib/seasons';
 import { seatLabel, type Settings } from './lib/settings';
 import { unlockAudio } from './lib/sound';
-import { themeName } from './lib/themeOptions';
+import { choiceLabel } from './lib/themeOptions';
 import { completeOrder, finishersNeeded, standings } from './lib/tournament';
 import { useThemeModule } from './themes';
 
@@ -220,10 +220,10 @@ export default function App() {
     showNotice({ text: 'Torneo annullato.' });
   };
 
-  const handleChooseTheme = (next: SeasonChoice) => {
-    chooseSeason(next);
+  const handleChooseTheme = (next: SeasonChoice, birthdayDay: string | null) => {
+    chooseSeason(next, birthdayDay);
     setThemeLabOpen(false);
-    showNotice({ text: `Tema: ${themeName(next)}` });
+    showNotice({ text: `Tema: ${choiceLabel(next, birthdayDay)}` });
   };
 
   const hands = tournament?.hands.length ?? 0;
