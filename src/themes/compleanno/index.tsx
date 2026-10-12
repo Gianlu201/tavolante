@@ -8,9 +8,9 @@ import PartyHat from './PartyHat'
 import BirthdayScene from './Scene'
 
 /**
- * Compleanno (i giorni di BIRTHDAYS, prima di ogni altro tema): si apre spegnendo le
- * candeline, il tavolo è una torta, cappellini da festa per tutti e la corona per chi
- * compie gli anni, se è seduto al tavolo.
+ * Compleanno (i giorni di BIRTHDAYS con il festeggiato al tavolo, prima di ogni altro
+ * tema): si apre spegnendo le candeline, il tavolo è una torta, cappellini da festa per
+ * tutti e la corona per chi compie gli anni.
  */
 const compleanno: ThemeModule = {
   Scene: BirthdayScene,

@@ -58,13 +58,13 @@ export default function App() {
     end: endTournament,
     discard: discardTournament,
   } = useTournament();
-  const { season, greeting, choice, version } = useSeason();
-  const theme = useThemeModule(season);
   const cardRef = useRef<HTMLDivElement>(null);
   const noticeKeyRef = useRef(0);
   const { spinning, deal, hideCard } = useDealAnimation(cardRef);
   const [result, setResult] = useState<Result | null>(null);
   const [editing, setEditing] = useState(false);
+  /** The table as it was when customizing began: the theme waits for «Fatto». */
+  const [tableBeforeEditing, setTableBeforeEditing] = useState(settings.profiles);
   const [editIndex, setEditIndex] = useState<number | null>(null);
   /** Ids of the players tapped so far while closing a tournament hand. */
   const [recording, setRecording] = useState<string[] | null>(null);
@@ -74,6 +74,12 @@ export default function App() {
   const [notice, setNotice] = useState<(NoticeData & { key: number }) | null>(
     null,
   );
+
+  // A birthday theme needs the person celebrating at the table: names typed while
+  // customizing count only once done, so the theme does not flip under the drawer.
+  const guests = editing ? tableBeforeEditing : settings.profiles;
+  const { season, greeting, choice, version } = useSeason(guests);
+  const theme = useThemeModule(season);
 
   const cards = resolveDeckSize(settings.deckPreset, settings.customCards);
   const tournamentActive = tournament !== null && tournament.endedAt === null;
@@ -121,6 +127,7 @@ export default function App() {
 
   const toggleEditing = () => {
     setEditIndex(null);
+    if (!editing) setTableBeforeEditing(settings.profiles);
     setEditing((current) => !current);
   };
 
@@ -413,7 +420,7 @@ export default function App() {
         )}
       </main>
       {/* Keyed on the choice count: picking the same theme again replays its intro. */}
-      {theme?.Overlay && <theme.Overlay key={version} />}
+      {theme?.Overlay && <theme.Overlay key={version} profiles={guests} />}
     </>
   );
 }

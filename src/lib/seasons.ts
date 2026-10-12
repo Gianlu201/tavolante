@@ -1,4 +1,4 @@
-import { BIRTHDAYS, birthdayIn, birthdaysOn, joinNames } from './birthdays'
+import { birthdayIn, birthdaysOf, celebrantsOn, joinNames } from './birthdays'
 
 /**
  * Il calendario dei temi stagionali. Ogni tema dichiara i giorni che copre in un dato
@@ -27,10 +27,13 @@ type DayRange = readonly [Date, Date]
 
 type SeasonDefinition = {
   season: Season
-  /** The days covered by the occurrences that start in `year`. */
-  periods: (year: number) => DayRange[]
+  /**
+   * The days covered by the occurrences that start in `year`. `guests` are the names at
+   * the table, for the themes that depend on who is playing; omitted, everyone counts.
+   */
+  periods: (year: number, guests?: string[]) => DayRange[]
   /** Header text on the days that deserve it, instead of «Tavolante · Murlan». */
-  greeting?: (date: Date) => string | null
+  greeting?: (date: Date, guests?: string[]) => string | null
 }
 
 const day = (year: number, month: number, date: number) => new Date(year, month - 1, date)
@@ -89,20 +92,20 @@ const isDay = (month: number, date: number) => (when: Date) =>
   when.getMonth() === month - 1 && when.getDate() === date
 
 /**
- * In order of priority: when two periods overlap the first one wins. A birthday beats
- * every feast; Capodanno sits inside Natale; Easter Sunday can fall on April 1st (it
- * does in 2029).
+ * In order of priority: when two periods overlap the first one wins. A birthday of
+ * someone at the table beats every feast; Capodanno sits inside Natale; Easter Sunday
+ * can fall on April 1st (it does in 2029).
  */
 const CALENDAR: SeasonDefinition[] = [
   {
     season: 'compleanno',
-    periods: (year) =>
-      BIRTHDAYS.map((birthday): DayRange => {
+    periods: (year, guests) =>
+      birthdaysOf(guests).map((birthday): DayRange => {
         const date = birthdayIn(birthday, year)
         return [date, date]
       }),
-    greeting: (date) => {
-      const names = birthdaysOn(date).map((birthday) => birthday.name)
+    greeting: (date, guests) => {
+      const names = celebrantsOn(date, guests).map((birthday) => birthday.name)
       return names.length > 0 ? `Buon compleanno ${joinNames(names)} 🎂` : null
     },
   },
@@ -150,11 +153,14 @@ const CALENDAR: SeasonDefinition[] = [
 const covers = ([first, last]: DayRange, date: Date) =>
   date >= first && date < addDays(last, 1)
 
-/** A period that wraps over the new year started the year before: check both. */
-export const seasonOn = (date: Date): Season | null =>
+/**
+ * The theme of `date` for the names at the table (everyone when omitted). A period that
+ * wraps over the new year started the year before: check both.
+ */
+export const seasonOn = (date: Date, guests?: string[]): Season | null =>
   CALENDAR.find(({ periods }) =>
-    [...periods(date.getFullYear()), ...periods(date.getFullYear() - 1)].some((range) =>
-      covers(range, date),
+    [...periods(date.getFullYear(), guests), ...periods(date.getFullYear() - 1, guests)].some(
+      (range) => covers(range, date),
     ),
   )?.season ?? null
 
@@ -289,11 +295,13 @@ export const chooseSeason = (next: SeasonChoice) => {
 /** The app's clock: the real one, unless a forced theme moved it. */
 export const clockNow = () => new Date(Date.now() + (override?.offset ?? 0))
 
-export const seasonAt = (date: Date) => (override ? override.season : seasonOn(date))
+/** A forced theme shows whoever is seated; the calendar follows the names at the table. */
+export const seasonAt = (date: Date, guests: string[]) =>
+  override ? override.season : seasonOn(date, guests)
 
 /** Wishes shown in the header on the days of the feast itself. */
-export const holidayGreeting = (date: Date, season: Season | null) =>
-  CALENDAR.find((entry) => entry.season === season)?.greeting?.(date) ?? null
+export const holidayGreeting = (date: Date, season: Season | null, guests: string[]) =>
+  CALENDAR.find((entry) => entry.season === season)?.greeting?.(date, guests) ?? null
 
 /** Milliseconds until the next local midnight. */
 export const msToMidnight = (date: Date) => {

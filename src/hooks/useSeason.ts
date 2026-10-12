@@ -7,6 +7,7 @@ import {
   seasonVersion,
   subscribeSeason,
 } from '../lib/seasons'
+import type { PlayerProfile } from '../lib/settings'
 
 const DEFAULT_THEME_COLOR = '#092820'
 
@@ -28,14 +29,16 @@ export function useNow(intervalMs: number) {
 }
 
 /**
- * The seasonal theme of today. It lives on <html data-season>, where index.css swaps
- * the colour tokens, and in the browser bar colour so the whole screen matches.
+ * The seasonal theme of today for the players at the table: a birthday counts only when
+ * the person celebrating is seated. It lives on <html data-season>, where index.css
+ * swaps the colour tokens, and in the browser bar colour so the whole screen matches.
  */
-export function useSeason() {
+export function useSeason(profiles: PlayerProfile[]) {
   const choice = useSyncExternalStore(subscribeSeason, currentChoice)
   const version = useSyncExternalStore(subscribeSeason, seasonVersion)
   const now = useNow(60_000)
-  const season = seasonAt(now)
+  const guests = profiles.map((profile) => profile.name)
+  const season = seasonAt(now, guests)
 
   useEffect(() => {
     const root = document.documentElement
@@ -52,5 +55,5 @@ export function useSeason() {
       ?.setAttribute('content', color || DEFAULT_THEME_COLOR)
   }, [season])
 
-  return { season, greeting: holidayGreeting(now, season), choice, version }
+  return { season, greeting: holidayGreeting(now, season, guests), choice, version }
 }

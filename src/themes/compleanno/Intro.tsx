@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 import Confetti from '../../components/Confetti'
 import PartyHorn from '../../components/PartyHorn'
-import { birthdaysOn, joinNames } from '../../lib/birthdays'
+import { celebrantsOn, joinNames } from '../../lib/birthdays'
 import { clockNow } from '../../lib/seasons'
+import type { PlayerProfile } from '../../lib/settings'
 import { PARTY_COLORS } from './colors'
 
 const INTRO_MS = 5600
@@ -17,14 +18,21 @@ const CANDLES = [
 
 /**
  * L'introduzione del compleanno: arriva la torta con le candeline accese, si spengono
- * con uno sbuffo di fumo, suonano le trombette e compaiono gli auguri con il nome del
- * festeggiato fra i coriandoli. Non intercetta i tocchi; con «riduci animazioni» non c'è.
+ * con uno sbuffo di fumo, suonano le trombette e compaiono gli auguri con il nome dei
+ * festeggiati seduti al tavolo fra i coriandoli. Parte anche quando il festeggiato si
+ * siede: a tavola vuota il tema non c'è, e arriva al «Fatto» della personalizzazione. Non intercetta i tocchi; con «riduci animazioni» non c'è.
  */
-export default function BirthdayIntro() {
+export default function BirthdayIntro({ profiles }: { profiles: PlayerProfile[] }) {
   const [reducedMotion] = useState(
     () => window.matchMedia('(prefers-reduced-motion: reduce)').matches,
   )
-  const [names] = useState(() => birthdaysOn(clockNow()).map((birthday) => birthday.name))
+  // The names as written in the birthday list, whatever the case typed on the seat.
+  const [names] = useState(() =>
+    celebrantsOn(
+      clockNow(),
+      profiles.map((profile) => profile.name),
+    ).map((birthday) => birthday.name),
+  )
   const [done, setDone] = useState(false)
 
   useEffect(() => {

@@ -227,7 +227,7 @@ telefono:
 
 | Tema | Periodo | Cosa cambia |
 | --- | --- | --- |
-| 🎂 **Compleanno** | i giorni elencati in [`lib/birthdays.ts`](src/lib/birthdays.ts), **prima di qualsiasi altro tema** | si apre con la torta: le candeline si spengono con uno sbuffo, suonano le trombette e compaiono gli auguri con il nome fra i coriandoli; festa a luci basse con la ghirlanda «TANTI AUGURI», palloncini che salgono ai lati e coriandoli colorati; il tavolo è una torta di glassa alla fragola con i ciuffi di panna e le codette, carte turchesi con il palloncino; cappellino da festa su ogni giocatore e la corona su chi compie gli anni (riconosciuto dal nome sul posto). In alto «Buon compleanno …» |
+| 🎂 **Compleanno** | i giorni elencati in [`lib/birthdays.ts`](src/lib/birthdays.ts), **solo se il festeggiato è seduto al tavolo e prima di qualsiasi altro tema** | si apre con la torta: le candeline si spengono con uno sbuffo, suonano le trombette e compaiono gli auguri con il nome fra i coriandoli; festa a luci basse con la ghirlanda «TANTI AUGURI», palloncini che salgono ai lati e coriandoli colorati; il tavolo è una torta di glassa alla fragola con i ciuffi di panna e le codette, carte turchesi con il palloncino; cappellino da festa su ogni giocatore e la corona su chi compie gli anni. In alto «Buon compleanno …» |
 | 🎭 **Carnevale di Viareggio** | dal sabato di 17 giorni prima del Martedì grasso al Martedì grasso | si apre con i tre colpi di cannone dei corsi mascherati; Burlamacco si affaccia e saluta, coriandoli che cadono sempre, stelle filanti lanciate dagli angoli, fari nel cielo; tavolo a rombi con un bordo di stelle filanti, mascherina su ogni giocatore, carte a scacchi bianchi e rossi. Giovedì e Martedì grasso: «A Carnevale ogni scherzo vale» |
 | 🐣 **Pasqua** | Domenica delle Palme → Pasquetta | il tavolo è un uovo di cioccolato aperto nella sua stagnola cangiante, con la coccarda; orecchie da coniglio su ogni giocatore; il coniglio che sbuca accanto al titolo, l'uovo che si schiude con il pulcino, farfalle e prato fiorito. «Buona Pasqua» a Pasqua e Pasquetta |
 | 🐟 **Pesce d'aprile** | 1° aprile | il tavolo fa una capriola, la scritta in alto dice «Briscola» e si corregge, pesci di carta nuotano sullo sfondo e uno è attaccato al posto di un giocatore (lo stesso per tutto il giorno): toccandolo si stacca, senza cambiare il vincitore |
@@ -244,9 +244,14 @@ sovrappongono vince quello che viene prima nell'elenco del calendario: un comple
 qualsiasi festa, Capodanno dentro Natale, Pasqua sul pesce d'aprile (succede nel 2029).
 
 I compleanni si aggiungono in [`src/lib/birthdays.ts`](src/lib/birthdays.ts), uno per
-riga con nome, mese e giorno; due persone nello stesso giorno si festeggiano insieme
-(«Buon compleanno Chiara e Genni»), e chi è nato il 29 febbraio festeggia il 1° marzo
-negli anni non bisestili.
+riga con nome, mese e giorno. Il festeggiato si riconosce dal nome scritto sul suo posto,
+senza badare a maiuscole e spazi («chiara» vale quanto «Chiara»): a tavola vuota il tema
+non c'è, e se lo si fa sedere durante la personalizzazione la festa (introduzione
+compresa) parte al «Fatto», non mentre si scrive. Il tavolo resta salvato, quindi alla
+riapertura il tema c'è già se il festeggiato era seduto l'ultima volta. Due festeggiati
+seduti nello stesso giorno si festeggiano insieme («Buon compleanno Chiara e Genni»), e
+chi è nato il 29 febbraio festeggia il 1° marzo negli anni non bisestili. Dal laboratorio
+temi il compleanno si può forzare anche senza festeggiati al tavolo.
 
 Le decorazioni stanno ai bordi e dietro ai contenuti: sui posti arriva al massimo un
 accessorio (cappellino, orecchie, mascherina, lampanino…), che lascia libere stellina,
@@ -375,7 +380,7 @@ niente libreria di drag & drop (Pointer Events nativi).
 | Asset | Dimensione | Gzip |
 | --- | --- | --- |
 | JS (senza i temi stagionali) | 277,9 kB | **90,4 kB** |
-| Ogni tema stagionale, caricato solo nel suo periodo | 2,6–13,3 kB | 1,2–4,2 kB |
+| Ogni tema stagionale, caricato solo nel suo periodo | 2,6–13,3 kB | 1,2–4,3 kB |
 | CSS | 112,3 kB | **21,2 kB** |
 | Workbox runtime | 5,7 kB | 2,2 kB |
 | Precache totale (bundle, temi, icone, avatar WebP) | 781 KiB | — |
@@ -428,7 +433,7 @@ tavolante/
     │   ├── tournament.ts       # punti, classifica, podio, persistenza del torneo
     │   ├── podiumImage.ts      # podio disegnato su canvas, testo per WhatsApp, condivisione
     │   ├── seasons.ts          # calendario dei temi, data della Pasqua, ?tema=
-    │   ├── birthdays.ts        # 🎂 compleanni del gruppo: vincono su ogni altro tema
+    │   ├── birthdays.ts        # 🎂 compleanni del gruppo: col festeggiato al tavolo vincono su ogni tema
     │   ├── sound.ts            # fanfara sintetizzata con Web Audio
     │   ├── scatter.ts          # pseudo-casuale deterministico per decorazioni e coriandoli
     │   └── avatars.ts          # raccolta degli avatar e composizione della griglia
