@@ -251,9 +251,11 @@ compresa) parte al «Fatto», non mentre si scrive. Il tavolo resta salvato, qui
 riapertura il tema c'è già se il festeggiato era seduto l'ultima volta. Due festeggiati
 seduti nello stesso giorno si festeggiano insieme («Buon compleanno Chiara e Genni»), e
 chi è nato il 29 febbraio festeggia il 1° marzo negli anni non bisestili. Dal laboratorio
-temi il compleanno si può forzare anche senza festeggiati al tavolo, scegliendo prima il
-giorno da festeggiare: uno dei compleanni in lista o una data qualsiasi. L'orologio
-dell'app va alla sera di quel giorno, e il giorno resta salvato insieme al tema forzato.
+temi il compleanno si forza scegliendo prima il giorno da festeggiare: uno dei compleanni
+in lista o una data qualsiasi. L'orologio dell'app va alla sera di quel giorno e il
+giorno resta salvato insieme al tema forzato, ma la regola del tavolo vale anche qui:
+senza il festeggiato di quel giorno seduto resta la grafica classica, e l'avviso dice chi
+manca.
 
 Le decorazioni stanno ai bordi e dietro ai contenuti: sui posti arriva al massimo un
 accessorio (cappellino, orecchie, mascherina, lampanino…), che lascia libere stellina,
