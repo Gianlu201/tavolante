@@ -321,9 +321,15 @@ export const chooseSeason = (next: SeasonChoice, day: string | null = null) => {
 /** The app's clock: the real one, unless a forced theme moved it. */
 export const clockNow = () => new Date(Date.now() + (override?.offset ?? 0))
 
-/** A forced theme shows whoever is seated; the calendar follows the names at the table. */
-export const seasonAt = (date: Date, guests: string[]) =>
-  override ? override.season : seasonOn(date, guests)
+/**
+ * The theme on screen for the names at the table. A forced birthday too needs someone
+ * celebrating that day at the table: without them the page keeps the classic look.
+ */
+export const seasonAt = (date: Date, guests: string[]): Season | null => {
+  if (!override) return seasonOn(date, guests)
+  if (override.season === 'compleanno' && celebrantsOn(date, guests).length === 0) return null
+  return override.season
+}
 
 /** Wishes shown in the header on the days of the feast itself. */
 export const holidayGreeting = (date: Date, season: Season | null, guests: string[]) =>

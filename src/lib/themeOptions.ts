@@ -1,3 +1,4 @@
+import { celebrantsOn, joinNames } from './birthdays'
 import { parseDayKey, type SeasonChoice } from './seasons'
 
 export type ThemeOption = { choice: SeasonChoice; emoji: string; name: string; detail?: string }
@@ -31,4 +32,13 @@ const longDay = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long'
 export const choiceLabel = (choice: SeasonChoice, birthdayDay: string | null) => {
   const date = choice === 'compleanno' ? parseDayKey(birthdayDay) : null
   return date ? `${themeName(choice)} · ${longDay.format(date)}` : themeName(choice)
+}
+
+/** Why a forced birthday is not on screen yet: it needs someone celebrating at the table. */
+export const birthdayHint = (date: Date, guests: string[]) => {
+  if (celebrantsOn(date, guests).length > 0) return ''
+  const names = celebrantsOn(date).map((birthday) => birthday.name)
+  return names.length > 0
+    ? `. Si vedrà con ${joinNames(names)} al tavolo`
+    : '. Nessun compleanno in lista quel giorno'
 }

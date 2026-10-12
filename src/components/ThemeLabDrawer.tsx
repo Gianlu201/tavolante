@@ -52,7 +52,8 @@ type ThemeLabDrawerProps = {
  * Il laboratorio dei temi, nascosto: si apre toccando cinque volte di fila il nome nel
  * footer. Forza un tema qualsiasi (anche il classico, durante le feste) e la scelta resta
  * salvata su questo dispositivo finché non si torna ad «Automatico». Il compleanno chiede
- * prima il giorno da festeggiare: uno della lista o una data qualsiasi.
+ * prima il giorno da festeggiare (uno della lista o una data qualsiasi) e, come nel
+ * calendario, si vede solo con il festeggiato di quel giorno seduto al tavolo.
  */
 export default function ThemeLabDrawer({ choice, season, onChoose, onClose }: ThemeLabDrawerProps) {
   const today = new Date()
@@ -118,9 +119,9 @@ export default function ThemeLabDrawer({ choice, season, onChoose, onClose }: Th
           )}
 
           <p className={HINT_CLASS}>
-            L'orologio dell'app va alla sera di quel giorno. Gli auguri e la corona vanno a
-            chi è seduto al tavolo con il nome del festeggiato; se non c'è nessuno di loro,
-            la festa resta senza nome.
+            L'orologio dell'app va alla sera di quel giorno. La festa si vede solo con il
+            festeggiato seduto al tavolo: finché non c'è resta la grafica classica, e durante
+            la personalizzazione dei giocatori si ricontrolla al «Fatto».
           </p>
 
           <button

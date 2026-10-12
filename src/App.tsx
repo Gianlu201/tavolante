@@ -19,10 +19,10 @@ import {
   resolveDeckSize,
   type Direction,
 } from './lib/dealing';
-import { chooseSeason, type SeasonChoice } from './lib/seasons';
+import { chooseSeason, clockNow, type SeasonChoice } from './lib/seasons';
 import { seatLabel, type Settings } from './lib/settings';
 import { unlockAudio } from './lib/sound';
-import { choiceLabel } from './lib/themeOptions';
+import { birthdayHint, choiceLabel } from './lib/themeOptions';
 import { completeOrder, finishersNeeded, standings } from './lib/tournament';
 import { useThemeModule } from './themes';
 
@@ -223,7 +223,15 @@ export default function App() {
   const handleChooseTheme = (next: SeasonChoice, birthdayDay: string | null) => {
     chooseSeason(next, birthdayDay);
     setThemeLabOpen(false);
-    showNotice({ text: `Tema: ${choiceLabel(next, birthdayDay)}` });
+    // The app clock is already on the picked day here.
+    const hint =
+      next === 'compleanno'
+        ? birthdayHint(
+            clockNow(),
+            guests.map((profile) => profile.name),
+          )
+        : '';
+    showNotice({ text: `Tema: ${choiceLabel(next, birthdayDay)}${hint}` });
   };
 
   const hands = tournament?.hands.length ?? 0;
