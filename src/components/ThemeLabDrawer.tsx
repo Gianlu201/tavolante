@@ -6,7 +6,9 @@ const dayFormat = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'sho
 
 /** «21 mar → 29 mar»: the next occurrence is always within a year, so no year needed. */
 const periodLabel = (season: Season, today: Date) => {
-  const [first, last] = upcomingRange(season, today)
+  const next = upcomingRange(season, today)
+  if (!next) return 'nessuna data'
+  const [first, last] = next
   const same = first.getTime() === last.getTime()
   return `${dayFormat.format(first)}${same ? '' : ` → ${dayFormat.format(last)}`}`
 }

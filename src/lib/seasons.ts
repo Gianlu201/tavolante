@@ -1,10 +1,14 @@
+import { BIRTHDAYS, birthdayIn, birthdaysOn, joinNames } from './birthdays'
+
 /**
  * Il calendario dei temi stagionali. Ogni tema dichiara i giorni che copre in un dato
- * anno: un periodo fisso, uno a cavallo di Capodanno o uno che si sposta con la
- * Pasqua sono tutti la stessa cosa, una funzione anno → [primo giorno, ultimo giorno].
+ * anno: un periodo fisso, uno a cavallo di Capodanno, uno che si sposta con la Pasqua
+ * o i singoli giorni dei compleanni sono tutti la stessa cosa, una funzione
+ * anno → elenco di [primo giorno, ultimo giorno].
  */
 
 export const SEASONS = [
+  'compleanno',
   'capodanno',
   'pasqua',
   'pesce',
@@ -23,8 +27,8 @@ type DayRange = readonly [Date, Date]
 
 type SeasonDefinition = {
   season: Season
-  /** The days covered by the occurrence that starts in `year`. */
-  range: (year: number) => DayRange
+  /** The days covered by the occurrences that start in `year`. */
+  periods: (year: number) => DayRange[]
   /** Header text on the days that deserve it, instead of «Tavolante · Murlan». */
   greeting?: (date: Date) => string | null
 }
@@ -62,17 +66,17 @@ export const easterSunday = (year: number) => {
 /** Same days every year; when `to` comes before `from` the period ends the next year. */
 const fixed =
   ([fromMonth, fromDay]: [number, number], [toMonth, toDay]: [number, number]) =>
-  (year: number): DayRange => {
+  (year: number): DayRange[] => {
     const wraps = toMonth * 100 + toDay < fromMonth * 100 + fromDay
-    return [day(year, fromMonth, fromDay), day(wraps ? year + 1 : year, toMonth, toDay)]
+    return [[day(year, fromMonth, fromDay), day(wraps ? year + 1 : year, toMonth, toDay)]]
   }
 
 /** Days counted from Easter Sunday: -7 is Palm Sunday, +1 is Easter Monday. */
 const fromEaster =
   (fromOffset: number, toOffset: number) =>
-  (year: number): DayRange => {
+  (year: number): DayRange[] => {
     const easter = easterSunday(year)
-    return [addDays(easter, fromOffset), addDays(easter, toOffset)]
+    return [[addDays(easter, fromOffset), addDays(easter, toOffset)]]
   }
 
 const onDays = (text: string, ...days: ((date: Date) => boolean)[]) => (date: Date) =>
@@ -85,36 +89,49 @@ const isDay = (month: number, date: number) => (when: Date) =>
   when.getMonth() === month - 1 && when.getDate() === date
 
 /**
- * In order of priority: when two periods overlap the first one wins. Capodanno sits
- * inside Natale; Easter Sunday can fall on April 1st (it does in 2029).
+ * In order of priority: when two periods overlap the first one wins. A birthday beats
+ * every feast; Capodanno sits inside Natale; Easter Sunday can fall on April 1st (it
+ * does in 2029).
  */
 const CALENDAR: SeasonDefinition[] = [
-  { season: 'capodanno', range: fixed([12, 31], [1, 1]) },
+  {
+    season: 'compleanno',
+    periods: (year) =>
+      BIRTHDAYS.map((birthday): DayRange => {
+        const date = birthdayIn(birthday, year)
+        return [date, date]
+      }),
+    greeting: (date) => {
+      const names = birthdaysOn(date).map((birthday) => birthday.name)
+      return names.length > 0 ? `Buon compleanno ${joinNames(names)} 🎂` : null
+    },
+  },
+  { season: 'capodanno', periods: fixed([12, 31], [1, 1]) },
   {
     season: 'pasqua',
-    range: fromEaster(-7, 1),
+    periods: fromEaster(-7, 1),
     greeting: onDays('Buona Pasqua · Murlan 🐣', isEaster(0), isEaster(1)),
   },
-  { season: 'pesce', range: fixed([4, 1], [4, 1]) },
+  { season: 'pesce', periods: fixed([4, 1], [4, 1]) },
   {
     // From the Saturday of the third weekend of parades to Martedì grasso.
     season: 'carnevale',
-    range: fromEaster(-64, -47),
+    periods: fromEaster(-64, -47),
     greeting: onDays('A Carnevale ogni scherzo vale 🎭', isEaster(-52), isEaster(-47)),
   },
   {
     season: 'luminara',
-    range: fixed([6, 16], [6, 16]),
+    periods: fixed([6, 16], [6, 16]),
     greeting: () => 'Luminara di San Ranieri ✨',
   },
   {
     season: 'palio',
-    range: fixed([6, 17], [6, 17]),
+    periods: fixed([6, 17], [6, 17]),
     greeting: () => 'Palio di San Ranieri 🚣',
   },
   {
     season: 'agosto',
-    range: fixed([8, 9], [8, 16]),
+    periods: fixed([8, 9], [8, 16]),
     greeting: (date) =>
       isDay(8, 10)(date)
         ? 'Notte di San Lorenzo ✨'
@@ -122,10 +139,10 @@ const CALENDAR: SeasonDefinition[] = [
           ? 'Buon Ferragosto · Murlan ☀️'
           : null,
   },
-  { season: 'halloween', range: fixed([10, 24], [11, 2]) },
+  { season: 'halloween', periods: fixed([10, 24], [11, 2]) },
   {
     season: 'natale',
-    range: fixed([12, 8], [1, 6]),
+    periods: fixed([12, 8], [1, 6]),
     greeting: onDays('Buon Natale · Murlan 🎄', isDay(12, 24), isDay(12, 25), isDay(12, 26)),
   },
 ]
@@ -135,10 +152,27 @@ const covers = ([first, last]: DayRange, date: Date) =>
 
 /** A period that wraps over the new year started the year before: check both. */
 export const seasonOn = (date: Date): Season | null =>
-  CALENDAR.find(
-    ({ range }) =>
-      covers(range(date.getFullYear()), date) || covers(range(date.getFullYear() - 1), date),
+  CALENDAR.find(({ periods }) =>
+    [...periods(date.getFullYear()), ...periods(date.getFullYear() - 1)].some((range) =>
+      covers(range, date),
+    ),
   )?.season ?? null
+
+/**
+ * The current or next occurrence of a theme's period, as seen from `date`; null for a
+ * theme with no days at all (an empty birthday list).
+ */
+export const upcomingRange = (season: Season, date: Date): DayRange | null => {
+  const entry = CALENDAR.find((item) => item.season === season)
+  if (!entry) throw new Error(`Unknown season ${season}`)
+  const year = date.getFullYear()
+  return (
+    [year - 1, year, year + 1]
+      .flatMap((y) => entry.periods(y))
+      .sort(([a], [b]) => a.getTime() - b.getTime())
+      .find(([, last]) => addDays(last, 1) > date) ?? null
+  )
+}
 
 const isSeason = (value: string | null): value is Season =>
   (SEASONS as readonly string[]).includes(value ?? '')
@@ -152,12 +186,18 @@ export type SeasonChoice = 'auto' | 'off' | 'mezzanotte' | Season
 const isChoice = (value: string | null): value is SeasonChoice =>
   value === 'auto' || value === 'off' || value === 'mezzanotte' || isSeason(value)
 
-/** The day each theme shows off best, greetings included, in the given year. */
-const showcaseDay = (season: Season, year: number): Date => {
+/** The day each theme shows off best, greetings included, as seen from `now`. */
+const showcaseDay = (season: Season, now: Date): Date => {
+  const year = now.getFullYear()
   const easter = easterSunday(year)
   const at = (date: Date, hour: number) =>
     new Date(date.getFullYear(), date.getMonth(), date.getDate(), hour)
   switch (season) {
+    case 'compleanno': {
+      // The next birthday on the list, or today when the list is empty.
+      const [first] = upcomingRange('compleanno', now) ?? [now]
+      return at(first, 20)
+    }
     case 'capodanno':
       return new Date(year, 11, 31, 22)
     case 'pasqua':
@@ -193,7 +233,7 @@ const overrideFor = (choice: SeasonChoice): Override | null => {
   const target =
     choice === 'mezzanotte'
       ? new Date(now.getFullYear(), 11, 31, 23, 59, 48)
-      : showcaseDay(choice, now.getFullYear())
+      : showcaseDay(choice, now)
   return { season: choice === 'mezzanotte' ? 'capodanno' : choice, offset: target.getTime() - now.getTime() }
 }
 
@@ -250,17 +290,6 @@ export const chooseSeason = (next: SeasonChoice) => {
 export const clockNow = () => new Date(Date.now() + (override?.offset ?? 0))
 
 export const seasonAt = (date: Date) => (override ? override.season : seasonOn(date))
-
-/** The current or next occurrence of a theme's period, as seen from `date`. */
-export const upcomingRange = (season: Season, date: Date): DayRange => {
-  const entry = CALENDAR.find((item) => item.season === season)
-  if (!entry) throw new Error(`Unknown season ${season}`)
-  const year = date.getFullYear()
-  const next = [year - 1, year, year + 1]
-    .map((y) => entry.range(y))
-    .find(([, last]) => addDays(last, 1) > date)
-  return next ?? entry.range(year + 1)
-}
 
 /** Wishes shown in the header on the days of the feast itself. */
 export const holidayGreeting = (date: Date, season: Season | null) =>

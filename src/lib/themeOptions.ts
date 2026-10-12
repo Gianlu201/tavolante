@@ -2,10 +2,14 @@ import type { SeasonChoice } from './seasons'
 
 export type ThemeOption = { choice: SeasonChoice; emoji: string; name: string; detail?: string }
 
-/** The entries of the secret theme panel: the two modes, then the themes in calendar order. */
+/**
+ * The entries of the secret theme panel: the two modes, the birthdays (they beat every
+ * other theme), then the themes in calendar order.
+ */
 export const THEME_OPTIONS: ThemeOption[] = [
   { choice: 'auto', emoji: '📅', name: 'Automatico', detail: 'segue il calendario' },
   { choice: 'off', emoji: '🃏', name: 'Classico', detail: 'mai nessun tema' },
+  { choice: 'compleanno', emoji: '🎂', name: 'Compleanno' },
   { choice: 'carnevale', emoji: '🎭', name: 'Carnevale' },
   { choice: 'pasqua', emoji: '🐣', name: 'Pasqua' },
   { choice: 'pesce', emoji: '🐟', name: "Pesce d'aprile" },
