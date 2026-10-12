@@ -227,6 +227,7 @@ telefono:
 
 | Tema | Periodo | Cosa cambia |
 | --- | --- | --- |
+| 🎂 **Compleanno** | i giorni elencati in [`lib/birthdays.ts`](src/lib/birthdays.ts), **solo se il festeggiato è seduto al tavolo e prima di qualsiasi altro tema** | si apre con la torta: le candeline si spengono con uno sbuffo, suonano le trombette e compaiono gli auguri con il nome fra i coriandoli; festa a luci basse con la ghirlanda «TANTI AUGURI», palloncini che salgono ai lati e coriandoli colorati; il tavolo è una torta di glassa alla fragola con i ciuffi di panna e le codette, carte turchesi con il palloncino; cappellino da festa su ogni giocatore e la corona su chi compie gli anni. In alto «Buon compleanno …» |
 | 🎭 **Carnevale di Viareggio** | dal sabato di 17 giorni prima del Martedì grasso al Martedì grasso | si apre con i tre colpi di cannone dei corsi mascherati; Burlamacco si affaccia e saluta, coriandoli che cadono sempre, stelle filanti lanciate dagli angoli, fari nel cielo; tavolo a rombi con un bordo di stelle filanti, mascherina su ogni giocatore, carte a scacchi bianchi e rossi. Giovedì e Martedì grasso: «A Carnevale ogni scherzo vale» |
 | 🐣 **Pasqua** | Domenica delle Palme → Pasquetta | il tavolo è un uovo di cioccolato aperto nella sua stagnola cangiante, con la coccarda; orecchie da coniglio su ogni giocatore; il coniglio che sbuca accanto al titolo, l'uovo che si schiude con il pulcino, farfalle e prato fiorito. «Buona Pasqua» a Pasqua e Pasquetta |
 | 🐟 **Pesce d'aprile** | 1° aprile | il tavolo fa una capriola, la scritta in alto dice «Briscola» e si corregge, pesci di carta nuotano sullo sfondo e uno è attaccato al posto di un giocatore (lo stesso per tutto il giorno): toccandolo si stacca, senza cambiare il vincitore |
@@ -239,8 +240,20 @@ telefono:
 
 La data della Pasqua (e quindi del Carnevale) si calcola dall'anno con l'algoritmo di
 Meeus/Jones/Butcher: niente tabelle da aggiornare e niente rete. Quando due periodi si
-sovrappongono vince quello che viene prima nell'elenco del calendario: Capodanno dentro
-Natale, Pasqua sul pesce d'aprile (succede nel 2029).
+sovrappongono vince quello che viene prima nell'elenco del calendario: un compleanno su
+qualsiasi festa, Capodanno dentro Natale, Pasqua sul pesce d'aprile (succede nel 2029).
+
+I compleanni si aggiungono in [`src/lib/birthdays.ts`](src/lib/birthdays.ts), uno per
+riga con nome, mese e giorno. Il festeggiato si riconosce dal nome scritto sul suo posto,
+senza badare a maiuscole e spazi («chiara» vale quanto «Chiara»): a tavola vuota il tema
+non c'è, e se lo si fa sedere durante la personalizzazione la festa (introduzione
+compresa) parte al «Fatto», non mentre si scrive. Il tavolo resta salvato, quindi alla
+riapertura il tema c'è già se il festeggiato era seduto l'ultima volta. Due festeggiati
+seduti nello stesso giorno si festeggiano insieme («Buon compleanno Chiara e Genni»), e
+chi è nato il 29 febbraio festeggia il 1° marzo negli anni non bisestili. Dal laboratorio
+temi il compleanno si può forzare anche senza festeggiati al tavolo, scegliendo prima il
+giorno da festeggiare: uno dei compleanni in lista o una data qualsiasi. L'orologio
+dell'app va alla sera di quel giorno, e il giorno resta salvato insieme al tema forzato.
 
 Le decorazioni stanno ai bordi e dietro ai contenuti: sui posti arriva al massimo un
 accessorio (cappellino, orecchie, mascherina, lampanino…), che lascia libere stellina,
@@ -252,7 +265,7 @@ Per provarli fuori stagione si aggiunge un parametro all'indirizzo:
 
 | URL | Effetto |
 | --- | --- |
-| `?tema=carnevale` · `pasqua` · `pesce` · `luminara` · `palio` · `agosto` · `halloween` · `natale` · `capodanno` | forza quel tema e sposta l'orologio dell'app sul suo giorno clou (auguri compresi), solo per quella visita |
+| `?tema=compleanno` · `carnevale` · `pasqua` · `pesce` · `luminara` · `palio` · `agosto` · `halloween` · `natale` · `capodanno` | forza quel tema e sposta l'orologio dell'app sul suo giorno clou (auguri compresi; per il compleanno è il prossimo della lista), solo per quella visita |
 | `?tema=mezzanotte` | Capodanno con l'orologio a pochi secondi dalla mezzanotte, per vedere il conto alla rovescia |
 | `?tema=off` | nessun tema, anche se il periodo è attivo |
 
@@ -369,7 +382,7 @@ niente libreria di drag & drop (Pointer Events nativi).
 | Asset | Dimensione | Gzip |
 | --- | --- | --- |
 | JS (senza i temi stagionali) | 277,9 kB | **90,4 kB** |
-| Ogni tema stagionale, caricato solo nel suo periodo | 2,6–13,3 kB | 1,2–4,1 kB |
+| Ogni tema stagionale, caricato solo nel suo periodo | 2,6–13,3 kB | 1,2–4,3 kB |
 | CSS | 112,3 kB | **21,2 kB** |
 | Workbox runtime | 5,7 kB | 2,2 kB |
 | Precache totale (bundle, temi, icone, avatar WebP) | 781 KiB | — |
@@ -422,6 +435,7 @@ tavolante/
     │   ├── tournament.ts       # punti, classifica, podio, persistenza del torneo
     │   ├── podiumImage.ts      # podio disegnato su canvas, testo per WhatsApp, condivisione
     │   ├── seasons.ts          # calendario dei temi, data della Pasqua, ?tema=
+    │   ├── birthdays.ts        # 🎂 compleanni del gruppo: col festeggiato al tavolo vincono su ogni tema
     │   ├── sound.ts            # fanfara sintetizzata con Web Audio
     │   ├── scatter.ts          # pseudo-casuale deterministico per decorazioni e coriandoli
     │   └── avatars.ts          # raccolta degli avatar e composizione della griglia
@@ -429,7 +443,7 @@ tavolante/
     │   ├── index.ts            #    mappa tema → import() e hook useThemeModule
     │   ├── types.ts            #    cosa può aggiungere un tema (fondale, intro, tavolo, posti…)
     │   ├── pisa/               #    Lungarni, lampanini e quartieri: condivisi da Luminara e Palio
-    │   └── carnevale/ pasqua/ pesce/ luminara/ palio/ agosto/ halloween/ natale/ capodanno/
+    │   └── compleanno/ carnevale/ pasqua/ pesce/ luminara/ palio/ agosto/ halloween/ natale/ capodanno/
     └── assets/avatars/         # 🖼️ WebP generati — cartella di output, non toccare a mano
 ```
 
@@ -467,7 +481,7 @@ e controllati**, ricevono dati e callback e non conoscono `localStorage`.
 | [`hooks/useSettings.ts`](src/hooks/useSettings.ts) | le mutazioni non banali: rimuovere un posto, riordinarli, e in entrambi i casi far seguire al `winnerIndex` la **persona**, non l'indice |
 | [`lib/tournament.ts`](src/lib/tournament.ts) | mani registrate per **id** di giocatore, classifica con spareggi ed ex aequo, gradini del podio. **Puro**, più il parsing difensivo della chiave `tavolante:tournament:v1` |
 | [`lib/podiumImage.ts`](src/lib/podiumImage.ts) | disegna il podio su un canvas 1080 px con avatar e font già in cache, lo condivide con la Web Share API o lo scarica |
-| [`lib/seasons.ts`](src/lib/seasons.ts) | calendario dei temi: ognuno è una funzione anno → giorni coperti (fissi, a cavallo dell'anno o legati alla Pasqua), in ordine di priorità, con gli auguri; scelta del tema forzata (`?tema=` o salvata sul dispositivo) che sposta l'orologio dell'app sul giorno clou del tema |
+| [`lib/seasons.ts`](src/lib/seasons.ts) | calendario dei temi: ognuno è una funzione anno → periodi coperti (fissi, a cavallo dell'anno, legati alla Pasqua o i singoli giorni dei compleanni), in ordine di priorità, con gli auguri; scelta del tema forzata (`?tema=` o salvata sul dispositivo) che sposta l'orologio dell'app sul giorno clou del tema |
 | [`themes/`](src/themes) | un modulo per tema (`index.tsx` più i suoi componenti): fondale, introduzione, decorazione del tavolo, accessorio dei posti, scritta in alto. [`themes/index.ts`](src/themes/index.ts) li carica con `import()` solo nel loro periodo |
 | [`hooks/useDealAnimation.ts`](src/hooks/useDealAnimation.ts) | l'animazione, in coordinate polari, cancellabile e `async` |
 | [`hooks/useSeatDrag.ts`](src/hooks/useSeatDrag.ts) | drag & drop circolare: soglia tap/drag, slot dall'angolo del puntatore, zona morta centrale, soppressione del click post-drag |

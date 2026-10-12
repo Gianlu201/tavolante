@@ -1,11 +1,15 @@
-import type { SeasonChoice } from './seasons'
+import { parseDayKey, type SeasonChoice } from './seasons'
 
 export type ThemeOption = { choice: SeasonChoice; emoji: string; name: string; detail?: string }
 
-/** The entries of the secret theme panel: the two modes, then the themes in calendar order. */
+/**
+ * The entries of the secret theme panel: the two modes, the birthdays (they beat every
+ * other theme), then the themes in calendar order.
+ */
 export const THEME_OPTIONS: ThemeOption[] = [
   { choice: 'auto', emoji: '📅', name: 'Automatico', detail: 'segue il calendario' },
   { choice: 'off', emoji: '🃏', name: 'Classico', detail: 'mai nessun tema' },
+  { choice: 'compleanno', emoji: '🎂', name: 'Compleanno' },
   { choice: 'carnevale', emoji: '🎭', name: 'Carnevale' },
   { choice: 'pasqua', emoji: '🐣', name: 'Pasqua' },
   { choice: 'pesce', emoji: '🐟', name: "Pesce d'aprile" },
@@ -20,3 +24,11 @@ export const THEME_OPTIONS: ThemeOption[] = [
 
 export const themeName = (choice: SeasonChoice) =>
   THEME_OPTIONS.find((option) => option.choice === choice)?.name ?? choice
+
+const longDay = new Intl.DateTimeFormat('it-IT', { day: 'numeric', month: 'long' })
+
+/** «Compleanno · 6 settembre» for a birthday forced on a day, else the theme name. */
+export const choiceLabel = (choice: SeasonChoice, birthdayDay: string | null) => {
+  const date = choice === 'compleanno' ? parseDayKey(birthdayDay) : null
+  return date ? `${themeName(choice)} · ${longDay.format(date)}` : themeName(choice)
+}

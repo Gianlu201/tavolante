@@ -13,7 +13,7 @@ export type ThemeModule = {
   /** Behind the whole page: sky, characters, decorations. */
   Scene: ComponentType
   /** Above everything and never in the way of taps: intros, countdowns. */
-  Overlay?: ComponentType
+  Overlay?: ComponentType<{ profiles: PlayerProfile[] }>
   /** Around the felt, under the seats. */
   TableDecoration?: ComponentType
   /** Worn by a seat; the dragged copy wears it too. */

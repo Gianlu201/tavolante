@@ -95,6 +95,12 @@
   --animate-spider-bob: spider-bob 7s ease-in-out infinite;
   --animate-firework: firework 6s ease-out infinite both;
   --animate-countdown-pop: countdown-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-balloon-rise: balloon-rise 22s linear infinite;
+  --animate-party-veil: party-veil 5.6s ease-out both;
+  --animate-cake-in: cake-in 5.6s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  --animate-candle-out: candle-out 5.6s ease-in both;
+  --animate-smoke-puff: smoke-puff 5.6s ease-out both;
+  --animate-wish-in: wish-in 5.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 
   @keyframes scrim-in {
     from {
@@ -969,6 +975,97 @@
     }
   }
 
+  /* Compleanno: i palloncini salgono da sotto lo schermo e spariscono in alto. */
+  @keyframes balloon-rise {
+    from {
+      translate: 0 0;
+    }
+    to {
+      translate: 0 -150vh;
+    }
+  }
+
+  /* L'introduzione: arriva la torta, si spengono le candeline, fumo e auguri. */
+  @keyframes party-veil {
+    0% {
+      opacity: 0;
+    }
+    8%,
+    84% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes cake-in {
+    0% {
+      opacity: 0;
+      scale: 0.5;
+      translate: 0 40px;
+    }
+    12%,
+    84% {
+      opacity: 1;
+      scale: 1;
+      translate: 0 0;
+    }
+    100% {
+      opacity: 0;
+      scale: 0.92;
+      translate: 0 0;
+    }
+  }
+
+  @keyframes candle-out {
+    0%,
+    44% {
+      opacity: 1;
+      scale: 1;
+    }
+    50%,
+    100% {
+      opacity: 0;
+      scale: 0.2;
+    }
+  }
+
+  @keyframes smoke-puff {
+    0%,
+    47% {
+      opacity: 0;
+      translate: 0 0;
+      scale: 0.6;
+    }
+    54% {
+      opacity: 0.8;
+    }
+    84%,
+    100% {
+      opacity: 0;
+      translate: 0 -34px;
+      scale: 2;
+    }
+  }
+
+  @keyframes wish-in {
+    0%,
+    48% {
+      opacity: 0;
+      scale: 0.7;
+    }
+    56%,
+    84% {
+      opacity: 1;
+      scale: 1;
+    }
+    100% {
+      opacity: 0;
+      scale: 1;
+    }
+  }
+
   /* La lingua di carta si srotola, sobbalza e si riavvolge. */
   @keyframes horn-blow {
     0%,
@@ -1007,6 +1104,8 @@
   /* La croce pisana, bianca: la usano Luminara e Palio. */
   /* Rombo a scacchi bianchi e rossi, come la tuta di Burlamacco: lo usa il Carnevale. */
   --burlamacco-checks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3E%3Cg transform='rotate%2845%29'%3E%3Crect x='-8' y='-8' width='16' height='16' fill='white'/%3E%3Cpath d='M-8-8h4v4h-4zM0-8h4v4H0zM-4-4h4v4h-4zM4-4h4v4H4zM-8 0h4v4h-4zM0 0h4v4H0zM-4 4h4v4h-4zM4 4h4v4H4z' fill='%23d22a35'/%3E%3Crect x='-8' y='-8' width='16' height='16' fill='none' stroke='white' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E");
+  /* Palloncino bianco: lo usa il Compleanno. */
+  --balloon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -14 24 30' fill='white'%3E%3Cellipse cy='-3' rx='8' ry='10'/%3E%3Cpath d='M-1.8 7.6h3.6L0 9.8z'/%3E%3Cpath d='M0 9.8c-2.4 1.6 1.6 2.8-.6 5.2' fill='none' stroke='white' stroke-width='1.1'/%3E%3C/svg%3E");
   --pisan-cross: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -20 40 40' fill='white'%3E%3Cdefs%3E%3Cg id='t'%3E%3Ccircle cy='-16.2' r='2.9'/%3E%3Ccircle cx='-3.4' cy='-13.6' r='2.9'/%3E%3Ccircle cx='3.4' cy='-13.6' r='2.9'/%3E%3C/g%3E%3C/defs%3E%3Cpath d='M-2.6-13h5.2v26h-5.2zM-13-2.6h26v5.2h-26z'/%3E%3Cuse href='%23t'/%3E%3Cuse href='%23t' transform='rotate%2890%29'/%3E%3Cuse href='%23t' transform='rotate%28180%29'/%3E%3Cuse href='%23t' transform='rotate%28270%29'/%3E%3C/svg%3E");
 }
 
@@ -1089,6 +1188,20 @@
   --color-deck-2: #b8302a;
   --color-page: #030820;
   --deck-emblem: '☀';
+}
+
+/* Compleanno: tavolo di glassa alla fragola dentro un bordo di panna, carte turchesi con
+   il palloncino, festa notturna dietro. Vince su ogni altro tema. */
+:root[data-season='compleanno'] {
+  --color-felt-1: #cf4f80;
+  --color-felt-2: #9c2c5c;
+  --color-felt-3: #3f0f2e;
+  --color-rim: #f7d9e4;
+  --color-drawer: #33123a;
+  --color-deck-1: #2bb5a8;
+  --color-deck-2: #157770;
+  --color-page: #1d0f3d;
+  --deck-emblem-image: var(--balloon);
 }
 
 @layer base {

@@ -11,6 +11,8 @@ type ConfettiProps = {
   loop?: boolean
   /** Stacking and placement; by default a layer over the whole screen. */
   className?: string
+  /** Paper colours, by default the gold and cream of the table. */
+  colors?: string[]
 }
 
 /** Pioggia di coriandoli in CSS puro: con «riduci animazioni» non compare affatto. */
@@ -19,6 +21,7 @@ export default function Confetti({
   count = 46,
   loop = false,
   className = 'fixed inset-0 z-50',
+  colors = COLORS,
 }: ConfettiProps) {
   return (
     <div
@@ -32,7 +35,7 @@ export default function Confetti({
           left: `${scatter(i, 2) * 100}%`,
           width: `${size}px`,
           height: `${round ? size : size * 1.7}px`,
-          backgroundColor: COLORS[i % COLORS.length],
+          backgroundColor: colors[i % colors.length],
           animationDuration: `${(loop ? 6 : 2.6) + scatter(i, 3) * (loop ? 5 : 2)}s`,
           animationDelay: loop
             ? `${-scatter(i, 4) * 11}s`

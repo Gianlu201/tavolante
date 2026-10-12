@@ -7,6 +7,7 @@ import type { ThemeModule } from './types'
  * precaches them all anyway, so a theme that starts while offline still shows up.
  */
 const LOADERS: Record<Season, () => Promise<{ default: ThemeModule }>> = {
+  compleanno: () => import('./compleanno'),
   capodanno: () => import('./capodanno'),
   pasqua: () => import('./pasqua'),
   pesce: () => import('./pesce'),
