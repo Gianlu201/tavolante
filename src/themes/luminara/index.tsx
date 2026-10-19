@@ -1,7 +1,7 @@
 import Lampanino from '../pisa/Lampanino'
 import LuminiRing from '../pisa/LuminiRing'
 import type { ThemeModule } from '../types'
-import LuminaraIntro from './Intro'
+import LuminaraIntro, { INTRO_MS } from './Intro'
 import LuminaraScene from './Scene'
 
 /**
@@ -11,6 +11,7 @@ import LuminaraScene from './Scene'
 const luminara: ThemeModule = {
   Scene: LuminaraScene,
   Overlay: LuminaraIntro,
+  introMs: INTRO_MS,
   TableDecoration: LuminiRing,
   seatAccessory: () => <Lampanino />,
 }

@@ -38,6 +38,8 @@
   --animate-podium-rise: podium-rise 0.55s cubic-bezier(0.22, 1.2, 0.36, 1) both;
   --animate-podium-drop: podium-drop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
   --animate-fade-up: fade-up 0.5s ease-out both;
+  --animate-update-in: update-in 0.55s cubic-bezier(0.34, 1.4, 0.64, 1) both;
+  --animate-float: float 2.8s ease-in-out infinite alternate;
   --animate-confetti-fall: confetti-fall 3s cubic-bezier(0.25, 0.4, 0.55, 1) 2 both;
   --animate-horn-blow: horn-blow 1.5s ease-in-out 2 both;
   --animate-riffle-left: riffle-left 0.95s ease-in-out;
@@ -165,6 +167,23 @@
     from {
       translate: 0 10px;
       opacity: 0;
+    }
+  }
+
+  @keyframes update-in {
+    from {
+      translate: 0 28px;
+      scale: 0.92;
+      opacity: 0;
+    }
+  }
+
+  @keyframes float {
+    from {
+      translate: 0 -4px;
+    }
+    to {
+      translate: 0 4px;
     }
   }
 

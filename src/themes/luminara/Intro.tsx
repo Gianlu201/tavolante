@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Lungarno from '../pisa/Lungarno'
 
-const INTRO_MS = 6800
+export const INTRO_MS = 6800
 
 /**
  * Lo spegnimento: all'apertura i Lungarni (e l'app) si spengono, poi i lampanini si

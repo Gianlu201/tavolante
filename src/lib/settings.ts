@@ -141,6 +141,15 @@ export const saveSettings = (settings: Settings) => {
   }
 }
 
+/** Every version saves the settings on its first start: finding them means the app was used before. */
+export const hasSavedSettings = () => {
+  try {
+    return localStorage.getItem(STORAGE_KEY) !== null
+  } catch {
+    return false
+  }
+}
+
 export const clearSettings = () => {
   try {
     localStorage.removeItem(STORAGE_KEY)

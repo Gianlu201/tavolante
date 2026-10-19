@@ -12,7 +12,7 @@ vincitore della mano precedente** — la regola con cui si distribuisce nel Murl
 
 | | |
 | --- | --- |
-| **Versione** | 2.0.1 |
+| **Versione** | 2.1.0 |
 | **Stack** | React 19 · TypeScript 6 · Vite 8 · Tailwind CSS v4 · PWA |
 | **Lingua UI** | Italiano |
 | **Offline** | Sì, una volta installata |
@@ -302,6 +302,15 @@ ripresa dal background senza ricaricare la pagina, e il browser da solo non
 ricontrollerebbe il service worker. Impostazioni e torneo vivono in `localStorage`
 e sopravvivono all'aggiornamento.
 
+**Avviso di aggiornamento:** dopo una versione nuova, chi aveva già usato l'app
+trova un biglietto che lo annuncia (ventaglio di carte, qualche personaggio,
+coriandoli); si chiude dal pulsante, toccando fuori o con Esc. Compare solo quando
+sale la **minor** o la **major** (`2.0.x → 2.1.0`, `2.4.x → 3.0.0`), mai per una
+**patch** (`2.1.0 → 2.1.1`), che corregge cose che non si vedono. Chi apre l'app per
+la prima volta non lo vede. L'ultima versione annunciata resta salvata sul dispositivo
+(`tavolante:versione-vista:v1`); se un tema apre con un'introduzione, il biglietto
+aspetta che finisca. Dal laboratorio dei temi lo si può rivedere quando si vuole.
+
 ---
 
 ## 🥚 Easter egg
@@ -425,6 +434,7 @@ tavolante/
     │   ├── Fireworks.tsx       # fuochi d'artificio in CSS
     │   ├── SeasonLayer.tsx     # contenitore del fondale del tema stagionale
     │   ├── Notice.tsx          # avviso breve in alto, con «Annulla»
+    │   ├── UpdateCard.tsx      # biglietto che annuncia una nuova versione
     │   ├── PlayerAvatar.tsx    # ritratto rotondo fuori dal tavolo
     │   └── Footer.tsx          # copyright, link al sito, invito all'installazione
     ├── hooks/
@@ -444,6 +454,7 @@ tavolante/
     │   ├── birthdays.ts        # 🎂 compleanni del gruppo: col festeggiato al tavolo vincono su ogni tema
     │   ├── sound.ts            # fanfara sintetizzata con Web Audio
     │   ├── scatter.ts          # pseudo-casuale deterministico per decorazioni e coriandoli
+    │   ├── updates.ts          # quando annunciare una nuova versione (minor o major)
     │   └── avatars.ts          # raccolta degli avatar e composizione della griglia
     ├── themes/                 # 🎨 temi stagionali, uno per cartella, caricati solo nel periodo
     │   ├── index.ts            #    mappa tema → import() e hook useThemeModule
@@ -566,8 +577,9 @@ funzionare tenendo le impostazioni solo in memoria.
 
 La chiave è versionata — `tavolante:settings:v1` — così un futuro cambio di schema
 incompatibile può convivere con i dati vecchi invece di corromperli. Lo stesso vale
-per il torneo (`tavolante:tournament:v1`) e per la preferenza del suono
-(`tavolante:sound:v1`). Le impostazioni salvate prima che i giocatori avessero un
+per il torneo (`tavolante:tournament:v1`), per la preferenza del suono
+(`tavolante:sound:v1`) e per l'ultima versione annunciata
+(`tavolante:versione-vista:v1`). Le impostazioni salvate prima che i giocatori avessero un
 `id` lo ricevono al primo caricamento, senza perdere nomi e personaggi.
 
 ### 👥 Indici che seguono le persone

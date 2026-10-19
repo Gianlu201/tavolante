@@ -45,6 +45,8 @@ type ThemeLabDrawerProps = {
   season: Season | null
   /** `birthdayDay` is the `YYYY-MM-DD` picked for a birthday, else null. */
   onChoose: (choice: SeasonChoice, birthdayDay: string | null) => void
+  /** Shows the card that announces a new version, to see how it looks. */
+  onPreviewUpdate: () => void
   onClose: () => void
 }
 
@@ -53,9 +55,16 @@ type ThemeLabDrawerProps = {
  * footer. Forza un tema qualsiasi (anche il classico, durante le feste) e la scelta resta
  * salvata su questo dispositivo finché non si torna ad «Automatico». Il compleanno chiede
  * prima il giorno da festeggiare (uno della lista o una data qualsiasi) e, come nel
- * calendario, si vede solo con il festeggiato di quel giorno seduto al tavolo.
+ * calendario, si vede solo con il festeggiato di quel giorno seduto al tavolo. In fondo
+ * si può rivedere il biglietto che annuncia una nuova versione.
  */
-export default function ThemeLabDrawer({ choice, season, onChoose, onClose }: ThemeLabDrawerProps) {
+export default function ThemeLabDrawer({
+  choice,
+  season,
+  onChoose,
+  onPreviewUpdate,
+  onClose,
+}: ThemeLabDrawerProps) {
   const today = new Date()
   const birthdays = upcomingBirthdays(today)
   const savedDay = choice === 'compleanno' ? currentBirthdayDay() : null
@@ -179,6 +188,14 @@ export default function ThemeLabDrawer({ choice, season, onChoose, onClose }: Th
             dell'app, finché non torni su <b className="text-cream/80">Automatico</b>. Toccare
             di nuovo lo stesso tema fa ripartire la sua introduzione.
           </p>
+
+          <button
+            type="button"
+            className="flex cursor-pointer items-center justify-center gap-2 rounded-[14px] border border-cream/14 bg-black/18 px-3 py-2.5 text-[13px] font-semibold text-cream/85 active:bg-cream/8"
+            onClick={onPreviewUpdate}
+          >
+            <span aria-hidden="true">✦</span> Rivedi l'avviso di aggiornamento
+          </button>
         </>
       )}
     </BottomSheet>

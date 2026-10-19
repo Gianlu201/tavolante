@@ -3,7 +3,7 @@ import { clockNow } from '../../lib/seasons'
 import type { ThemeModule } from '../types'
 import CakeTable from './CakeTable'
 import Crown from './Crown'
-import BirthdayIntro from './Intro'
+import BirthdayIntro, { INTRO_MS } from './Intro'
 import PartyHat from './PartyHat'
 import BirthdayScene from './Scene'
 
@@ -15,6 +15,7 @@ import BirthdayScene from './Scene'
 const compleanno: ThemeModule = {
   Scene: BirthdayScene,
   Overlay: BirthdayIntro,
+  introMs: INTRO_MS,
   TableDecoration: CakeTable,
   seatAccessory: ({ index, profile }) =>
     isCelebrated(profile.name, clockNow()) ? <Crown /> : <PartyHat index={index} />,

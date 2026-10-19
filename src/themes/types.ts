@@ -14,6 +14,8 @@ export type ThemeModule = {
   Scene: ComponentType
   /** Above everything and never in the way of taps: intros, countdowns. */
   Overlay?: ComponentType<{ profiles: PlayerProfile[] }>
+  /** How long the Overlay holds the screen at startup: the update card waits for it. */
+  introMs?: number
   /** Around the felt, under the seats. */
   TableDecoration?: ComponentType
   /** Worn by a seat; the dragged copy wears it too. */

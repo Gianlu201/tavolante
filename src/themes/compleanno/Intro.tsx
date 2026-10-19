@@ -6,7 +6,7 @@ import { clockNow } from '../../lib/seasons'
 import type { PlayerProfile } from '../../lib/settings'
 import { PARTY_COLORS } from './colors'
 
-const INTRO_MS = 5600
+export const INTRO_MS = 5600
 /** When the candles go out, in seconds: 48% of the intro, as in the keyframes. */
 const BLOW_AT = 2.7
 

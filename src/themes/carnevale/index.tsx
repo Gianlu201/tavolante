@@ -1,5 +1,5 @@
 import type { ThemeModule } from '../types'
-import Cannons from './Cannons'
+import Cannons, { INTRO_MS } from './Cannons'
 import Mask from './Mask'
 import CarnivalScene from './Scene'
 import StreamerRing from './StreamerRing'
@@ -11,6 +11,7 @@ import StreamerRing from './StreamerRing'
 const carnevale: ThemeModule = {
   Scene: CarnivalScene,
   Overlay: Cannons,
+  introMs: INTRO_MS,
   TableDecoration: StreamerRing,
   seatAccessory: ({ index }) => <Mask index={index} />,
   roomyHeader: true,

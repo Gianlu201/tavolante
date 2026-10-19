@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import Confetti from '../../components/Confetti'
 
-const INTRO_MS = 4800
+export const INTRO_MS = 4800
 
 const SHOTS = [
   { delay: 0.3, left: '22%', top: '26%', rotate: -12 },

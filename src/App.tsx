@@ -8,6 +8,7 @@ import Podium from './components/Podium';
 import SeasonLayer from './components/SeasonLayer';
 import ThemeLabDrawer from './components/ThemeLabDrawer';
 import TournamentDrawer from './components/TournamentDrawer';
+import UpdateCard from './components/UpdateCard';
 import { useDealAnimation } from './hooks/useDealAnimation';
 import { useSeason } from './hooks/useSeason';
 import { useSettings } from './hooks/useSettings';
@@ -24,6 +25,7 @@ import { seatLabel, type Settings } from './lib/settings';
 import { unlockAudio } from './lib/sound';
 import { birthdayHint, choiceLabel } from './lib/themeOptions';
 import { completeOrder, finishersNeeded, standings } from './lib/tournament';
+import { markUpdateSeen, shouldAnnounceUpdate } from './lib/updates';
 import { useThemeModule } from './themes';
 
 const PILL_BASE =
@@ -73,6 +75,10 @@ export default function App() {
   const [themeLabOpen, setThemeLabOpen] = useState(false);
   const [notice, setNotice] = useState<(NoticeData & { key: number }) | null>(
     null,
+  );
+  /** At startup after a new version, or reopened by hand from the theme lab. */
+  const [updateCard, setUpdateCard] = useState<'startup' | 'preview' | null>(
+    () => (shouldAnnounceUpdate() ? 'startup' : null),
   );
 
   // A birthday theme needs the person celebrating at the table: names typed while
@@ -232,6 +238,11 @@ export default function App() {
           )
         : '';
     showNotice({ text: `Tema: ${choiceLabel(next, birthdayDay)}${hint}` });
+  };
+
+  const handleCloseUpdate = () => {
+    markUpdateSeen();
+    setUpdateCard(null);
   };
 
   const hands = tournament?.hands.length ?? 0;
@@ -410,6 +421,10 @@ export default function App() {
             choice={choice}
             season={season}
             onChoose={handleChooseTheme}
+            onPreviewUpdate={() => {
+              setThemeLabOpen(false);
+              setUpdateCard('preview');
+            }}
             onClose={() => setThemeLabOpen(false)}
           />
         )}
@@ -429,6 +444,13 @@ export default function App() {
       </main>
       {/* Keyed on the choice count: picking the same theme again replays its intro. */}
       {theme?.Overlay && <theme.Overlay key={version} profiles={guests} />}
+      {/* At startup it waits for the theme to load, then for its intro to end. */}
+      {updateCard && (updateCard === 'preview' || season === null || theme) && (
+        <UpdateCard
+          delayMs={updateCard === 'startup' ? (theme?.introMs ?? 0) : 0}
+          onClose={handleCloseUpdate}
+        />
+      )}
     </>
   );
 }
