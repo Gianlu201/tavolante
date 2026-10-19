@@ -12,7 +12,7 @@ vincitore della mano precedente** — la regola con cui si distribuisce nel Murl
 
 | | |
 | --- | --- |
-| **Versione** | 1.2.0 |
+| **Versione** | 2.0.1 |
 | **Stack** | React 19 · TypeScript 6 · Vite 8 · Tailwind CSS v4 · PWA |
 | **Lingua UI** | Italiano |
 | **Offline** | Sì, una volta installata |
@@ -294,9 +294,13 @@ browser non supporta l'installazione.
 **Requisito:** serve **HTTPS** (o `localhost`). Da un `file://` o da un IP in HTTP
 il service worker non si registra e l'installazione non viene proposta.
 
-**Aggiornamenti:** sono automatici (`registerType: 'autoUpdate'`). Alla riapertura
-l'app scarica la versione nuova e si ricarica da sola; le impostazioni vivono in
-`localStorage` e sopravvivono all'aggiornamento.
+**Aggiornamenti:** sono automatici (`registerType: 'autoUpdate'`). L'app cerca una
+versione nuova all'avvio, ogni volta che torna in primo piano e ogni ora mentre
+resta aperta; quando la trova la scarica e si ricarica da sola. Il controllo al
+ritorno in primo piano serve perché sul telefono una PWA installata di solito viene
+ripresa dal background senza ricaricare la pagina, e il browser da solo non
+ricontrollerebbe il service worker. Impostazioni e torneo vivono in `localStorage`
+e sopravvivono all'aggiornamento.
 
 ---
 
