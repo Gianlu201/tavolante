@@ -25,10 +25,11 @@ export default defineConfig({
         scope: '/',
         display: 'standalone',
         orientation: 'portrait',
-        // Android colora la barra di navigazione con questi valori e non segue i
+        // background_color è lo sfondo dello splash: il feltro del tema base.
+        background_color: '#092820',
+        // Android colora la barra di navigazione con theme_color, che non segue i
         // temi stagionali (il meta theme-color vale solo per la barra in alto):
-        // un nero morbido che sta bene sotto tutti. background_color è anche lo splash.
-        background_color: '#0d0f0e',
+        // un nero morbido che sta bene sotto tutti.
         theme_color: '#0d0f0e',
         categories: ['games', 'utilities'],
         icons: [
