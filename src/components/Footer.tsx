@@ -42,7 +42,7 @@ export default function Footer({ onSecret }: { onSecret: () => void }) {
         className="cursor-default border-none bg-transparent p-0 [font:inherit] [letter-spacing:inherit] text-inherit select-none"
         onClick={(event) => countSecretTap(event.timeStamp)}
       >
-        © {new Date().getFullYear()} v{version} Gianluca Di Diego
+        © {new Date().getFullYear()} Gianluca Di Diego v{version}
       </button>
 
       <span aria-hidden="true" className={SEPARATOR_CLASS}>
