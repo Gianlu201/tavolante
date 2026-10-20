@@ -1161,6 +1161,9 @@
   --color-deck-2: #861019;
   --color-page: #1b1d48;
   --deck-emblem-image: var(--pisan-cross);
+  /* I pulsanti stanno a cavallo tra l'arco del ponte e il tramonto riflesso nell'Arno. */
+  --pill-glass: rgb(30 17 38 / 0.74);
+  --pill-blur: 4px;
 }
 
 :root[data-season='pasqua'] {
