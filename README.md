@@ -729,7 +729,7 @@ icone che il manifest e iOS richiedono:
 | `pwa-maskable-512.png` | 512×512 | **70%** | Android ritaglia con maschera circolare/squircle: il disegno deve stare nella zona sicura |
 | `apple-touch-icon.png` | 180×180 | 88% | iOS ignora il manifest e arrotonda da sé |
 
-Lo sfondo è tinta piena `#092820` (il feltro del tema base): una PNG trasparente su
+Lo sfondo è tinta piena `#092820` (lo stesso `background_color`): una PNG trasparente su
 Android diventerebbe nera. Vanno rigenerate se cambia il favicon.
 
 ### 🖼️ Copertina delle condivisioni
