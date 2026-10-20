@@ -18,7 +18,7 @@ import sharp from 'sharp'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const PUBLIC_DIR = join(root, 'public')
 const SOURCE = join(PUBLIC_DIR, 'favicon.svg')
-const BACKGROUND = '#092820' // --color-felt-3, uguale al theme-color
+const BACKGROUND = '#092820' // --color-felt-3
 
 /** Il cerchio del favicon tocca i bordi: qui lo si rimpicciolisce dentro il canvas. */
 const render = async (size, inset) => {
