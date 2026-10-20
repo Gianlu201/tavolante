@@ -1101,6 +1101,10 @@
      nei temi che li impostano. */
   --deck-emblem: '';
   --deck-emblem-image: none;
+  /* Vetro sotto i pulsanti sotto il titolo, per le scene fitte proprio lì dietro:
+     nessuno, tranne nei temi che lo impostano. */
+  --pill-glass: transparent;
+  --pill-blur: 0px;
   /* La croce pisana, bianca: la usano Luminara e Palio. */
   /* Rombo a scacchi bianchi e rossi, come la tuta di Burlamacco: lo usa il Carnevale. */
   --burlamacco-checks: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-12 -12 24 24'%3E%3Cg transform='rotate%2845%29'%3E%3Crect x='-8' y='-8' width='16' height='16' fill='white'/%3E%3Cpath d='M-8-8h4v4h-4zM0-8h4v4H0zM-4-4h4v4h-4zM4-4h4v4H4zM-8 0h4v4h-4zM0 0h4v4H0zM-4 4h4v4h-4zM4 4h4v4H4z' fill='%23d22a35'/%3E%3Crect x='-8' y='-8' width='16' height='16' fill='none' stroke='white' stroke-width='1'/%3E%3C/g%3E%3C/svg%3E");
@@ -1143,6 +1147,9 @@
   --color-deck-2: #861019;
   --color-page: #02030a;
   --deck-emblem-image: var(--pisan-cross);
+  /* L'arco e la spalletta del ponte, accesi, passano dietro i pulsanti. */
+  --pill-glass: rgb(3 5 12 / 0.78);
+  --pill-blur: 3px;
 }
 
 :root[data-season='palio'] {
@@ -1154,6 +1161,9 @@
   --color-deck-2: #861019;
   --color-page: #1b1d48;
   --deck-emblem-image: var(--pisan-cross);
+  /* I pulsanti stanno a cavallo tra l'arco del ponte e il tramonto riflesso nell'Arno. */
+  --pill-glass: rgb(30 17 38 / 0.74);
+  --pill-blur: 4px;
 }
 
 :root[data-season='pasqua'] {

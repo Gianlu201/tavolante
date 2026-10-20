@@ -32,6 +32,10 @@ const PILL_BASE =
 const PILL_ACTIVE = 'border-gold-light bg-gold text-ink';
 const PILL_IDLE = 'border-cream/20 bg-cream/5 text-cream/80';
 
+/* Under the pill rather than on it: stays whole when the pill is dimmed or tinted. */
+const PILL_GLASS =
+  'inline-flex rounded-full bg-(--pill-glass) backdrop-blur-(--pill-blur)';
+
 type Result = {
   startIndex: number;
   winnerIndex: number;
@@ -259,27 +263,31 @@ export default function App() {
         </header>
 
         <div className='flex shrink-0 flex-wrap justify-center gap-2'>
-          <button
-            type='button'
-            className={`${PILL_BASE} ${editing ? PILL_ACTIVE : PILL_IDLE}`}
-            disabled={busy}
-            aria-pressed={editing}
-            onClick={toggleEditing}
-          >
-            {editing ? '✓ Fatto' : '✎ Personalizza'}
-          </button>
-          <button
-            type='button'
-            className={`${PILL_BASE} ${
-              tournamentActive
-                ? 'border-gold/60 bg-gold/14 text-gold-light'
-                : PILL_IDLE
-            }`}
-            disabled={busy || editing}
-            onClick={() => setTournamentOpen(true)}
-          >
-            {tournamentActive ? '🏆 Classifica' : '🏆 Torneo'}
-          </button>
+          <span className={PILL_GLASS}>
+            <button
+              type='button'
+              className={`${PILL_BASE} ${editing ? PILL_ACTIVE : PILL_IDLE}`}
+              disabled={busy}
+              aria-pressed={editing}
+              onClick={toggleEditing}
+            >
+              {editing ? '✓ Fatto' : '✎ Personalizza'}
+            </button>
+          </span>
+          <span className={PILL_GLASS}>
+            <button
+              type='button'
+              className={`${PILL_BASE} ${
+                tournamentActive
+                  ? 'border-gold/60 bg-gold/14 text-gold-light'
+                  : PILL_IDLE
+              }`}
+              disabled={busy || editing}
+              onClick={() => setTournamentOpen(true)}
+            >
+              {tournamentActive ? '🏆 Classifica' : '🏆 Torneo'}
+            </button>
+          </span>
         </div>
 
         <div
